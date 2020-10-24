@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="accounting.window.StartWindow">
+   <children>
+      <Pane prefHeight="400.0" prefWidth="608.0">
+         <children>
+            <Pane prefHeight="400.0" prefWidth="600.0">
+               <children>
+                  <Button fx:id="createSysBtn" layoutX="242.0" layoutY="322.0" mnemonicParsing="false" onAction="#createAccountingSystem" text="Create new system" />
+                  <Button fx:id="loadSysBtn" layoutX="259.0" layoutY="188.0" mnemonicParsing="false" onAction="#loadAccountingSystem" text="Load system" />
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
