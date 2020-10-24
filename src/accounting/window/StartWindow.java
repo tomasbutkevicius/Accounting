@@ -45,7 +45,7 @@ public class StartWindow implements Initializable {
 
     private AccountingSystem createTemporarySystem() {
         AccountingSystem accountingSystem = new AccountingSystem("Demo", LocalDate.now(), "v1", 0, 0);
-        User tempUser = new User(UserType.INDIVIDUAL, "Tomas", "password", "Vilnius");
+        User tempUser = new User(UserType.PRIVATE, "Tomas", "password", "Vilnius");
         accountingSystem.getUsers().add(tempUser);
         return accountingSystem;
     }

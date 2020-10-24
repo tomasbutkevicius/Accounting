@@ -21,7 +21,7 @@ public class UserController {
             activeUser.setType(UserType.COMPANY);
             System.out.println("User type is company");
         } else {
-            activeUser.setType(UserType.INDIVIDUAL);
+            activeUser.setType(UserType.PRIVATE);
             System.out.println("User type is individual");
         }
         System.out.println("Enter user name");
@@ -70,7 +70,7 @@ public class UserController {
             userType = UserType.COMPANY;
             System.out.println("User type is company");
         } else {
-            userType = UserType.INDIVIDUAL;
+            userType = UserType.PRIVATE;
             System.out.println("User type is individual");
         }
         System.out.println("Enter user name");
