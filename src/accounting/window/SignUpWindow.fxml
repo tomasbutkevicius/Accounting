@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="597.0" prefWidth="826.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="accounting.window.SignUpWindow">
+   <children>
+      <Label layoutX="377.0" layoutY="64.0" text="CREATE USER" />
+   </children>
+</AnchorPane>

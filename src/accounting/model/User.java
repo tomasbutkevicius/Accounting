@@ -4,7 +4,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-@Data
 public class User implements Serializable {
     private UserType type;
     private String name;
@@ -15,6 +14,38 @@ public class User implements Serializable {
         this.type = type;
         this.name = name;
         this.password = password;
+        this.contactInformation = contactInformation;
+    }
+
+    public UserType getType() {
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getContactInformation() {
+        return contactInformation;
+    }
+
+    public void setContactInformation(String contactInformation) {
         this.contactInformation = contactInformation;
     }
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="597.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="accounting.window.AccountingWindow">
+   <children>
+      <Label layoutX="362.0" layoutY="54.0" text="ACCOUNTING" />
+   </children>
+</AnchorPane>
