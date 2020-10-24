@@ -68,4 +68,8 @@ public class AccountingSystemController {
     public static int getExpense(AccountingSystem accountingSystem) {
         return accountingSystem.getExpense();
     }
+
+    public static Boolean removeUser(AccountingSystem accountingSystem, User activeUser) {
+        return accountingSystem.getUsers().remove(activeUser);
+    }
 }

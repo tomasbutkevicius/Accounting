@@ -13,7 +13,7 @@
          <children>
             <Label fx:id="systemNameField" layoutX="360.0" layoutY="33.0" prefHeight="53.0" prefWidth="82.0" textAlignment="CENTER" />
             <Label layoutX="245.0" layoutY="41.0" prefHeight="37.0" prefWidth="125.0" text="Accounting system:" />
-            <Button fx:id="backBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
+            <Button fx:id="backBtn" layoutY="2.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
          </children>
       </Pane>
       <SplitPane dividerPositions="0.6356275303643725" layoutY="104.0" prefHeight="496.0" prefWidth="809.0">

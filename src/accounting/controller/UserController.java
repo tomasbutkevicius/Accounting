@@ -81,8 +81,4 @@ public class UserController {
         contactInfo = scanner.nextLine();
         return new User(userType, userName, userPassword, contactInfo);
     }
-
-    public static Boolean removeUser(AccountingSystem accountingSystem, User activeUser) {
-        return accountingSystem.getUsers().remove(activeUser);
-    }
 }
