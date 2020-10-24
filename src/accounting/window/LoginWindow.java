@@ -21,6 +21,7 @@ import java.util.ResourceBundle;
 public class LoginWindow implements Initializable {
 
   public Button loginBtn;
+  public Button backBtn;
   private AccountingSystem accountingSystem;
   @FXML public TextField usernameField;
   public TextField passwordField;
@@ -76,6 +77,18 @@ public class LoginWindow implements Initializable {
     signUp.setAccountingSystem(accountingSystem);
 
     Stage stage = (Stage) signBtn.getScene().getWindow();
+    stage.setTitle("Accounting System");
+    stage.setScene(new Scene(root, 800, 600));
+    stage.show();
+  }
+
+  public void goBack(ActionEvent actionEvent) throws IOException {
+    loadStartWindow();
+  }
+
+  private void loadStartWindow() throws IOException {
+    Parent root = FXMLLoader.load(getClass().getResource("StartWindow.fxml"));
+    Stage stage = (Stage) backBtn.getScene().getWindow();
     stage.setTitle("Accounting System");
     stage.setScene(new Scene(root, 800, 600));
     stage.show();
