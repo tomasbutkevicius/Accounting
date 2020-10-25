@@ -2,6 +2,7 @@ package accounting.window;
 
 import accounting.controller.AccountingSystemController;
 import accounting.controller.CategoryController;
+import accounting.controller.UserController;
 import accounting.model.AccountingSystem;
 import accounting.model.Category;
 import accounting.model.User;
@@ -86,14 +87,26 @@ public class AccountingWindow implements Initializable {
     loadLoginWindow();
   }
 
-  public void manageCatBtnClick(ActionEvent actionEvent) {
+  public void manageCatBtnClick(ActionEvent actionEvent) throws IOException {
     Category category =
         AccountingSystemController.getCategoryByTitle(accountingSystem, editCatNameField.getText());
     if (category == null) {
       errorMessage.setText("Category not found");
     } else {
-      errorMessage.setText("Category found");
+      loadManageCategoryWindow(category);
     }
+  }
+
+  private void loadManageCategoryWindow(Category category) throws IOException {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("ManageCategoryWindow.fxml"));
+    Parent root = loader.load();
+    ManageCategoryWindow manageCategoryWindow = loader.getController();
+    manageCategoryWindow.setDisplayInformation(accountingSystem, category, activeUser);
+
+    Stage stage = (Stage) manageCatBtn.getScene().getWindow();
+    stage.setTitle("Accounting System. User " + activeUser.getName());
+    stage.setScene(new Scene(root, 800, 600));
+    stage.show();
   }
 
   public void addCatBtnClick(ActionEvent actionEvent) throws IOException {
@@ -165,12 +178,17 @@ public class AccountingWindow implements Initializable {
 
   public void updateUserBtnClick(ActionEvent actionEvent) {
     messageToUser.setText("");
-    User user = getUpdateUser();
-    if (user != null) {
+    User updatedUser = getUpdateUser();
+    if (updatedUser != null) {
       AccountingSystemController.removeUser(accountingSystem, activeUser);
-      activeUser = user;
-      AccountingSystemController.addUser(accountingSystem, activeUser);
-      messageToUser.setText("User updated");
+      if(UserController.getUserByName(accountingSystem, updatedUser.getName()) != null){
+        messageToUser.setText("User with this name already exists");
+        AccountingSystemController.addUser(accountingSystem, activeUser);
+      } else {
+        activeUser = updatedUser;
+        AccountingSystemController.addUser(accountingSystem, activeUser);
+        messageToUser.setText("User updated");
+      }
     }
   }
 
