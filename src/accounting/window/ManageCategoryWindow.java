@@ -50,6 +50,7 @@ public class ManageCategoryWindow implements Initializable {
   private AccountingSystem accountingSystem;
   private Category category;
   private User activeUser;
+  private Category parentCategory;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {}
@@ -63,6 +64,20 @@ public class ManageCategoryWindow implements Initializable {
     setExpenseList(category);
     setIncomeList(category);
     setResponsibleUserList(category);
+    parentTitle.setText("Is a parent");
+  }
+
+  public void setDisplayInformation(
+          AccountingSystem accountingSystem, Category category, User activeUser, Category parentCategory) {
+    setAccountingSystem(accountingSystem);
+    setActiveUser(activeUser);
+    setCategory(category);
+    setSubCategoryList(category);
+    setExpenseList(category);
+    setIncomeList(category);
+    setResponsibleUserList(category);
+    setParentCategory(category);
+    parentTitle.setText("'" + category.getParentCategory().getTitle() + "'");
   }
 
   public void setAccountingSystem(AccountingSystem accountingSystem) {
@@ -73,11 +88,11 @@ public class ManageCategoryWindow implements Initializable {
     this.category = category;
     titleField.setText(category.getTitle());
     title.setText("'" + category.getTitle() + "'");
-    if (category.getParentCategory() == null) {
-      parentTitle.setText("Is a parent");
-    } else {
-      parentTitle.setText("'" + category.getParentCategory().getTitle() + "'");
-    }
+
+  }
+
+  public void setParentCategory(Category category) {
+    this.parentCategory = category;
   }
 
   public void setActiveUser(User activeUser) {
@@ -147,7 +162,13 @@ public class ManageCategoryWindow implements Initializable {
   }
 
   public void backBtnClick(ActionEvent actionEvent) throws IOException {
-    loadAccountingWindow();
+    if(parentCategory == null)
+      loadAccountingWindow();
+    else
+      loadManageCategoryWindow();
+  }
+
+  private void loadManageCategoryWindow() {
   }
 
   public void manageSubCatBtnClick(ActionEvent actionEvent) {}

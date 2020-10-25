@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="accounting.window.ManageCategoryWindow">
+<AnchorPane prefHeight="564.0" prefWidth="801.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="accounting.window.ManageCategoryWindow">
     <children>
         <Button fx:id="backBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backBtnClick" text="Back" />
         <Button fx:id="manageSubCatBtn" layoutX="362.0" layoutY="147.0" mnemonicParsing="false" onAction="#manageSubCatBtnClick" text="Manage subcategory" />
@@ -58,7 +58,7 @@
         <Button fx:id="addSubCatBtn" layoutX="201.0" layoutY="82.0" mnemonicParsing="false" onAction="#addSubCatBtnClick" text="Add subcategory" />
         <TextField fx:id="editSubCatNameField" layoutX="362.0" layoutY="111.0" />
         <Label layoutX="319.0" layoutY="115.0" text="Name:" />
-        <Label fx:id="errorMessage" layoutX="345.0" layoutY="40.0" prefHeight="39.0" prefWidth="184.0" />
+        <Label fx:id="errorMessage" layoutX="334.0" layoutY="193.0" prefHeight="39.0" prefWidth="184.0" />
       <ListView fx:id="incomeList" layoutX="28.0" layoutY="264.0" prefHeight="98.0" prefWidth="284.0" />
       <Label layoutX="55.0" layoutY="240.0" text="Incomes" />
       <ListView fx:id="expenseList" layoutX="28.0" layoutY="401.0" prefHeight="98.0" prefWidth="284.0" />
