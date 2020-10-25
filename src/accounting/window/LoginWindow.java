@@ -30,8 +30,8 @@ public class LoginWindow implements Initializable {
   public Label systemNameField;
 
   public void setAccountingSystem(AccountingSystem accountingSystem) {
-    this.accountingSystem = accountingSystem;
-    systemNameField.setText(accountingSystem.getName());
+      this.accountingSystem = accountingSystem;
+      systemNameField.setText(accountingSystem.getName());
   }
 
   @Override
@@ -63,6 +63,7 @@ public class LoginWindow implements Initializable {
     AccountingWindow accounting = loader.getController();
     accounting.setAccountingSystem(accountingSystem);
     accounting.setUser(user);
+    accounting.setCategoryList(accountingSystem);
 
     Stage stage = (Stage) loginBtn.getScene().getWindow();
     stage.setTitle("Accounting System. User " + user.getName());
@@ -87,7 +88,11 @@ public class LoginWindow implements Initializable {
   }
 
   private void loadStartWindow() throws IOException {
-    Parent root = FXMLLoader.load(getClass().getResource("StartWindow.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("StartWindow.fxml"));
+    Parent root = loader.load();
+    StartWindow startWindow = loader.getController();
+    startWindow.setAccountingSystem(accountingSystem);
+
     Stage stage = (Stage) backBtn.getScene().getWindow();
     stage.setTitle("Accounting System");
     stage.setScene(new Scene(root, 800, 600));

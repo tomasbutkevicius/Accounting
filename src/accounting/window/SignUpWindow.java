@@ -45,9 +45,7 @@ public class SignUpWindow implements Initializable {
     User user = createUser();
     if (user != null) {
       errorMessage.setText("");
-      AccountingSystemController.addUser(accountingSystem, user);
-      Popup.display("User created", "New user successfully added", "Okay");
-      loadLoginWindow();
+      Popup.display("User creation", AccountingSystemController.addUser(accountingSystem, user), "Okay");
     }
   }
 

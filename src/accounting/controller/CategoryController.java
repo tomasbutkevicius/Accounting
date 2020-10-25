@@ -38,8 +38,12 @@ public class CategoryController {
         } else {
             Category subCategory;
             subCategory = new Category(title, description, responsibleUsers, selectedCategory);
-            selectedCategory.getSubCategories().add(subCategory);
+            addSubCategory(selectedCategory, subCategory);
         }
+    }
+
+    private static void addSubCategory(Category selectedCategory, Category subCategory) {
+        selectedCategory.getSubCategories().add(subCategory);
     }
 
     public static void updateCategoryMainInfo(Category selectedCategory, String newTitle, String newDescription) {
@@ -58,22 +62,6 @@ public class CategoryController {
 
     public static Boolean responsibleUserExists(ArrayList<User> responsibleUsers, User user) {
         return responsibleUsers.stream().anyMatch(responsibleUser -> responsibleUser.getName().equals(user.getName()));
-    }
-
-    public static Boolean createCategory(AccountingSystem accountingSystem, User user) {
-        Scanner scanner = new Scanner(System.in);
-        String title;
-        String description;
-        ArrayList<User> responsibleUsers = new ArrayList<>();
-        responsibleUsers.add(user);
-        Category category;
-        System.out.println("Enter category title");
-        title = scanner.nextLine();
-        System.out.println("Enter category description");
-        description = scanner.nextLine();
-
-        category = new Category(title, description, responsibleUsers);
-        return AccountingSystemController.addCategory(accountingSystem, category);
     }
 
     public static void removeResponsibleUser(AccountingSystem accountingSystem, Category selectedCategory) {

@@ -18,23 +18,21 @@ public class AccountingSystemController {
         return categories.stream().filter(category -> category.getTitle().equals(requestedTitle)).findFirst().orElse(null);
     }
 
-    public static Boolean addCategory(AccountingSystem accountingSystem, Category category) {
+    public static String addCategory(AccountingSystem accountingSystem, Category category) {
         if (!categoryExists(accountingSystem.getCategories(), category.getTitle())) {
             accountingSystem.getCategories().add(category);
-            System.out.println("Category added");
-            return true;
+            return "Category added";
         } else {
-            System.out.println("Category already exists");
-            return false;
+            return "Category already exists";
         }
     }
 
-    public static void addUser(AccountingSystem accountingSystem, User user) {
-        if (!UserController.userExists(accountingSystem.getUsers(), user)) {
+    public static String addUser(AccountingSystem accountingSystem, User user) {
+        if (UserController.getUserByName(accountingSystem, user.getName()) == null) {
             accountingSystem.getUsers().add(user);
-            System.out.println("User added");
+            return "User added";
         } else {
-            System.out.println("User already exists");
+            return "User already exists";
         }
     }
 
