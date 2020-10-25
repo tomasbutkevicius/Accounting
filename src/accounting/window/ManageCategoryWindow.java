@@ -239,9 +239,73 @@ public class ManageCategoryWindow implements Initializable {
     stage.show();
   }
 
-  public void addIncomeBtnClick(ActionEvent actionEvent) {}
+  public void addIncomeBtnClick(ActionEvent actionEvent) {
+    messageToUser.setText("");
+    errorMessage.setText("");
+    Stage popUpWindow = new Stage();
 
-  public void addExpenseBtnClick(ActionEvent actionEvent) {}
+    popUpWindow.initModality(Modality.APPLICATION_MODAL);
+    popUpWindow.setTitle("Add income");
+
+    Label labelIncomeName = new Label("Income name:");
+    TextField incomeNameField = new TextField();
+
+    Label labelIncomeAmount = new Label("Income amount:");
+    TextField incomeAmountField = new TextField();
+
+    Button backBtn = new Button("Back");
+    Button createIncomeBtn = new Button("Create");
+    backBtn.setOnAction(e -> popUpWindow.close());
+    createIncomeBtn.setOnAction(e -> createIncome());
+    VBox layout = new VBox(10);
+
+    layout.getChildren().addAll(labelIncomeName, incomeNameField, labelIncomeAmount, incomeAmountField, backBtn, createIncomeBtn);
+
+    layout.setAlignment(Pos.CENTER);
+
+    Scene scene1 = new Scene(layout, 500, 300);
+
+    popUpWindow.setScene(scene1);
+
+    popUpWindow.showAndWait();
+  }
+
+  private void createIncome() {
+  }
+
+  public void addExpenseBtnClick(ActionEvent actionEvent) {
+    messageToUser.setText("");
+    errorMessage.setText("");
+    Stage popUpWindow = new Stage();
+
+    popUpWindow.initModality(Modality.APPLICATION_MODAL);
+    popUpWindow.setTitle("Add expense");
+
+    Label labelExpenseName = new Label("Expense name:");
+    TextField expenseNameField = new TextField();
+
+    Label labelExpenseAmount = new Label("Expense amount:");
+    TextField expenseAmountField = new TextField();
+
+    Button backBtn = new Button("Back");
+    Button createExpenseBtn = new Button("Create");
+    backBtn.setOnAction(e -> popUpWindow.close());
+    createExpenseBtn.setOnAction(e -> createExpense());
+    VBox layout = new VBox(10);
+
+    layout.getChildren().addAll(labelExpenseName, expenseNameField, labelExpenseAmount, expenseAmountField, backBtn, createExpenseBtn);
+
+    layout.setAlignment(Pos.CENTER);
+
+    Scene scene1 = new Scene(layout, 500, 300);
+
+    popUpWindow.setScene(scene1);
+
+    popUpWindow.showAndWait();
+  }
+
+  private void createExpense() {
+  }
 
   public void addResponsibleBtnClick(ActionEvent actionEvent) {
       if(emptyField(responsibleUserNameField.getText())){
