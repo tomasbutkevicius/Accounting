@@ -27,6 +27,7 @@
                         <Button fx:id="addResponsibleBtn" layoutX="194.0" layoutY="406.0" mnemonicParsing="false" onAction="#addResponsibleBtnClick" text="Add" textFill="#2ba822" />
                         <Label fx:id="messageToAddUser" layoutX="32.0" layoutY="431.0" prefHeight="39.0" prefWidth="206.0" />
                         <Button fx:id="removeRespBtn" layoutX="28.0" layoutY="406.0" mnemonicParsing="false" onAction="#removeRespBtnClick" text="Remove" textFill="RED" />
+                          <Button fx:id="showUsersBtn" layoutX="90.0" layoutY="496.0" mnemonicParsing="false" onAction="#showUsersBtnClick" text="Show all users" />
                      </children>
                         </AnchorPane>
                </content>
@@ -52,13 +53,12 @@
                 </Tab>
             </tabs>
         </TabPane>
-        <Button fx:id="showUsersBtn" layoutX="346.0" layoutY="515.0" mnemonicParsing="false" onAction="#showUsersBtnClick" text="Show all users" />
         <ListView fx:id="subCategoryList" layoutX="28.0" layoutY="111.0" prefHeight="121.0" prefWidth="284.0" />
         <Label layoutX="40.0" layoutY="95.0" text="Subcategories" />
         <Button fx:id="addSubCatBtn" layoutX="201.0" layoutY="82.0" mnemonicParsing="false" onAction="#addSubCatBtnClick" text="Add subcategory" />
         <TextField fx:id="editSubCatNameField" layoutX="362.0" layoutY="111.0" />
-        <Label layoutX="319.0" layoutY="115.0" text="Name:" />
-        <Label fx:id="errorMessage" layoutX="334.0" layoutY="193.0" prefHeight="39.0" prefWidth="184.0" />
+        <Label layoutX="362.0" layoutY="86.0" text="Subcategory name" />
+        <Label fx:id="errorMessage" layoutX="242.0" layoutY="511.0" prefHeight="39.0" prefWidth="321.0" />
       <ListView fx:id="incomeList" layoutX="28.0" layoutY="264.0" prefHeight="98.0" prefWidth="284.0" />
       <Label layoutX="55.0" layoutY="240.0" text="Incomes" />
       <ListView fx:id="expenseList" layoutX="28.0" layoutY="401.0" prefHeight="98.0" prefWidth="284.0" />
@@ -69,5 +69,11 @@
       <Label layoutX="206.0" layoutY="18.0" text="Selected category:" />
       <Label layoutX="214.0" layoutY="40.0" text="Parent category:" />
       <Label fx:id="parentTitle" layoutX="315.0" layoutY="40.0" prefHeight="17.0" prefWidth="81.0" />
+      <Label layoutX="364.0" layoutY="240.0" text="Income name" />
+      <TextField fx:id="delIncNameField" layoutX="363.0" layoutY="261.0" />
+      <Label layoutX="362.0" layoutY="379.0" text="Expense name" />
+      <Button fx:id="deleteIncBtn" layoutX="362.0" layoutY="301.0" mnemonicParsing="false" onAction="#deleteIncBtnClick" prefHeight="25.0" prefWidth="128.0" text="Delete income" />
+      <TextField fx:id="delExpNameField" layoutX="362.0" layoutY="401.0" />
+      <Button fx:id="deleteExpBtn" layoutX="362.0" layoutY="438.0" mnemonicParsing="false" onAction="#deleteExpBtnClick" prefHeight="25.0" prefWidth="128.0" text="Delete expense" />
     </children>
 </AnchorPane>

@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.Callable;
 
 public class ManageCategoryWindow implements Initializable {
   public ListView subCategoryList;
@@ -45,6 +46,8 @@ public class ManageCategoryWindow implements Initializable {
   public Label messageToAddUser;
   public Label parentTitle;
   public ListView responsibleUserList;
+  public TextField delIncNameField;
+  public TextField delExpNameField;
   private AccountingSystem accountingSystem;
   private Category category;
   private User activeUser;
@@ -459,5 +462,129 @@ public class ManageCategoryWindow implements Initializable {
 
   private boolean emptyField(String text) {
     return text.replaceAll("\\s", "").isEmpty();
+  }
+
+  public void deleteIncBtnClick(ActionEvent actionEvent) {
+    if(validateIncomeDelete()){
+      popUpConfirmDeleteIncome();
+    }
+  }
+
+  private boolean validateIncomeDelete() {
+    if(emptyField(delIncNameField.getText())){
+      errorMessage.setText("Income name to delete is missing");
+      return false;
+    }
+      if(CategoryController.getIncomeByName(category, delIncNameField.getText()) == null){
+        errorMessage.setText("Income with entered name does not exist");
+        return false;
+      }
+      return true;
+    }
+
+  private void popUpConfirmDeleteIncome() {
+    messageToUser.setText("");
+    errorMessage.setText("");
+    Stage popUpWindow = new Stage();
+
+    popUpWindow.initModality(Modality.APPLICATION_MODAL);
+    popUpWindow.setTitle("Delete Income");
+
+    Label question = new Label("Are you sure you want to delete income '" + delIncNameField.getText() + "'?");
+    Button backBtn = new Button("Go back");
+    Button deleteBtn = new Button("Delete. I am sure. Yes. Bye.");
+    backBtn.setOnAction(e -> popUpWindow.close());
+    deleteBtn.setOnAction(
+            e -> {
+              try {
+                deleteIncome();
+                popUpWindow.close();
+              } catch (Exception ex) {
+                ex.printStackTrace();
+              }
+            });
+    VBox layout = new VBox(10);
+
+    layout.getChildren().addAll(question, backBtn, deleteBtn);
+
+    layout.setAlignment(Pos.CENTER);
+
+    Scene scene1 = new Scene(layout, 500, 300);
+
+    popUpWindow.setScene(scene1);
+
+    popUpWindow.showAndWait();
+  }
+
+  private void deleteIncome() {
+    if(IncomeController.removeIncome(accountingSystem, category, CategoryController.getIncomeByName(category, delIncNameField.getText()))){
+        errorMessage.setText("Income deleted");
+        setIncomeList(category);
+    } else {
+      errorMessage.setText("Something went wrong");
+    }
+  }
+
+
+  private boolean validateExpenseDelete() {
+    if(emptyField(delExpNameField.getText())){
+      errorMessage.setText("Expense name to delete is missing");
+      return false;
+    }
+    if(CategoryController.getExpenseByName(category, delExpNameField.getText()) == null){
+      errorMessage.setText("Expense with entered name does not exist");
+      return false;
+    }
+    return true;
+  }
+
+
+  private void popUpConfirmDeleteExpense() {
+    messageToUser.setText("");
+    errorMessage.setText("");
+    Stage popUpWindow = new Stage();
+
+    popUpWindow.initModality(Modality.APPLICATION_MODAL);
+    popUpWindow.setTitle("Delete Expense");
+
+    Label question = new Label("Are you sure you want to delete expense '" + delExpNameField.getText() + "'?");
+    Button backBtn = new Button("Go back");
+    Button deleteBtn = new Button("Delete. I am sure. Yes. Bye.");
+    backBtn.setOnAction(e -> popUpWindow.close());
+    deleteBtn.setOnAction(
+            e -> {
+              try {
+                deleteExpense();
+                popUpWindow.close();
+              } catch (Exception ex) {
+                ex.printStackTrace();
+              }
+            });
+    VBox layout = new VBox(10);
+
+    layout.getChildren().addAll(question, backBtn, deleteBtn);
+
+    layout.setAlignment(Pos.CENTER);
+
+    Scene scene1 = new Scene(layout, 500, 300);
+
+    popUpWindow.setScene(scene1);
+
+    popUpWindow.showAndWait();
+  }
+
+  private void deleteExpense() {
+    if(ExpenseController.removeExpense(accountingSystem, category, CategoryController.getExpenseByName(category, delExpNameField.getText()))){
+      errorMessage.setText("Expense deleted");
+      setExpenseList(category);
+    } else {
+      errorMessage.setText("Something went wrong");
+    }
+  }
+
+  public void deleteExpBtnClick(ActionEvent actionEvent) {
+    if(validateExpenseDelete()){
+      popUpConfirmDeleteExpense();
+    }
   }
 }

@@ -51,8 +51,8 @@ public class AccountingWindow implements Initializable {
     this.accountingSystem = accountingSystem;
     systemNameField.setText(accountingSystem.getName());
     systemDateField.setText(accountingSystem.getSystemCreationDate().toString());
-    systemIncomeField.setText(Integer.toString(accountingSystem.getIncome()));
-    systemExpenseField.setText(Integer.toString(accountingSystem.getExpense()));
+    systemIncomeField.setText(Integer.toString(accountingSystem.getIncome()) + "eur");
+    systemExpenseField.setText(Integer.toString(accountingSystem.getExpense())+ "eur");
   }
 
   public void setCategoryList(AccountingSystem accountingSystem) {
