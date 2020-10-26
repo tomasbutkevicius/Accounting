@@ -37,7 +37,7 @@ public class IncomeController {
     }
 
     public static Boolean incomeExists(ArrayList<Income> incomes, String incomeName) {
-        return incomes.stream().anyMatch((income -> income.getName().equals(incomeName)));
+        return incomes.stream().anyMatch((income -> income.getName().equalsIgnoreCase(incomeName.replaceAll("\\s", ""))));
     }
 
     public static Boolean addToCategory(Category category, Income income) {
@@ -49,14 +49,8 @@ public class IncomeController {
         }
     }
 
-    public static Income createIncome(AccountingSystem accountingSystem) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Income name");
-        String name = scanner.nextLine();
-        System.out.println("Enter number of income amount (eur)");
-        Integer amount = scanner.nextInt();
-        accountingSystem.addIncome(amount);
-
-        return new Income(name, amount);
+    public static void createIncome(AccountingSystem accountingSystem, Category category, Income income) {
+        category.getIncomes().add(income);
+        accountingSystem.addIncome(income.getAmount());
     }
 }

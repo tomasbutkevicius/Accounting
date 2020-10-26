@@ -1,8 +1,6 @@
 package accounting.window;
 
-import accounting.controller.AccountingSystemController;
-import accounting.controller.CategoryController;
-import accounting.controller.UserController;
+import accounting.controller.*;
 import accounting.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -68,7 +66,10 @@ public class ManageCategoryWindow implements Initializable {
   }
 
   public void setDisplayInformation(
-          AccountingSystem accountingSystem, Category category, User activeUser, Category parentCategory) {
+      AccountingSystem accountingSystem,
+      Category category,
+      User activeUser,
+      Category parentCategory) {
     setAccountingSystem(accountingSystem);
     setActiveUser(activeUser);
     setCategory(category);
@@ -88,7 +89,6 @@ public class ManageCategoryWindow implements Initializable {
     this.category = category;
     titleField.setText(category.getTitle());
     title.setText("'" + category.getTitle() + "'");
-
   }
 
   public void setParentCategory(Category category) {
@@ -100,28 +100,30 @@ public class ManageCategoryWindow implements Initializable {
   }
 
   public void setSubCategoryList(Category category) {
-      subCategoryList.getItems().clear();
+    subCategoryList.getItems().clear();
     for (Category subcategory : category.getSubCategories()) {
       subCategoryList.getItems().add("'" + subcategory.getTitle() + "'");
     }
   }
 
   public void setIncomeList(Category category) {
-      incomeList.getItems().clear();
+    incomeList.getItems().clear();
     for (Income income : category.getIncomes()) {
-      incomeList.getItems().add("'" + income.getName() + "'");
+      incomeList.getItems().add("'" + income.getName() + "' amount: " + income.getAmount() + "eur");
     }
   }
 
   public void setExpenseList(Category category) {
-      expenseList.getItems().clear();
+    expenseList.getItems().clear();
     for (Expense expense : category.getExpenses()) {
-      expenseList.getItems().add("'" + expense.getName() + "'");
+      expenseList
+          .getItems()
+          .add("'" + expense.getName() + "' amount: " + expense.getAmount() + "eur");
     }
   }
 
   public void setResponsibleUserList(Category category) {
-      responsibleUserList.getItems().clear();
+    responsibleUserList.getItems().clear();
     for (User user : category.getResponsibleUsers()) {
       responsibleUserList.getItems().add("'" + user.getName() + "'");
     }
@@ -162,14 +164,11 @@ public class ManageCategoryWindow implements Initializable {
   }
 
   public void backBtnClick(ActionEvent actionEvent) throws IOException {
-    if(parentCategory == null)
-      loadAccountingWindow();
-    else
-      loadManageCategoryWindow();
+    if (parentCategory == null) loadAccountingWindow();
+    else loadManageCategoryWindow();
   }
 
-  private void loadManageCategoryWindow() {
-  }
+  private void loadManageCategoryWindow() {}
 
   public void manageSubCatBtnClick(ActionEvent actionEvent) {}
 
@@ -188,7 +187,45 @@ public class ManageCategoryWindow implements Initializable {
     }
   }
 
-  public void deleteCategoryBtnClick(ActionEvent actionEvent) {}
+  public void deleteCategoryBtnClick(ActionEvent actionEvent) {
+    messageToUser.setText("");
+    errorMessage.setText("");
+    Stage popUpWindow = new Stage();
+
+    popUpWindow.initModality(Modality.APPLICATION_MODAL);
+    popUpWindow.setTitle("Delete category");
+
+    Label question = new Label("Are you sure you want to delete this category?");
+    Button backBtn = new Button("Go back");
+    Button deleteBtn = new Button("Delete. I am sure. Yes. Bye.");
+    backBtn.setOnAction(e -> popUpWindow.close());
+    deleteBtn.setOnAction(
+        e -> {
+          try {
+            deleteCategory();
+            popUpWindow.close();
+          } catch (IOException ex) {
+            ex.printStackTrace();
+          }
+        });
+    VBox layout = new VBox(10);
+
+    layout.getChildren().addAll(question, backBtn, deleteBtn);
+
+    layout.setAlignment(Pos.CENTER);
+
+    Scene scene1 = new Scene(layout, 500, 300);
+
+    popUpWindow.setScene(scene1);
+
+    popUpWindow.showAndWait();
+  }
+
+  private void deleteCategory() throws IOException {
+    AccountingSystemController.removeCategory(accountingSystem, category);
+    if (parentCategory == null) loadAccountingWindow();
+    else loadManageCategoryWindow();
+  }
 
   public void showUsersBtnClick(ActionEvent actionEvent) {
     loadUserList();
@@ -256,10 +293,19 @@ public class ManageCategoryWindow implements Initializable {
     Button backBtn = new Button("Back");
     Button createIncomeBtn = new Button("Create");
     backBtn.setOnAction(e -> popUpWindow.close());
-    createIncomeBtn.setOnAction(e -> createIncome());
+    createIncomeBtn.setOnAction(
+        e -> createIncome(incomeNameField.getText(), incomeAmountField.getText()));
     VBox layout = new VBox(10);
 
-    layout.getChildren().addAll(labelIncomeName, incomeNameField, labelIncomeAmount, incomeAmountField, backBtn, createIncomeBtn);
+    layout
+        .getChildren()
+        .addAll(
+            labelIncomeName,
+            incomeNameField,
+            labelIncomeAmount,
+            incomeAmountField,
+            backBtn,
+            createIncomeBtn);
 
     layout.setAlignment(Pos.CENTER);
 
@@ -270,7 +316,21 @@ public class ManageCategoryWindow implements Initializable {
     popUpWindow.showAndWait();
   }
 
-  private void createIncome() {
+  private void createIncome(String incomeNameField, String incomeAmountField) {
+    if (emptyField(incomeNameField) || emptyField(incomeAmountField)) {
+      Popup.display("Error", "Required field is empty", "Okay");
+    } else if (IncomeController.incomeExists(category.getIncomes(), incomeNameField)) {
+      Popup.display("Error", "Income with this name exists", "Okay");
+    } else {
+      try {
+        Income income = new Income(incomeNameField, Integer.parseInt(incomeAmountField));
+        IncomeController.createIncome(accountingSystem, category, income);
+        Popup.display("Income added", "Income added", "Okay");
+        setIncomeList(category);
+      } catch (NumberFormatException e) {
+        Popup.display("Error", "Amount must be a number", "Okay");
+      }
+    }
   }
 
   public void addExpenseBtnClick(ActionEvent actionEvent) {
@@ -290,10 +350,19 @@ public class ManageCategoryWindow implements Initializable {
     Button backBtn = new Button("Back");
     Button createExpenseBtn = new Button("Create");
     backBtn.setOnAction(e -> popUpWindow.close());
-    createExpenseBtn.setOnAction(e -> createExpense());
+    createExpenseBtn.setOnAction(
+        e -> createExpense(expenseNameField.getText(), expenseAmountField.getText()));
     VBox layout = new VBox(10);
 
-    layout.getChildren().addAll(labelExpenseName, expenseNameField, labelExpenseAmount, expenseAmountField, backBtn, createExpenseBtn);
+    layout
+        .getChildren()
+        .addAll(
+            labelExpenseName,
+            expenseNameField,
+            labelExpenseAmount,
+            expenseAmountField,
+            backBtn,
+            createExpenseBtn);
 
     layout.setAlignment(Pos.CENTER);
 
@@ -304,57 +373,77 @@ public class ManageCategoryWindow implements Initializable {
     popUpWindow.showAndWait();
   }
 
-  private void createExpense() {
+  private void createExpense(String expenseNameField, String expenseAmountField) {
+    if (emptyField(expenseNameField) || emptyField(expenseAmountField)) {
+      Popup.display("Error", "Required field is empty", "Okay");
+    } else if (ExpenseController.expenseExists(category.getExpenses(), expenseNameField)) {
+      Popup.display("Error", "Expense with this name exists", "Okay");
+    } else {
+      try {
+        Integer.parseInt(expenseAmountField);
+
+        Expense expense = new Expense(expenseNameField, Integer.parseInt(expenseAmountField));
+        ExpenseController.createExpense(accountingSystem, category, expense);
+        Popup.display("Expense added", "Expense added", "Okay");
+        setExpenseList(category);
+      } catch (NumberFormatException e) {
+        Popup.display("Error", "Amount must be a number", "Okay");
+      }
+    }
   }
 
   public void addResponsibleBtnClick(ActionEvent actionEvent) {
-      if(emptyField(responsibleUserNameField.getText())){
-          messageToAddUser.setText("Empty field");
-      } else {
-          addResponsibleUser();
-      }
+    if (emptyField(responsibleUserNameField.getText())) {
+      messageToAddUser.setText("Empty field");
+    } else {
+      addResponsibleUser();
+    }
   }
 
-    private void addResponsibleUser() {
-        User responsibleUser = UserController.getUserByName(accountingSystem, responsibleUserNameField.getText());
-        if (responsibleUser == null) {
-            messageToAddUser.setText("User with this name does not exist");
-        } else {
-            if (CategoryController.responsibleUserExists(category.getResponsibleUsers(), responsibleUser)) {
-                messageToAddUser.setText("User is already responsible");
-            } else {
-                CategoryController.addResponsibleUser(category, responsibleUser);
-                setResponsibleUserList(category);
-                messageToAddUser.setText("Added responsible user");
-            }
-        }
+  private void addResponsibleUser() {
+    User responsibleUser =
+        UserController.getUserByName(accountingSystem, responsibleUserNameField.getText());
+    if (responsibleUser == null) {
+      messageToAddUser.setText("User with this name does not exist");
+    } else {
+      if (CategoryController.responsibleUserExists(
+          category.getResponsibleUsers(), responsibleUser)) {
+        messageToAddUser.setText("User is already responsible");
+      } else {
+        CategoryController.addResponsibleUser(category, responsibleUser);
+        setResponsibleUserList(category);
+        messageToAddUser.setText("Added responsible user");
+      }
     }
+  }
 
-    public void removeRespBtnClick(ActionEvent actionEvent) {
-        if(emptyField(responsibleUserNameField.getText())){
-            messageToAddUser.setText("Empty field");
-        } else {
-            removeResponsibleUser();
-        }
+  public void removeRespBtnClick(ActionEvent actionEvent) {
+    if (emptyField(responsibleUserNameField.getText())) {
+      messageToAddUser.setText("Empty field");
+    } else {
+      removeResponsibleUser();
     }
+  }
 
-    private void removeResponsibleUser() {
-        User responsibleUser = UserController.getUserByName(accountingSystem, responsibleUserNameField.getText());
-        if (responsibleUser == null) {
-            messageToAddUser.setText("User with this name does not exist");
-        } else {
-            if (CategoryController.responsibleUserExists(category.getResponsibleUsers(), responsibleUser)) {
-                ArrayList<User> responsibleUsers = category.getResponsibleUsers();
-                responsibleUsers.remove(responsibleUser);
-                messageToAddUser.setText("User removed from list");
-                setResponsibleUserList(category);
-            } else {
-                messageToAddUser.setText("User is not responsible");
-            }
-        }
+  private void removeResponsibleUser() {
+    User responsibleUser =
+        UserController.getUserByName(accountingSystem, responsibleUserNameField.getText());
+    if (responsibleUser == null) {
+      messageToAddUser.setText("User with this name does not exist");
+    } else {
+      if (CategoryController.responsibleUserExists(
+          category.getResponsibleUsers(), responsibleUser)) {
+        ArrayList<User> responsibleUsers = category.getResponsibleUsers();
+        responsibleUsers.remove(responsibleUser);
+        messageToAddUser.setText("User removed from list");
+        setResponsibleUserList(category);
+      } else {
+        messageToAddUser.setText("User is not responsible");
+      }
     }
+  }
 
-    private void loadAccountingWindow() throws IOException {
+  private void loadAccountingWindow() throws IOException {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("AccountingWindow.fxml"));
     Parent root = loader.load();
     AccountingWindow accounting = loader.getController();
@@ -371,5 +460,4 @@ public class ManageCategoryWindow implements Initializable {
   private boolean emptyField(String text) {
     return text.replaceAll("\\s", "").isEmpty();
   }
-
 }

@@ -9,15 +9,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="564.0" prefWidth="801.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="accounting.window.ManageCategoryWindow">
+<AnchorPane prefHeight="564.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="accounting.window.ManageCategoryWindow">
     <children>
         <Button fx:id="backBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backBtnClick" text="Back" />
         <Button fx:id="manageSubCatBtn" layoutX="362.0" layoutY="147.0" mnemonicParsing="false" onAction="#manageSubCatBtnClick" text="Manage subcategory" />
-        <TabPane layoutX="529.0" prefHeight="554.0" prefWidth="284.0" side="RIGHT" tabClosingPolicy="UNAVAILABLE">
+        <TabPane layoutX="518.0" layoutY="-4.0" prefHeight="569.0" prefWidth="284.0" side="RIGHT" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
                 <Tab text="Responsible">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="317.0" prefWidth="255.0">
+               <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="554.0" prefWidth="286.0">
                      <children>
                         <ListView fx:id="responsibleUserList" layoutX="28.0" layoutY="42.0" prefHeight="235.0" prefWidth="204.0" />
                         <Label layoutX="80.0" layoutY="14.0" text="Responsible Users" />
@@ -29,7 +29,7 @@
                         <Button fx:id="removeRespBtn" layoutX="28.0" layoutY="406.0" mnemonicParsing="false" onAction="#removeRespBtnClick" text="Remove" textFill="RED" />
                      </children>
                         </AnchorPane>
-                    </content>
+               </content>
                 </Tab>
                 <Tab text="Category">
                     <content>

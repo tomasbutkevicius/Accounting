@@ -3,6 +3,7 @@ package accounting.controller;
 import accounting.model.AccountingSystem;
 import accounting.model.Category;
 import accounting.model.Expense;
+import accounting.model.Income;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -37,7 +38,7 @@ public class ExpenseController {
     }
 
     public static Boolean expenseExists(ArrayList<Expense> expenses, String expenseName) {
-        return expenses.stream().anyMatch((expense -> expense.getName().equals(expenseName)));
+        return expenses.stream().anyMatch((expense -> expense.getName().equalsIgnoreCase(expenseName.replaceAll("\\s", ""))));
     }
 
     public static Boolean addToCategory(Category category, Expense expense) {
@@ -49,13 +50,8 @@ public class ExpenseController {
         }
     }
 
-    public static Expense createExpense(AccountingSystem accountingSystem) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Expense name");
-        String name = scanner.nextLine();
-        System.out.println("Enter number of expense amount (eur)");
-        Integer amount = scanner.nextInt();
-        accountingSystem.addExpense(amount);
-        return new Expense(name, amount);
+    public static void createExpense(AccountingSystem accountingSystem, Category category, Expense expense) {
+        category.getExpenses().add(expense);
+        accountingSystem.addExpense(expense.getAmount());
     }
 }

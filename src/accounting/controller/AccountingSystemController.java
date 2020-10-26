@@ -56,7 +56,7 @@ public class AccountingSystemController {
     }
 
     public static Boolean categoryExists(ArrayList<Category> categories, String categoryName) {
-        return categories.stream().anyMatch((category -> category.getTitle().equals(categoryName)));
+        return categories.stream().anyMatch((category -> category.getTitle().equalsIgnoreCase(categoryName.replaceAll("\\s", ""))));
     }
 
     public static int getIncome(AccountingSystem accountingSystem) {
