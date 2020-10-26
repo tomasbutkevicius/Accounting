@@ -65,23 +65,10 @@ public class ManageCategoryWindow implements Initializable {
     setExpenseList(category);
     setIncomeList(category);
     setResponsibleUserList(category);
-    parentTitle.setText("Is a parent");
-  }
-
-  public void setDisplayInformation(
-      AccountingSystem accountingSystem,
-      Category category,
-      User activeUser,
-      Category parentCategory) {
-    setAccountingSystem(accountingSystem);
-    setActiveUser(activeUser);
-    setCategory(category);
-    setSubCategoryList(category);
-    setExpenseList(category);
-    setIncomeList(category);
-    setResponsibleUserList(category);
-    setParentCategory(category);
-    parentTitle.setText("'" + category.getParentCategory().getTitle() + "'");
+    if(category.getParentCategory()!=null){
+      parentTitle.setText("'" + category.getParentCategory().getTitle() + "'");
+    } else
+      parentTitle.setText("Is a parent");
   }
 
   public void setAccountingSystem(AccountingSystem accountingSystem) {
@@ -105,7 +92,7 @@ public class ManageCategoryWindow implements Initializable {
   public void setSubCategoryList(Category category) {
     subCategoryList.getItems().clear();
     for (Category subcategory : category.getSubCategories()) {
-      subCategoryList.getItems().add("'" + subcategory.getTitle() + "'");
+      subCategoryList.getItems().add("'" + subcategory.getTitle() + "' " + subcategory.getParentCategory().getTitle());
     }
   }
 
@@ -168,12 +155,44 @@ public class ManageCategoryWindow implements Initializable {
 
   public void backBtnClick(ActionEvent actionEvent) throws IOException {
     if (parentCategory == null) loadAccountingWindow();
-    else loadManageCategoryWindow();
+    else loadParentCategoryWindow();
   }
 
-  private void loadManageCategoryWindow() {}
+  private void loadParentCategoryWindow() throws IOException {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("ManageCategoryWindow.fxml"));
+    Parent root = loader.load();
+    ManageCategoryWindow manageCategoryWindow = loader.getController();
+    manageCategoryWindow.setDisplayInformation(accountingSystem, parentCategory, activeUser);
 
-  public void manageSubCatBtnClick(ActionEvent actionEvent) {}
+    Stage stage = (Stage) backBtn.getScene().getWindow();
+    stage.setTitle("Accounting System. User " + activeUser.getName());
+    stage.setScene(new Scene(root, 800, 600));
+    stage.show();
+  }
+
+  private void loadSubCategoryWindow(Category subcategory) throws IOException {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("ManageCategoryWindow.fxml"));
+    Parent root = loader.load();
+    ManageCategoryWindow manageCategoryWindow = loader.getController();
+    manageCategoryWindow.setDisplayInformation(accountingSystem, subcategory, activeUser);
+
+    Stage stage = (Stage) backBtn.getScene().getWindow();
+    stage.setTitle("Accounting System. User " + activeUser.getName());
+    stage.setScene(new Scene(root, 800, 600));
+    stage.show();
+  }
+
+  public void manageSubCatBtnClick(ActionEvent actionEvent) throws IOException {
+
+    if(emptyField(editSubCatNameField.getText()))
+      errorMessage.setText("Enter subcategory name to edit");
+     else
+      if(CategoryController.getSubcategoryByName(category, editSubCatNameField.getText()) == null)
+        errorMessage.setText("Subcategory not found");
+      else {
+        loadSubCategoryWindow(CategoryController.getSubcategoryByName(category, editSubCatNameField.getText()));
+      }
+    }
 
   public void updateCategoryTitleBtnClick(ActionEvent actionEvent) {
     if (!emptyField(titleField.getText())) {
@@ -227,7 +246,7 @@ public class ManageCategoryWindow implements Initializable {
   private void deleteCategory() throws IOException {
     AccountingSystemController.removeCategory(accountingSystem, category);
     if (parentCategory == null) loadAccountingWindow();
-    else loadManageCategoryWindow();
+    else loadParentCategoryWindow();
   }
 
   public void showUsersBtnClick(ActionEvent actionEvent) {

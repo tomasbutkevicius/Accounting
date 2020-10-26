@@ -20,25 +20,15 @@ public class CategoryController {
         }
     }
 
-    public static void createSubCategory(Category selectedCategory, User user) {
+    public static String createSubCategory(Category selectedCategory, Category subcategory, User user) {
         Scanner scanner = new Scanner(System.in);
-
-        ArrayList<User> responsibleUsers = new ArrayList<>();
-        responsibleUsers.add(user);
-        System.out.println("Enter subcategory title");
-        String title;
-        title = scanner.nextLine();
-
-        System.out.println("Enter subcategory description");
-        String description;
-        description = scanner.nextLine();
-
-        if (AccountingSystemController.categoryExists(selectedCategory.getSubCategories(), title)) {
-            System.out.println("Subcategory with this name already exists");
+        if (AccountingSystemController.categoryExists(selectedCategory.getSubCategories(), subcategory.getTitle())) {
+            return "Subcategory with this name already exists";
         } else {
             Category subCategory;
-            subCategory = new Category(title, description, responsibleUsers, selectedCategory);
+            subCategory = new Category(subcategory.getTitle(), subcategory.getDescription(), subcategory.getResponsibleUsers(), selectedCategory);
             addSubCategory(selectedCategory, subCategory);
+            return "Subcategory added";
         }
     }
 

@@ -58,10 +58,10 @@ public class CreateCategoryWindow implements Initializable {
                     AccountingSystemController.addCategory(accountingSystem, category),
                     "Okay");
         } else {
-            parentCategory.getSubCategories().add(category);
+
             Popup.display(
                     "Subcategory creation",
-                    "subcategory Added",
+                    CategoryController.createSubCategory(parentCategory, category, activeUser),
                     "Okay");
         }
     }
