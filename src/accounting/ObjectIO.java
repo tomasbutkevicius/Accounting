@@ -7,21 +7,22 @@ import java.io.*;
 
 public class ObjectIO {
 
-    public static void WriteObjectToFile(AccountingSystem accountingSystem) {
+    public static String WriteObjectToFile(AccountingSystem accountingSystem) {
         try {
-            FileOutputStream fileOut = new FileOutputStream(new File("newAccountingSystem.txt"));
+            FileOutputStream fileOut = new FileOutputStream(new File("lastSave.txt"));
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
             objectOut.writeObject(accountingSystem);
             objectOut.close();
-            System.out.println("Accounting system was succesfully written to a file " + "newAccountingSystem.txt");
+            return "Accounting system was successfully \n written to a file lastSave.txt";
         } catch (Exception ex) {
             ex.printStackTrace();
+            return "Something went wrong saving accounting to file";
         }
     }
 
-    public static AccountingSystem readObjectFromFile(AccountingSystem accountingSystem) throws IOException, ClassNotFoundException {
+    public static AccountingSystem readObjectFromFile(AccountingSystem accountingSystem, String fileName) throws IOException, ClassNotFoundException {
         try {
-            FileInputStream fileIn = new FileInputStream(new File("accountingSystem.txt"));
+            FileInputStream fileIn = new FileInputStream(new File(fileName));
             ObjectInputStream objectIn = new ObjectInputStream(fileIn);
 
             // Read objects
@@ -32,7 +33,7 @@ public class ObjectIO {
             System.out.println("New system successfully loaded");
 
         } catch (FileNotFoundException e) {
-            System.out.println("File accountingSystem.txt was not found. Make sure it is in Accounting folder");
+            System.out.println("File" + fileName + " was not found. Make sure it is in Accounting folder");
         }
         return accountingSystem;
     }

@@ -64,8 +64,10 @@ public class ManageCategoryWindow implements Initializable {
     setSubCategoryList(category);
     setExpenseList(category);
     setIncomeList(category);
+    setParentCategory(category);
     setResponsibleUserList(category);
     if(category.getParentCategory()!=null){
+
       parentTitle.setText("'" + category.getParentCategory().getTitle() + "'");
     } else
       parentTitle.setText("Is a parent");
@@ -82,7 +84,7 @@ public class ManageCategoryWindow implements Initializable {
   }
 
   public void setParentCategory(Category category) {
-    this.parentCategory = category;
+    this.parentCategory = category.getParentCategory();
   }
 
   public void setActiveUser(User activeUser) {
@@ -244,9 +246,15 @@ public class ManageCategoryWindow implements Initializable {
   }
 
   private void deleteCategory() throws IOException {
-    AccountingSystemController.removeCategory(accountingSystem, category);
-    if (parentCategory == null) loadAccountingWindow();
-    else loadParentCategoryWindow();
+
+    if (parentCategory == null) {
+      AccountingSystemController.removeCategory(accountingSystem, category);
+      loadAccountingWindow();
+    }
+    else {
+      CategoryController.removeSubCategory(parentCategory, category);
+      loadParentCategoryWindow();
+    }
   }
 
   public void showUsersBtnClick(ActionEvent actionEvent) {

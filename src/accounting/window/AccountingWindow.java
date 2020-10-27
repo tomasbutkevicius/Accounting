@@ -1,5 +1,6 @@
 package accounting.window;
 
+import accounting.ObjectIO;
 import accounting.controller.AccountingSystemController;
 import accounting.controller.CategoryController;
 import accounting.controller.UserController;
@@ -44,6 +45,7 @@ public class AccountingWindow implements Initializable {
   public Button addCatBtn;
   public TextField editCatNameField;
   public Label errorMessage;
+  public Label messageToUserSystem;
   private AccountingSystem accountingSystem;
   private User activeUser;
 
@@ -268,4 +270,8 @@ public class AccountingWindow implements Initializable {
 
     popUpWindow.showAndWait();
   }
+
+    public void saveBtnClick(ActionEvent actionEvent) {
+      messageToUserSystem.setText(ObjectIO.WriteObjectToFile(accountingSystem));
+    }
 }

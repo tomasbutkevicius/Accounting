@@ -1,18 +1,24 @@
 package accounting.window;
 
 import accounting.ObjectIO;
+import accounting.controller.AccountingSystemController;
 import accounting.model.AccountingSystem;
 import accounting.model.User;
 import accounting.model.UserType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -66,6 +72,57 @@ public class StartWindow implements Initializable {
       messageToUser.setText("First load or create a system");
     } else {
       loadLoginWindow();
+    }
+  }
+
+  public void loadBtnClick(ActionEvent actionEvent) {
+    messageToUser.setText("");
+    Stage popUpWindow = new Stage();
+
+    popUpWindow.initModality(Modality.APPLICATION_MODAL);
+    popUpWindow.setTitle("Load save");
+
+    Label fileQuest = new Label("Enter file name (lastSave.txt):");
+    TextField fileField = new TextField();
+
+    Button backBtn = new Button("Back");
+    Button loadBtn = new Button("Load");
+    backBtn.setOnAction(e -> popUpWindow.close());
+    loadBtn.setOnAction(e -> {
+      try {
+        loadSystemFromFile(fileField.getText());
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      } catch (ClassNotFoundException ex) {
+        ex.printStackTrace();
+      }
+    });
+    VBox layout = new VBox(10);
+
+    layout.getChildren().addAll(fileQuest, fileField, backBtn, loadBtn);
+
+    layout.setAlignment(Pos.CENTER);
+
+    Scene scene1 = new Scene(layout, 500, 300);
+
+    popUpWindow.setScene(scene1);
+
+    popUpWindow.showAndWait();
+  }
+
+  private void loadSystemFromFile(String file) throws IOException, ClassNotFoundException {
+    File f = new File(file);
+    if(!f.exists()) {
+      Popup.display(
+              "Error",
+              "File not found",
+              "Okay");
+    } else {
+      accountingSystem = ObjectIO.readObjectFromFile(accountingSystem, file);
+      Popup.display(
+              "Loaded",
+              "System loaded",
+              "Okay");
     }
   }
 }

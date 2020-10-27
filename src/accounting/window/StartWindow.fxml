@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="accounting.window.StartWindow">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="accounting.window.StartWindow">
    <children>
       <Pane layoutY="-30.0" prefHeight="600.0" prefWidth="809.0">
          <children>
-            <Pane layoutY="7.0" prefHeight="593.0" prefWidth="803.0">
+            <Pane layoutX="3.0" layoutY="14.0" prefHeight="593.0" prefWidth="803.0">
                <children>
-                  <Button fx:id="createSysBtn" layoutX="347.0" layoutY="253.0" mnemonicParsing="false" onAction="#createAccountingSystem" text="Create new system" />
-                  <Button fx:id="startSysBtn" layoutX="364.0" layoutY="193.0" mnemonicParsing="false" onAction="#startAccountingSystem" text="Start system" />
+                  <Button fx:id="createSysBtn" layoutX="344.0" layoutY="331.0" mnemonicParsing="false" onAction="#createAccountingSystem" text="Create new system" />
+                  <Button fx:id="startSysBtn" layoutX="363.0" layoutY="174.0" mnemonicParsing="false" onAction="#startAccountingSystem" text="Start system" />
                   <Label fx:id="messageToUser" layoutX="178.0" layoutY="412.0" prefHeight="124.0" prefWidth="454.0" textAlignment="CENTER" />
-                  <Button fx:id="createDemoBtn" layoutX="342.0" layoutY="306.0" mnemonicParsing="false" onAction="#createDemoBtnClick" text="Create demo system" />
+                  <Button fx:id="createDemoBtn" layoutX="341.0" layoutY="387.0" mnemonicParsing="false" onAction="#createDemoBtnClick" text="Create demo system" />
                   <Label layoutX="353.0" layoutY="76.0" text="Accounting">
                      <font>
                         <Font name="Bell MT Bold" size="20.0" />
                      </font>
                   </Label>
+                  <Button fx:id="loadBtn" layoutX="339.0" layoutY="220.0" mnemonicParsing="false" onAction="#loadBtnClick" text="Load system from file" />
                </children>
             </Pane>
          </children>
