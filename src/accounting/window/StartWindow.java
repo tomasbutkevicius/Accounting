@@ -179,6 +179,7 @@ public class StartWindow implements Initializable {
     } else {
       accountingSystem = ObjectIO.readObjectFromFile(accountingSystem, file);
       Popup.display("Loaded", "System loaded", "Okay");
+      setSystemInformation();
     }
   }
 }
