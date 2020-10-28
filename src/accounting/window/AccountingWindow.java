@@ -227,7 +227,48 @@ public class AccountingWindow implements Initializable {
     return user;
   }
 
-  public void deleteUserBtnClick(ActionEvent actionEvent) {}
+  public void deleteUserBtnClick(ActionEvent actionEvent) {
+    popUpConfirmDeleteUser();
+  }
+
+  private void popUpConfirmDeleteUser() {
+    messageToUser.setText("");
+    errorMessage.setText("");
+    Stage popUpWindow = new Stage();
+
+    popUpWindow.initModality(Modality.APPLICATION_MODAL);
+    popUpWindow.setTitle("Delete User");
+
+    Label question = new Label("Are you sure you want to delete user '" + activeUser.getName() + "'?");
+    Button backBtn = new Button("Go back");
+    Button deleteBtn = new Button("Delete. I am sure. Yes. Bye.");
+    backBtn.setOnAction(e -> popUpWindow.close());
+    deleteBtn.setOnAction(
+            e -> {
+              try {
+                deleteUser();
+                popUpWindow.close();
+              } catch (Exception ex) {
+                ex.printStackTrace();
+              }
+            });
+    VBox layout = new VBox(10);
+
+    layout.getChildren().addAll(question, backBtn, deleteBtn);
+
+    layout.setAlignment(Pos.CENTER);
+
+    Scene scene1 = new Scene(layout, 500, 300);
+
+    popUpWindow.setScene(scene1);
+
+    popUpWindow.showAndWait();
+  }
+
+  private void deleteUser() throws IOException, ClassNotFoundException {
+    AccountingSystemController.removeUser(accountingSystem, activeUser);
+    loadLoginWindow();
+  }
 
   private boolean typeNotSelected() {
     return !radioBtnPrivate.isSelected() && !radioBtnCompany.isSelected();
