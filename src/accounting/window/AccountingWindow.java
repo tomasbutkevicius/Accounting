@@ -21,6 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -40,12 +41,14 @@ public class AccountingWindow implements Initializable {
   public Label messageToUser;
   public RadioButton radioBtnPrivate;
   public RadioButton radioBtnCompany;
+  public RadioButton radioBtnAdmin;
   final ToggleGroup group = new ToggleGroup();
   public ListView categoryList;
   public Button addCatBtn;
   public TextField editCatNameField;
   public Label errorMessage;
   public Label messageToUserSystem;
+  public Button showUsersBtn;
   private AccountingSystem accountingSystem;
   private User activeUser;
 
@@ -54,12 +57,12 @@ public class AccountingWindow implements Initializable {
     systemNameField.setText(accountingSystem.getName());
     systemDateField.setText(accountingSystem.getSystemCreationDate().toString());
     systemIncomeField.setText(Integer.toString(accountingSystem.getIncome()) + "eur");
-    systemExpenseField.setText(Integer.toString(accountingSystem.getExpense())+ "eur");
+    systemExpenseField.setText(Integer.toString(accountingSystem.getExpense()) + "eur");
   }
 
   public void setCategoryList(AccountingSystem accountingSystem) {
     for (Category category : accountingSystem.getCategories()) {
-      categoryList.getItems().add("'" + category.getTitle() + "'");
+      categoryList.getItems().add(category.getTitle());
     }
   }
 
@@ -68,16 +71,25 @@ public class AccountingWindow implements Initializable {
     usernameField.setText(user.getName());
     userPasswordField.setText(user.getPassword());
     if (user.getType() == UserType.PRIVATE) {
+      radioBtnAdmin.setDisable(true);
       radioBtnPrivate.setSelected(true);
-    } else {
+    } else if (user.getType() == UserType.COMPANY){
+      radioBtnAdmin.setDisable(true);
       radioBtnCompany.setSelected(true);
+    } else {
+      radioBtnPrivate.setDisable(true);
+      radioBtnCompany.setDisable(true);
+      radioBtnAdmin.setSelected(true);
+      showUsersBtn.setDisable(false);
     }
   }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    showUsersBtn.setDisable(true);
     radioBtnCompany.setToggleGroup(group);
     radioBtnPrivate.setToggleGroup(group);
+    radioBtnAdmin.setToggleGroup(group);
   }
 
   public void showUsersBtnClick(ActionEvent actionEvent) {
@@ -90,12 +102,12 @@ public class AccountingWindow implements Initializable {
   }
 
   public void manageCatBtnClick(ActionEvent actionEvent) throws IOException {
-    Category category =
-        AccountingSystemController.getCategoryByTitle(accountingSystem, editCatNameField.getText());
-    if (category == null) {
-      errorMessage.setText("Category not found");
-    } else {
+    try{
+      Category category =
+              AccountingSystemController.getCategoryByTitle(accountingSystem, categoryList.getSelectionModel().getSelectedItem().toString());
       loadManageCategoryWindow(category);
+    } catch (RuntimeException e){
+      errorMessage.setText("Category not selected");
     }
   }
 
@@ -112,7 +124,9 @@ public class AccountingWindow implements Initializable {
   }
 
   public void addCatBtnClick(ActionEvent actionEvent) throws IOException {
-    loadCreateCategoryWindow();
+    if (activeUser.getType().equals(UserType.ADMIN))
+      errorMessage.setText("Admin cannot add categories");
+    else loadCreateCategoryWindow();
   }
 
   public void contactBtnClick(ActionEvent actionEvent) {
@@ -182,8 +196,8 @@ public class AccountingWindow implements Initializable {
     messageToUser.setText("");
     User updatedUser = getUpdateUser();
     if (updatedUser != null) {
-      AccountingSystemController.removeUser(accountingSystem, activeUser);
-      if(UserController.getUserByName(accountingSystem, updatedUser.getName()) != null){
+      AccountingSystemController.removeUserForUpdate(accountingSystem, activeUser);
+      if (UserController.getUserByName(accountingSystem, updatedUser.getName()) != null) {
         messageToUser.setText("User with this name already exists");
         AccountingSystemController.addUser(accountingSystem, activeUser);
       } else {
@@ -228,10 +242,10 @@ public class AccountingWindow implements Initializable {
   }
 
   public void deleteUserBtnClick(ActionEvent actionEvent) {
-    popUpConfirmDeleteUser();
+    popUpConfirmDeleteUser(activeUser);
   }
 
-  private void popUpConfirmDeleteUser() {
+  private void popUpConfirmDeleteUser(User user) {
     messageToUser.setText("");
     errorMessage.setText("");
     Stage popUpWindow = new Stage();
@@ -239,19 +253,20 @@ public class AccountingWindow implements Initializable {
     popUpWindow.initModality(Modality.APPLICATION_MODAL);
     popUpWindow.setTitle("Delete User");
 
-    Label question = new Label("Are you sure you want to delete user '" + activeUser.getName() + "'?");
+    Label question =
+        new Label("Are you sure you want to delete user '" + user.getName() + "'?");
     Button backBtn = new Button("Go back");
     Button deleteBtn = new Button("Delete. I am sure. Yes. Bye.");
     backBtn.setOnAction(e -> popUpWindow.close());
     deleteBtn.setOnAction(
-            e -> {
-              try {
-                deleteUser();
-                popUpWindow.close();
-              } catch (Exception ex) {
-                ex.printStackTrace();
-              }
-            });
+        e -> {
+          try {
+            deleteUser(user);
+            popUpWindow.close();
+          } catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        });
     VBox layout = new VBox(10);
 
     layout.getChildren().addAll(question, backBtn, deleteBtn);
@@ -265,13 +280,14 @@ public class AccountingWindow implements Initializable {
     popUpWindow.showAndWait();
   }
 
-  private void deleteUser() throws IOException, ClassNotFoundException {
-    AccountingSystemController.removeUser(accountingSystem, activeUser);
-    loadLoginWindow();
+  private void deleteUser(User user) throws IOException, ClassNotFoundException {
+    AccountingSystemController.removeUser(accountingSystem, user);
+    if(user.equals(activeUser))
+      loadLoginWindow();
   }
 
   private boolean typeNotSelected() {
-    return !radioBtnPrivate.isSelected() && !radioBtnCompany.isSelected();
+    return !radioBtnPrivate.isSelected() && !radioBtnCompany.isSelected() && !radioBtnAdmin.isSelected();
   }
 
   private boolean emptyField() {
@@ -299,9 +315,18 @@ public class AccountingWindow implements Initializable {
 
     Button backBtn = new Button("Back");
     backBtn.setOnAction(e -> popUpWindow.close());
+    Button deleteBtn = new Button("Delete user");
+    deleteBtn.setOnAction(e -> {
+      try {
+        deleteSelectedUser(users.getSelectionModel().getSelectedItem().toString());
+        popUpWindow.close();
+      } catch (NullPointerException ex) {
+        Popup.display("error", "User not selected to delete", "ok");
+      }
+    });
     VBox layout = new VBox(10);
 
-    layout.getChildren().addAll(backBtn, users);
+    layout.getChildren().addAll(backBtn, users, deleteBtn);
 
     layout.setAlignment(Pos.CENTER);
 
@@ -312,7 +337,21 @@ public class AccountingWindow implements Initializable {
     popUpWindow.showAndWait();
   }
 
-    public void saveBtnClick(ActionEvent actionEvent) {
-      messageToUserSystem.setText(ObjectIO.WriteObjectToFile(accountingSystem));
+  private void deleteSelectedUser(String userToString) {
+    User selectedUser = null;
+    for (User user : accountingSystem.getUsers()) {
+      if(user.toString().equals(userToString))
+        selectedUser = user;
     }
+    if(selectedUser == activeUser)
+    {
+      Popup.display("error", "You cannot delete yourself", "okay then");
+    }
+    else
+        popUpConfirmDeleteUser(selectedUser);
+  }
+
+  public void saveBtnClick(ActionEvent actionEvent) {
+    messageToUserSystem.setText(ObjectIO.WriteObjectToFile(accountingSystem));
+  }
 }

@@ -12,7 +12,7 @@
 <AnchorPane prefHeight="598.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="accounting.window.AccountingWindow">
    <children>
       <Button fx:id="backBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backBtnClick" text="Logout" />
-      <Button fx:id="manageCatBtn" layoutX="408.0" layoutY="274.0" mnemonicParsing="false" onAction="#manageCatBtnClick" text="Mange category" />
+      <Button fx:id="manageCatBtn" layoutX="316.0" layoutY="141.0" mnemonicParsing="false" onAction="#manageCatBtnClick" text="Mange selected category" />
       <TabPane layoutX="529.0" prefHeight="598.0" prefWidth="271.0" side="RIGHT" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="System">
@@ -39,14 +39,15 @@
                      <children>
                         <Label layoutX="1.0" layoutY="46.0" text="Username:" />
                         <Label layoutX="2.0" layoutY="88.0" text="Password:" />
-                        <Label layoutX="26.0" layoutY="14.0" text="Type:" />
+                        <Label layoutY="14.0" text="Type:" />
                         <Button fx:id="contactBtn" layoutX="68.0" layoutY="127.0" mnemonicParsing="false" onAction="#contactBtnClick" prefHeight="25.0" prefWidth="126.0" text="Contact information" />
                         <TextField fx:id="usernameField" layoutX="71.0" layoutY="42.0" />
                         <TextField fx:id="userPasswordField" layoutX="71.0" layoutY="84.0" />
                         <Button fx:id="updateUserBtn" layoutX="30.0" layoutY="185.0" mnemonicParsing="false" onAction="#updateUserBtnClick" text="Update" textFill="#0897ff" />
                         <Button fx:id="deleteUserBtn" layoutX="165.0" layoutY="185.0" mnemonicParsing="false" onAction="#deleteUserBtnClick" prefHeight="17.0" prefWidth="59.0" text="Delete" textFill="#f20000" />
-                        <RadioButton fx:id="radioBtnPrivate" layoutX="68.0" layoutY="14.0" mnemonicParsing="false" text="Private" />
-                        <RadioButton fx:id="radioBtnCompany" layoutX="148.0" layoutY="14.0" mnemonicParsing="false" text="Company" />
+                        <RadioButton fx:id="radioBtnPrivate" layoutX="93.0" layoutY="14.0" mnemonicParsing="false" text="Private" />
+                        <RadioButton fx:id="radioBtnCompany" layoutX="159.0" layoutY="14.0" mnemonicParsing="false" text="Company" />
+                        <RadioButton fx:id="radioBtnAdmin" layoutX="30.0" layoutY="14.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="63.0" text="Admin" />
                         <Label fx:id="messageToUser" layoutX="22.0" layoutY="250.0" prefHeight="32.0" prefWidth="207.0" textAlignment="CENTER" />
                      </children>
                   </AnchorPane>
@@ -55,11 +56,9 @@
         </tabs>
       </TabPane>
       <Button fx:id="showUsersBtn" layoutX="345.0" layoutY="529.0" mnemonicParsing="false" onAction="#showUsersBtnClick" text="Show all users" />
-      <ListView fx:id="categoryList" layoutX="28.0" layoutY="111.0" prefHeight="443.0" prefWidth="280.0" />
+      <ListView fx:id="categoryList" layoutX="84.0" layoutY="111.0" prefHeight="443.0" prefWidth="150.0" />
       <Label layoutX="40.0" layoutY="86.0" text="Categories" />
       <Button fx:id="addCatBtn" layoutX="220.0" layoutY="82.0" mnemonicParsing="false" onAction="#addCatBtnClick" text="Add category" />
-      <TextField fx:id="editCatNameField" layoutX="362.0" layoutY="231.0" />
-      <Label layoutX="319.0" layoutY="235.0" text="Name:" />
       <Label fx:id="errorMessage" layoutX="319.0" layoutY="313.0" prefHeight="39.0" prefWidth="184.0" />
    </children>
 </AnchorPane>

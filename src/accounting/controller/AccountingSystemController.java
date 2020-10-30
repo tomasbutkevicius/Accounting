@@ -76,6 +76,10 @@ public class AccountingSystemController {
     return accountingSystem.getExpense();
   }
 
+  public static void removeUserForUpdate(AccountingSystem accountingSystem, User activeUser){
+    accountingSystem.getUsers().remove(activeUser);
+  }
+
   public static void removeUser(AccountingSystem accountingSystem, User activeUser) {
     removeUserResponsiblities(activeUser, accountingSystem.getCategories());
     accountingSystem.getUsers().remove(activeUser);

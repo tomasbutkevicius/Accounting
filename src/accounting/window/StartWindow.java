@@ -121,7 +121,9 @@ public class StartWindow implements Initializable {
   private AccountingSystem createTemporarySystem() {
     AccountingSystem accountingSystem = new AccountingSystem("Demo", LocalDate.now(), "v1", 0, 0);
     User tempUser = new User(UserType.PRIVATE, "Tomas", "password", "Vilnius");
+    User adminUser = new User(UserType.ADMIN, "admin", "admin", "");
     accountingSystem.getUsers().add(tempUser);
+    accountingSystem.getUsers().add(adminUser);
     messageToUser.setText("Created demo system (temp user Tomas, password= password)");
     return accountingSystem;
   }
@@ -153,6 +155,7 @@ public class StartWindow implements Initializable {
         e -> {
           try {
             loadSystemFromFile(fileField.getText());
+            popUpWindow.close();
           } catch (IOException ex) {
             ex.printStackTrace();
           } catch (ClassNotFoundException ex) {

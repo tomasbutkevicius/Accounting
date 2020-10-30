@@ -66,11 +66,13 @@ public class ManageCategoryWindow implements Initializable {
     setIncomeList(category);
     setParentCategory(category);
     setResponsibleUserList(category);
-    if(category.getParentCategory()!=null){
-
+    if (category.getParentCategory() != null) {
       parentTitle.setText("'" + category.getParentCategory().getTitle() + "'");
-    } else
-      parentTitle.setText("Is a parent");
+    } else parentTitle.setText("Is a parent");
+
+    if (activeUser.getType().equals(UserType.ADMIN)) {
+      showUsersBtn.setDisable(false);
+    }
   }
 
   public void setAccountingSystem(AccountingSystem accountingSystem) {
@@ -94,7 +96,9 @@ public class ManageCategoryWindow implements Initializable {
   public void setSubCategoryList(Category category) {
     subCategoryList.getItems().clear();
     for (Category subcategory : category.getSubCategories()) {
-      subCategoryList.getItems().add("'" + subcategory.getTitle() + "' " + subcategory.getParentCategory().getTitle());
+      subCategoryList
+          .getItems()
+          .add(subcategory.getTitle());
     }
   }
 
@@ -185,16 +189,15 @@ public class ManageCategoryWindow implements Initializable {
   }
 
   public void manageSubCatBtnClick(ActionEvent actionEvent) throws IOException {
-
-    if(emptyField(editSubCatNameField.getText()))
-      errorMessage.setText("Enter subcategory name to edit");
-     else
-      if(CategoryController.getSubcategoryByName(category, editSubCatNameField.getText()) == null)
-        errorMessage.setText("Subcategory not found");
-      else {
-        loadSubCategoryWindow(CategoryController.getSubcategoryByName(category, editSubCatNameField.getText()));
-      }
+    try {
+      Category subcategory =
+          CategoryController.getSubcategoryByName(
+              category, subCategoryList.getSelectionModel().getSelectedItem().toString());
+      loadSubCategoryWindow(subcategory);
+    } catch (RuntimeException e) {
+      errorMessage.setText("Category not selected");
     }
+  }
 
   public void updateCategoryTitleBtnClick(ActionEvent actionEvent) {
     if (!emptyField(titleField.getText())) {
@@ -250,8 +253,7 @@ public class ManageCategoryWindow implements Initializable {
     if (parentCategory == null) {
       AccountingSystemController.removeCategory(accountingSystem, category);
       loadAccountingWindow();
-    }
-    else {
+    } else {
       CategoryController.removeSubCategory(parentCategory, category);
       loadParentCategoryWindow();
     }
@@ -270,7 +272,7 @@ public class ManageCategoryWindow implements Initializable {
 
     ListView users = new ListView();
     for (User user : accountingSystem.getUsers()) {
-      users.getItems().add(user.toString());
+      users.getItems().add(user.getName() + ": " + user.getType());
     }
 
     Button backBtn = new Button("Back");
@@ -289,7 +291,9 @@ public class ManageCategoryWindow implements Initializable {
   }
 
   public void addSubCatBtnClick(ActionEvent actionEvent) throws IOException {
-    loadCreateCategoryWindow();
+    if (activeUser.getType().equals(UserType.ADMIN))
+      errorMessage.setText("Admin cannot add categories");
+    else loadCreateCategoryWindow();
   }
 
   private void loadCreateCategoryWindow() throws IOException {
@@ -440,9 +444,8 @@ public class ManageCategoryWindow implements Initializable {
           category.getResponsibleUsers(), responsibleUser)) {
         messageToAddUser.setText("User is already responsible");
       } else {
-        CategoryController.addResponsibleUser(category, responsibleUser);
+        messageToAddUser.setText(CategoryController.addResponsibleUser(category, responsibleUser));
         setResponsibleUserList(category);
-        messageToAddUser.setText("Added responsible user");
       }
     }
   }
@@ -492,22 +495,22 @@ public class ManageCategoryWindow implements Initializable {
   }
 
   public void deleteIncBtnClick(ActionEvent actionEvent) {
-    if(validateIncomeDelete()){
+    if (validateIncomeDelete()) {
       popUpConfirmDeleteIncome();
     }
   }
 
   private boolean validateIncomeDelete() {
-    if(emptyField(delIncNameField.getText())){
+    if (emptyField(delIncNameField.getText())) {
       errorMessage.setText("Income name to delete is missing");
       return false;
     }
-      if(CategoryController.getIncomeByName(category, delIncNameField.getText()) == null){
-        errorMessage.setText("Income with entered name does not exist");
-        return false;
-      }
-      return true;
+    if (CategoryController.getIncomeByName(category, delIncNameField.getText()) == null) {
+      errorMessage.setText("Income with entered name does not exist");
+      return false;
     }
+    return true;
+  }
 
   private void popUpConfirmDeleteIncome() {
     messageToUser.setText("");
@@ -517,19 +520,20 @@ public class ManageCategoryWindow implements Initializable {
     popUpWindow.initModality(Modality.APPLICATION_MODAL);
     popUpWindow.setTitle("Delete Income");
 
-    Label question = new Label("Are you sure you want to delete income '" + delIncNameField.getText() + "'?");
+    Label question =
+        new Label("Are you sure you want to delete income '" + delIncNameField.getText() + "'?");
     Button backBtn = new Button("Go back");
     Button deleteBtn = new Button("Delete. I am sure. Yes. Bye.");
     backBtn.setOnAction(e -> popUpWindow.close());
     deleteBtn.setOnAction(
-            e -> {
-              try {
-                deleteIncome();
-                popUpWindow.close();
-              } catch (Exception ex) {
-                ex.printStackTrace();
-              }
-            });
+        e -> {
+          try {
+            deleteIncome();
+            popUpWindow.close();
+          } catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        });
     VBox layout = new VBox(10);
 
     layout.getChildren().addAll(question, backBtn, deleteBtn);
@@ -544,27 +548,28 @@ public class ManageCategoryWindow implements Initializable {
   }
 
   private void deleteIncome() {
-    if(IncomeController.removeIncome(accountingSystem, category, CategoryController.getIncomeByName(category, delIncNameField.getText()))){
-        errorMessage.setText("Income deleted");
-        setIncomeList(category);
+    if (IncomeController.removeIncome(
+        accountingSystem,
+        category,
+        CategoryController.getIncomeByName(category, delIncNameField.getText()))) {
+      errorMessage.setText("Income deleted");
+      setIncomeList(category);
     } else {
       errorMessage.setText("Something went wrong");
     }
   }
 
-
   private boolean validateExpenseDelete() {
-    if(emptyField(delExpNameField.getText())){
+    if (emptyField(delExpNameField.getText())) {
       errorMessage.setText("Expense name to delete is missing");
       return false;
     }
-    if(CategoryController.getExpenseByName(category, delExpNameField.getText()) == null){
+    if (CategoryController.getExpenseByName(category, delExpNameField.getText()) == null) {
       errorMessage.setText("Expense with entered name does not exist");
       return false;
     }
     return true;
   }
-
 
   private void popUpConfirmDeleteExpense() {
     messageToUser.setText("");
@@ -574,19 +579,20 @@ public class ManageCategoryWindow implements Initializable {
     popUpWindow.initModality(Modality.APPLICATION_MODAL);
     popUpWindow.setTitle("Delete Expense");
 
-    Label question = new Label("Are you sure you want to delete expense '" + delExpNameField.getText() + "'?");
+    Label question =
+        new Label("Are you sure you want to delete expense '" + delExpNameField.getText() + "'?");
     Button backBtn = new Button("Go back");
     Button deleteBtn = new Button("Delete. I am sure. Yes. Bye.");
     backBtn.setOnAction(e -> popUpWindow.close());
     deleteBtn.setOnAction(
-            e -> {
-              try {
-                deleteExpense();
-                popUpWindow.close();
-              } catch (Exception ex) {
-                ex.printStackTrace();
-              }
-            });
+        e -> {
+          try {
+            deleteExpense();
+            popUpWindow.close();
+          } catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        });
     VBox layout = new VBox(10);
 
     layout.getChildren().addAll(question, backBtn, deleteBtn);
@@ -601,7 +607,10 @@ public class ManageCategoryWindow implements Initializable {
   }
 
   private void deleteExpense() {
-    if(ExpenseController.removeExpense(accountingSystem, category, CategoryController.getExpenseByName(category, delExpNameField.getText()))){
+    if (ExpenseController.removeExpense(
+        accountingSystem,
+        category,
+        CategoryController.getExpenseByName(category, delExpNameField.getText()))) {
       errorMessage.setText("Expense deleted");
       setExpenseList(category);
     } else {
@@ -610,7 +619,7 @@ public class ManageCategoryWindow implements Initializable {
   }
 
   public void deleteExpBtnClick(ActionEvent actionEvent) {
-    if(validateExpenseDelete()){
+    if (validateExpenseDelete()) {
       popUpConfirmDeleteExpense();
     }
   }

@@ -1,8 +1,10 @@
 package accounting.window;
 
 import accounting.controller.AccountingSystemController;
+import accounting.controller.UserController;
 import accounting.model.AccountingSystem;
 import accounting.model.User;
+import accounting.model.UserType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -23,6 +25,8 @@ public class CreateAccountingSystem {
     public Label errorMessage;
     public Button backBtn;
     public TextField versionField;
+    public TextField adminNameField;
+    public TextField adminPasswordField;
     private AccountingSystem accountingSystem;
 
     public void backBtnClick(ActionEvent actionEvent) throws IOException {
@@ -44,6 +48,8 @@ public class CreateAccountingSystem {
     public void createBtnClick(ActionEvent actionEvent) throws IOException {
         accountingSystem = createAccountingSystem();
         if (accountingSystem != null) {
+            User admin = new User(UserType.ADMIN, adminNameField.getText(), adminPasswordField.getText(), "First admin");
+            AccountingSystemController.addUser(accountingSystem, admin);
             errorMessage.setText("");
             Popup.display("Accounting system creation", "New accounting system created", "Okay");
             loadStartWindow();
@@ -54,13 +60,23 @@ public class CreateAccountingSystem {
         if(emptyField()){
             errorMessage.setText("Required fields are empty");
             return null;
-        } else {
-            return new AccountingSystem(systemNameField.getText(), LocalDate.now(), versionField.getText(), 0, 0);
         }
+        if(hasSpaces()){
+            errorMessage.setText("Admin information cannot have spaces");
+            return null;
+        }
+            return new AccountingSystem(systemNameField.getText(), LocalDate.now(), versionField.getText(), 0, 0);
     }
 
     private boolean emptyField() {
         return versionField.getText().replaceAll("\\s", "").isEmpty()
-                || systemNameField.getText().replaceAll("\\s", "").isEmpty();
+                || systemNameField.getText().replaceAll("\\s", "").isEmpty()
+                || adminNameField.getText().replaceAll("\\s", "").isEmpty()
+                || adminPasswordField.getText().replaceAll("\\s", "").isEmpty();
+    }
+
+    private boolean hasSpaces() {
+        if (adminPasswordField.getText().contains(" ") || adminNameField.getText().contains(" ")) return true;
+        return false;
     }
 }
