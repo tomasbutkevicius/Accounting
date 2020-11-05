@@ -1,16 +1,29 @@
 package accounting;
 
-import accounting.model.AccountingSystem;
+import accounting.utils.DatabaseUtilities;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 public class StartApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
+        Connection connection = DatabaseUtilities.connect();
         Parent root = FXMLLoader.load(getClass().getResource("./window/StartWindow.fxml"));
+
+        Statement stmt = connection.createStatement ();
+
+        String sql = "SELECT name, amount FROM income";
+        ResultSet resultSet = stmt.executeQuery (sql);
+
+
+
         primaryStage.setTitle("Accounting System");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
