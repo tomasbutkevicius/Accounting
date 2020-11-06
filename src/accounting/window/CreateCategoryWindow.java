@@ -58,10 +58,9 @@ public class CreateCategoryWindow implements Initializable {
                     AccountingSystemController.addCategory(accountingSystem, category),
                     "Okay");
         } else {
-
             Popup.display(
                     "Subcategory creation",
-                    CategoryController.createSubCategory(parentCategory, category, activeUser),
+                    CategoryController.createSubCategory(accountingSystem, parentCategory, category, activeUser),
                     "Okay");
         }
     }
