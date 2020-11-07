@@ -22,7 +22,6 @@ import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.concurrent.Callable;
 
 public class ManageCategoryWindow implements Initializable {
   public ListView subCategoryList;
@@ -359,15 +358,15 @@ public class ManageCategoryWindow implements Initializable {
       Popup.display("Error", "Income with this name exists", "Okay");
     } else {
       try {
-        Connection connection = DatabaseUtilities.connect();
-
-        Statement statement = connection.createStatement ();
-        String insertString = "INSERT INTO income VALUES (?, ?)";
-        PreparedStatement createIncome =  connection.prepareStatement(insertString);
-        createIncome.setString(1, incomeNameField);
-        createIncome.setInt(2, Integer.parseInt(incomeAmountField));
-        createIncome.execute();
-        DatabaseUtilities.disconect(connection, statement);
+//        Connection connection = DatabaseUtilities.connect();
+//
+//        Statement statement = connection.createStatement ();
+//        String insertString = "INSERT INTO income VALUES (?, ?)";
+//        PreparedStatement createIncome =  connection.prepareStatement(insertString);
+//        createIncome.setString(1, incomeNameField);
+//        createIncome.setInt(2, Integer.parseInt(incomeAmountField));
+//        createIncome.execute();
+//        DatabaseUtilities.disconnect(connection, statement);
 
 //        String sql = "SELECT name, amount FROM income";
 //        ResultSet resultSet = stmt.executeQuery (sql);
@@ -377,7 +376,7 @@ public class ManageCategoryWindow implements Initializable {
         IncomeController.createIncome(accountingSystem, category, income);
         Popup.display("Income added", "Income added", "Okay");
         setIncomeList(category);
-      } catch (NumberFormatException | SQLException e) {
+      } catch (NumberFormatException e) {
         Popup.display("Error", "Amount must be a number", "Okay");
       }
     }

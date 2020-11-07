@@ -18,7 +18,8 @@ public class DatabaseUtilities {
         }
     }
 
-    public static void disconect(Connection connection, Statement statement) throws SQLException {
+    public static void disconnect(Connection connection, Statement statement) throws SQLException {
+        statement.close();
         connection.close();
     }
 
