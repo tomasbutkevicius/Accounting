@@ -21,7 +21,7 @@ public class Category implements Serializable {
     private List<User> responsibleUsers;
     @ManyToOne
     private Category parentCategory;
-    @OneToMany
+    @OneToMany(mappedBy = "parentCategory")
     private List<Category> subCategories = new ArrayList<>();
 
     public Category(String title, String description, ArrayList<User> responsibleUsers) {
