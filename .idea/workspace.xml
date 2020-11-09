@@ -2,107 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="24487b0a-4dc9-44ab-838d-0b6c7c4c5a24" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/706ed05e-7999-42c2-a862-072204a06d27.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/706ed05e-7999-42c2-a862-072204a06d27/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/description.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/google-java-format.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Hibernate_5_4_11_5_4_11.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/mysql_mysql_connector_java_8_0_21.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/org_projectlombok_lombok_1_16_4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AccountingSystemGUI.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/META-INF/persistence.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lastSave.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/FastInfoset-1.2.15.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/antlr-2.7.7.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/byte-buddy-1.10.7.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/classmate-1.5.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/dom4j-2.1.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/hibernate-commons-annotations-5.1.0.Final.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/hibernate-core-5.4.11.Final.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/istack-commons-runtime-3.0.7.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/jandex-2.1.1.Final.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/javassist-3.24.0-GA.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/javax.activation-api-1.2.0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/javax.persistence-api-2.2.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/jaxb-api-2.3.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/jaxb-runtime-2.3.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/jboss-logging-3.3.2.Final.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/jboss-transaction-api_1.2_spec-1.1.1.Final.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/stax-ex-1.8.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/txw2-2.3.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/newAccountingSystem.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/ObjectIO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/StartApp.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/controller/AccountingSystemController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/controller/CategoryController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/controller/ExpenseController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/controller/IncomeController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/controller/UserController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/model/AccountingSystem.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/model/Category.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/model/Expense.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/model/Income.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/model/IncomeOld.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/model/User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/model/UserType.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/utils/DatabaseUtilities.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/AccountingWindow.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/AccountingWindow.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/CreateAccountingSystem.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/CreateCategoryWindow.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/CreateCategoryWindow.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/LoginWindow.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/LoginWindow.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/ManageCategoryWindow.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/ManageCategoryWindow.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/Popup.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/SignUpWindow.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/SignUpWindow.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/StartWindow.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/StartWindow.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/accounting/window/createAccountingSystem.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/AccountingSystemGUI/hibernate.cfg.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/ObjectIO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/StartApp.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/controller/AccountingSystemController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/controller/CategoryController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/controller/ExpenseController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/controller/IncomeController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/controller/UserController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/model/AccountingSystem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/model/Category.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/model/Expense.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/model/Income.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/model/IncomeOld.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/model/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/model/UserType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/utils/DatabaseUtilities.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/AccountingWindow.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/AccountingWindow.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/CreateAccountingSystem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/CreateCategoryWindow.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/CreateCategoryWindow.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/LoginWindow.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/LoginWindow.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/ManageCategoryWindow.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/ManageCategoryWindow.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/Popup.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/SignUpWindow.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/SignUpWindow.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/StartWindow.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/StartWindow.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/accounting/window/createAccountingSystem.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hibernate.cfg.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/AccountingHibernate/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AccountingHibernate/AccountingHibernate.iml" beforeDir="false" afterPath="$PROJECT_DIR$/AccountingHibernate/AccountingHibernate.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AccountingHibernate/src/main/java/StartApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/AccountingHibernate/src/main/java/StartApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AccountingHibernate/src/main/java/model/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/AccountingHibernate/src/main/java/model/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AccountingHibernate/src/main/java/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/AccountingHibernate/src/main/java/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AccountingHibernate/src/main/java/persistenceController/UserHibController.java" beforeDir="false" afterPath="$PROJECT_DIR$/AccountingHibernate/src/main/java/persistenceController/UserHibController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AccountingHibernate/target/classes/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/AccountingHibernate/target/classes/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AccountingHibernate/target/classes/StartApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/AccountingHibernate/target/classes/StartApp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AccountingHibernate/target/classes/model/Category.class" beforeDir="false" afterPath="$PROJECT_DIR$/AccountingHibernate/target/classes/model/Category.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AccountingHibernate/target/classes/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/AccountingHibernate/target/classes/model/User.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,10 +29,14 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="24487b0a-4dc9-44ab-838d-0b6c7c4c5a24" name="Default Changelist" comment="" />
@@ -142,6 +56,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1604838030673" />
+    <state x="655" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1604949075770">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="655" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1604949075770" />
     <state x="551" y="170" key="new project wizard" timestamp="1604838049740">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

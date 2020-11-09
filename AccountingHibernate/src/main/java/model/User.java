@@ -10,15 +10,12 @@ import java.util.List;
 @Entity
 public class User implements Serializable {
     @Id
-    @GeneratedValue
-    private int id;
+    private String name;
     @Enumerated(EnumType.STRING)
     private UserType type;
-    private String name;
     private String password;
     private String contactInformation;
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @OrderBy("id ASC")
+    @ManyToMany(mappedBy = "categories")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Category> categories;
 
@@ -28,6 +25,13 @@ public class User implements Serializable {
         this.password = password;
         this.contactInformation = contactInformation;
         this.categories.add(category);
+    }
+
+    public User(UserType type, String name, String password, String contactInformation) {
+        this.type = type;
+        this.name = name;
+        this.password = password;
+        this.contactInformation = contactInformation;
     }
 
     public User(){}
@@ -64,13 +68,6 @@ public class User implements Serializable {
         this.contactInformation = contactInformation;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public List<Category> getCategories() {
         return categories;

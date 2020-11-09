@@ -15,8 +15,8 @@ public class Category implements Serializable {
     private int id;
     private String title;
     private String description;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "categories")
-    @OrderBy("id ASC")
+    @ManyToMany(cascade= CascadeType.ALL, mappedBy = "categories")
+    @OrderBy("name")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<User> responsibleUsers;
     @ManyToOne
@@ -24,13 +24,13 @@ public class Category implements Serializable {
     @OneToMany(mappedBy = "parentCategory")
     private List<Category> subCategories = new ArrayList<>();
 
-    public Category(String title, String description, ArrayList<User> responsibleUsers) {
+    public Category(String title, String description, List<User> responsibleUsers) {
         this.title = title;
         this.description = description;
         this.responsibleUsers = responsibleUsers;
     }
 
-    public Category(String title, String description, ArrayList<User> responsibleUsers, Category parentCategory) {
+    public Category(String title, String description, List<User> responsibleUsers, Category parentCategory) {
         this.title = title;
         this.description = description;
         this.responsibleUsers = responsibleUsers;
