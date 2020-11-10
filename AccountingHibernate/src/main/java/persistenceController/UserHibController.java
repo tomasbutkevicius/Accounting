@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 public class UserHibController {
+
     EntityManagerFactory entityManagerFactory = null;
 
     public UserHibController(EntityManagerFactory entityManagerFactory) {
@@ -26,10 +27,10 @@ public class UserHibController {
         try {
             entityManager = getEntityManager();
             entityManager.getTransaction().begin();
-            entityManager.persist(user);
+            entityManager.persist(entityManager.merge(user));
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
-            Popup.display("Something went wrong", "Error", "ok");
+            Popup.display("error", "error", "ok");
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -78,6 +79,7 @@ public class UserHibController {
         try {
             entityManager = getEntityManager();
             entityManager.getTransaction().begin();
+            entityManager.flush();
             user = entityManager.merge(user);
             entityManager.getTransaction().commit();
         } catch (Exception exception) {

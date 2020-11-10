@@ -12,19 +12,18 @@ import java.util.List;
 public class StartApp {
     public static void main(String[] args) {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("accounting_hib");
-        CategoryHibController categoryHibController = new CategoryHibController(factory);
         UserHibController userHibController = new UserHibController(factory);
 
-        System.out.println(userHibController.getByName("test"));
+        CategoryHibController categoryHibController = new CategoryHibController(factory);
 
-        List<User> users = new ArrayList<User>();
-        Category category = new Category("test", "descr", users);
-
-        category.getResponsibleUsers().add(userHibController.getByName("test"));
+//        userHibController.create(new User(UserType.ADMIN, "test", "test", "test"));
+        List<User> responsibleUsers = new ArrayList<User>();
+        responsibleUsers.add(userHibController.getByName("test"));
+//        Category category = new Category("yes", "desc", responsibleUsers);
         User user = userHibController.getByName("test");
-        user.getCategories().add(category);
-        categoryHibController.create(category);
+        user.setName("What");
         userHibController.update(user);
 
+//        categoryHibController.create(new Category("yes", "desc", responsibleUsers));
     }
 }

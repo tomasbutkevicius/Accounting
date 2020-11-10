@@ -26,7 +26,7 @@ public class CategoryHibController {
         try {
             entityManager = getEntityManager();
             entityManager.getTransaction().begin();
-            entityManager.persist(category);
+            entityManager.persist(entityManager.merge(category));
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
             exception.printStackTrace();

@@ -15,8 +15,7 @@ public class Category implements Serializable {
     private int id;
     private String title;
     private String description;
-    @ManyToMany(cascade= CascadeType.ALL, mappedBy = "categories")
-    @OrderBy("name")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "categories")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<User> responsibleUsers;
     @ManyToOne

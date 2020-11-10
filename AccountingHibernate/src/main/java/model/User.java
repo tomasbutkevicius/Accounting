@@ -15,7 +15,7 @@ public class User implements Serializable {
     private UserType type;
     private String password;
     private String contactInformation;
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(cascade = CascadeType.MERGE)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Category> categories;
 
