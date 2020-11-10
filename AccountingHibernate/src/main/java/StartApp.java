@@ -13,17 +13,14 @@ public class StartApp {
     public static void main(String[] args) {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("accounting_hib");
         UserHibController userHibController = new UserHibController(factory);
-
         CategoryHibController categoryHibController = new CategoryHibController(factory);
 
-//        userHibController.create(new User(UserType.ADMIN, "test", "test", "test"));
-        List<User> responsibleUsers = new ArrayList<User>();
-        responsibleUsers.add(userHibController.getByName("test"));
-//        Category category = new Category("yes", "desc", responsibleUsers);
+        userHibController.create(new User(UserType.ADMIN, "test", "test", "test"));
         User user = userHibController.getByName("test");
-        user.setName("What");
+        List<User> responsibleUsers = new ArrayList<User>();
+        responsibleUsers.add(user);
+        Category category = new Category("yes", "desc", responsibleUsers);
+        user.getCategories().add(category);
         userHibController.update(user);
-
-//        categoryHibController.create(new Category("yes", "desc", responsibleUsers));
     }
 }

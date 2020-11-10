@@ -6,7 +6,6 @@
     <persistence-unit name="accounting_hib" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>model.Category</class>
-        <class>model.User</class>
         <properties>
             <property name="javax.persistence.jdbc.url"
                       value="jdbc:mysql://localhost:3306/accounting_hib?createDatabaseIfNotExist=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8"/>

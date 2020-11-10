@@ -10,6 +10,8 @@ import java.util.List;
 @Entity
 public class User implements Serializable {
     @Id
+    @GeneratedValue
+    private int id;
     private String name;
     @Enumerated(EnumType.STRING)
     private UserType type;
