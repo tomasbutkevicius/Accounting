@@ -34,7 +34,6 @@ import java.util.List;
 public class StartApp {
     public static void main(String[] args) {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("accounting_hib");
-        
     }
 }
 //
