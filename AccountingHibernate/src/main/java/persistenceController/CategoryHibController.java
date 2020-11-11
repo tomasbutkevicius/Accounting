@@ -90,7 +90,7 @@ public class CategoryHibController {
         }
     }
 
-    public void delete(String id){
+    public void delete(int id){
         EntityManager entityManager = null;
 
         try {

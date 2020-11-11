@@ -91,7 +91,7 @@ public class UserHibController {
         }
     }
 
-    public void delete(String name){
+    public void delete(int id){
         EntityManager entityManager = null;
 
         try {
@@ -99,8 +99,8 @@ public class UserHibController {
             entityManager.getTransaction().begin();
             User user = null;
             try{
-                user = entityManager.getReference(User.class, name);
-                user.getName();
+                user = entityManager.getReference(User.class, id);
+                System.out.println(user.getId());
 
             }catch(Exception e){
                 e.printStackTrace();

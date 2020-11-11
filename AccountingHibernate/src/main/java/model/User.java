@@ -17,7 +17,7 @@ public class User implements Serializable {
     private UserType type;
     private String password;
     private String contactInformation;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Category> categories;
 
@@ -86,6 +86,14 @@ public class User implements Serializable {
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

@@ -34,19 +34,20 @@ import java.util.List;
 public class StartApp {
     public static void main(String[] args) {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("accounting_hib");
+        UserHibController userHibController = new UserHibController(factory);
+        userHibController.delete(1);
     }
 }
-//
+
 //public class StartApp extends Application {
 //    @Override
 //    public void start(Stage primaryStage) throws Exception{
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("./window/StartWindow.fxml"));
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/StartWindow.fxml"));
 //        Parent root = loader.load();
 //        primaryStage.setTitle("Accounting System");
 //        primaryStage.setScene(new Scene(root, 800, 600));
 //        primaryStage.show();
 //    }
-//
 //
 //    public static void main(String[] args) {
 //        launch(args);
