@@ -10,12 +10,14 @@ import java.util.List;
 @Entity
 public class User implements Serializable {
     @Id
+    @GeneratedValue
+    private int id;
     private String name;
     @Enumerated(EnumType.STRING)
     private UserType type;
     private String password;
     private String contactInformation;
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Category> categories;
 
@@ -32,6 +34,15 @@ public class User implements Serializable {
         this.name = name;
         this.password = password;
         this.contactInformation = contactInformation;
+    }
+
+    public User(int id, String name, UserType type, String password, String contactInformation, List<Category> categories) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.password = password;
+        this.contactInformation = contactInformation;
+        this.categories = categories;
     }
 
     public User(){}

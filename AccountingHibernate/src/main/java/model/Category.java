@@ -23,6 +23,11 @@ public class Category implements Serializable {
     @OneToMany(mappedBy = "parentCategory")
     private List<Category> subCategories = new ArrayList<>();
 
+    public Category(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
     public Category(String title, String description, List<User> responsibleUsers) {
         this.title = title;
         this.description = description;
@@ -34,6 +39,16 @@ public class Category implements Serializable {
         this.description = description;
         this.responsibleUsers = responsibleUsers;
         this.parentCategory = parentCategory;
+    }
+
+
+    public Category(int id, String title, String description, List<User> responsibleUsers, Category parentCategory, List<Category> subCategories) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.responsibleUsers = responsibleUsers;
+        this.parentCategory = parentCategory;
+        this.subCategories = subCategories;
     }
 
     public Category() {
