@@ -66,6 +66,15 @@ public class AccountingSystemHib {
         return null;
     }
 
+    public AccountingSystem getByName(String name) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(AccountingSystem.class, name);
+        } finally {
+            em.close();
+        }
+    }
+
     public AccountingSystem getById(int id) {
         for (AccountingSystem accountingSystem : getAccountingSystemList()) {
             if (accountingSystem.getId() == id) return accountingSystem;

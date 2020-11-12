@@ -21,7 +21,7 @@
                                 <Font name="Bell MT Bold" size="20.0" />
                             </font>
                         </Label>
-                        <Button fx:id="loadBtn" layoutX="339.0" layoutY="220.0" mnemonicParsing="false" onAction="#loadBtnClick" text="Load system from file" />
+                        <Button fx:id="loadBtn" layoutX="339.0" layoutY="220.0" mnemonicParsing="false" onAction="#loadBtnClick" text="Load database" />
                         <Label fx:id="systemInformation" contentDisplay="CENTER" layoutX="567.0" layoutY="208.0" prefHeight="116.0" prefWidth="206.0">
                             <font>
                                 <Font name="Bell MT" size="12.0" />

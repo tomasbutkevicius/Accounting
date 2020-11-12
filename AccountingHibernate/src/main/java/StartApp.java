@@ -10,6 +10,7 @@ import model.UserType;
 import persistenceController.AccountingSystemHib;
 import persistenceController.CategoryHibController;
 import persistenceController.UserHibController;
+import window.StartWindow;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -34,48 +35,22 @@ import java.util.List;
 //        categoryHibController.create(category);
 //
 
-public class StartApp {
-    public static void main(String[] args) {
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("accounting_hib");
-        UserHibController userHibController = new UserHibController(factory);
-//
-//        AccountingSystem accountingSystem = new AccountingSystem("Demo", LocalDate.now(), "v1", 0, 0);
-//        User tempUser = new User(UserType.PRIVATE, "Tomas", "password", "Vilnius");
-//        User adminUser = new User(UserType.ADMIN, "admin", "admin", "");
-//        accountingSystem.getUsers().add(tempUser);
-//        accountingSystem.getUsers().add(adminUser);
-//
-//        tempUser.setAccountingSystem(accountingSystem);
-//        adminUser.setAccountingSystem(accountingSystem);
-//
-        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(factory);
-//        accountingSystemHib.create(accountingSystem);
+public class StartApp extends Application {
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("accounting_hib");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/StartWindow.fxml"));
+        Parent root = loader.load();
+        StartWindow startWindow = loader.getController();
+        startWindow.setEntityManagerFactory(entityManagerFactory);
+        startWindow.setAccountingSystemHib(new AccountingSystemHib(entityManagerFactory));
 
-//        Category category = new Category("yes", "yes");
-//        User user = userHibController.getById(3);
-//        user.getCategories().add(category);
-//        category.getResponsibleUsers().add(user);
-//        AccountingSystem accountingSystem = accountingSystemHib.getById(2);
-//        category.setAccountingSystem(accountingSystem);
-//        CategoryHibController categoryHibController = new CategoryHibController(factory);
-//        categoryHibController.create(category);
-        userHibController.delete(3);
-//        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(factory);
-//        accountingSystemHib.delete(1);
+        primaryStage.setTitle("Accounting System");
+        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
-
-//public class StartApp extends Application {
-//    @Override
-//    public void start(Stage primaryStage) throws Exception{
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/StartWindow.fxml"));
-//        Parent root = loader.load();
-//        primaryStage.setTitle("Accounting System");
-//        primaryStage.setScene(new Scene(root, 800, 600));
-//        primaryStage.show();
-//    }
-//
-//    public static void main(String[] args) {
-//        launch(args);
-//    }
-//}
