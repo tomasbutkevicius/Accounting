@@ -12,7 +12,7 @@
             <children>
                 <Pane layoutX="3.0" layoutY="14.0" prefHeight="593.0" prefWidth="803.0">
                     <children>
-                        <Button fx:id="createSysBtn" layoutX="344.0" layoutY="331.0" mnemonicParsing="false" onAction="#createAccountingSystem" text="Create new system" />
+                        <Button fx:id="createSysBtn" layoutX="344.0" layoutY="331.0" mnemonicParsing="false" onAction="#createSysBtnClick" text="Create new system" />
                         <Button fx:id="startSysBtn" layoutX="363.0" layoutY="174.0" mnemonicParsing="false" onAction="#startAccountingSystem" text="Start system" />
                         <Label fx:id="messageToUser" layoutX="178.0" layoutY="412.0" prefHeight="124.0" prefWidth="454.0" textAlignment="CENTER" />
                         <Button fx:id="createDemoBtn" layoutX="341.0" layoutY="387.0" mnemonicParsing="false" onAction="#createDemoBtnClick" text="Create demo system" />

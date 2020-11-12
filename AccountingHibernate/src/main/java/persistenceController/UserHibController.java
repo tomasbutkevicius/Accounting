@@ -1,5 +1,6 @@
 package persistenceController;
 
+import model.AccountingSystem;
 import model.User;
 import window.Popup;
 
@@ -72,6 +73,14 @@ public class UserHibController {
         }
         return null;
     }
+
+    public User getByNameInSystem(AccountingSystem accountingSystem, String name) {
+        for (User user : accountingSystem.getUsers()) {
+            if (user.getName().equals(name)) return user;
+        }
+        return null;
+    }
+
 
     public void update(User user){
         EntityManager entityManager = null;
