@@ -19,6 +19,7 @@ public class User implements Serializable {
     private String contactInformation;
     @ManyToMany(cascade = CascadeType.MERGE)
     @LazyCollection(LazyCollectionOption.FALSE)
+    @OrderBy("id ASC")
     private List<Category> categories;
     @ManyToOne
     private  AccountingSystem accountingSystem;

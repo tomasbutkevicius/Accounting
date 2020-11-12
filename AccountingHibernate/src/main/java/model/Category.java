@@ -15,17 +15,21 @@ public class Category implements Serializable {
     private int id;
     private String title;
     private String description;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "categories")
+    @ManyToMany(cascade = CascadeType.MERGE, mappedBy = "categories")
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<User> responsibleUsers;
+    @OrderBy("id ASC")
+    private List<User> responsibleUsers = new ArrayList<>();
     @ManyToOne
     private Category parentCategory;
     @OneToMany(mappedBy = "parentCategory")
+    @OrderBy("id ASC")
     private List<Category> subCategories = new ArrayList<>();
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
     private List<Income> incomes = new ArrayList<>();
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
     private List<Expense> expenses = new ArrayList<>();
     @ManyToOne
     private  AccountingSystem accountingSystem;

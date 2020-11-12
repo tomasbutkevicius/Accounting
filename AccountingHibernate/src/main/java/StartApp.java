@@ -13,6 +13,7 @@ import persistenceController.UserHibController;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,26 +39,29 @@ public class StartApp {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("accounting_hib");
         UserHibController userHibController = new UserHibController(factory);
 //
+//        AccountingSystem accountingSystem = new AccountingSystem("Demo", LocalDate.now(), "v1", 0, 0);
+//        User tempUser = new User(UserType.PRIVATE, "Tomas", "password", "Vilnius");
+//        User adminUser = new User(UserType.ADMIN, "admin", "admin", "");
+//        accountingSystem.getUsers().add(tempUser);
+//        accountingSystem.getUsers().add(adminUser);
 //
-//        userHibController.create(new User(UserType.ADMIN, "test", "test", "test"));
-//        userHibController.create(new User(UserType.ADMIN, "test2", "test", "test"));
+//        tempUser.setAccountingSystem(accountingSystem);
+//        adminUser.setAccountingSystem(accountingSystem);
 //
-//        List<User> responsibleUsers = new ArrayList<User>();
-//        User user1 = userHibController.getById(1);
-//        User user2 = userHibController.getById(2);
-//        responsibleUsers.add(user1);
-//        responsibleUsers.add(user2);
-//        Category category = new Category("yes", "desc", responsibleUsers);
-//        user1.getCategories().add(category);
-//        user2.getCategories().add(category);
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(factory);
+//        accountingSystemHib.create(accountingSystem);
+
+//        Category category = new Category("yes", "yes");
+//        User user = userHibController.getById(3);
+//        user.getCategories().add(category);
+//        category.getResponsibleUsers().add(user);
+//        AccountingSystem accountingSystem = accountingSystemHib.getById(2);
+//        category.setAccountingSystem(accountingSystem);
 //        CategoryHibController categoryHibController = new CategoryHibController(factory);
 //        categoryHibController.create(category);
-
-        User user1 = userHibController.getById(1);
-        User user2 = userHibController.getById(2);
-        user1.setName("New");
-
-        userHibController.delete(1);
+        userHibController.delete(3);
+//        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(factory);
+//        accountingSystemHib.delete(1);
     }
 }
 

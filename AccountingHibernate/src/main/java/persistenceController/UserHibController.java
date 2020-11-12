@@ -100,8 +100,7 @@ public class UserHibController {
             User user = null;
             try{
                 user = entityManager.getReference(User.class, id);
-                System.out.println(user.getId());
-
+                user.getCategories().clear();
             }catch(Exception e){
                 e.printStackTrace();
             }

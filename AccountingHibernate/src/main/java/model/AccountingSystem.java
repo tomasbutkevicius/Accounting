@@ -17,11 +17,13 @@ public class AccountingSystem implements Serializable {
     private String name;
     private LocalDate systemCreationDate;
     private String systemVersion;
-    @OneToMany(mappedBy = "accountingSystem", cascade= CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "accountingSystem", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
+    @OrderBy("id ASC")
     private List<User> users = new ArrayList<>();
-    @OneToMany(mappedBy = "accountingSystem", cascade= CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(mappedBy = "accountingSystem", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
+    @OrderBy("id ASC")
     private List<Category> categories = new ArrayList<>();
     private int income;
     private int expense;
