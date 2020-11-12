@@ -28,15 +28,18 @@ public class StartWindow implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        if (accountingSystem != null)
+            accountingSystem = accountingSystemHib.getById(accountingSystem.getId());
     }
-
 
 
     private void loadLoginWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/LoginWindow.fxml"));
         Parent root = loader.load();
         LoginWindow loginWindow = loader.getController();
-        loginWindow.setAccountingSystem(accountingSystem);
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        loginWindow.setAccountingSystem(accountingSystemHib.getById(accountingSystem.getId()));
         loginWindow.setEntityManagerFactory(entityManagerFactory);
 
         Stage stage = (Stage) startSysBtn.getScene().getWindow();
@@ -63,8 +66,10 @@ public class StartWindow implements Initializable {
         Parent root = loader.load();
         CreateAccountingSysWindow createAccountingSystem = loader.getController();
 
-        if(accountingSystem != null)
-            createAccountingSystem.setAccountingSystem(accountingSystem);
+        if (accountingSystem != null) {
+            AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+            createAccountingSystem.setAccountingSystem(accountingSystemHib.getById(accountingSystem.getId()));
+        }
         createAccountingSystem.setEntityManagerFactory(entityManagerFactory);
 
         Stage stage = (Stage) loadBtn.getScene().getWindow();
@@ -85,8 +90,10 @@ public class StartWindow implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/DatabasesWindow.fxml"));
         Parent root = loader.load();
         DatabasesWindow databasesWindow = loader.getController();
-        if(accountingSystem != null)
-            databasesWindow.setAccountingSystem(accountingSystem);
+        if (accountingSystem != null){
+            AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+            databasesWindow.setAccountingSystem(accountingSystemHib.getById(accountingSystem.getId()));
+        }
         databasesWindow.setEntityManagerFactory(entityManagerFactory);
 
         Stage stage = (Stage) loadBtn.getScene().getWindow();

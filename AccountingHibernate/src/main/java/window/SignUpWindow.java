@@ -40,6 +40,10 @@ public class SignUpWindow implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        if (accountingSystem != null)
+            accountingSystem = accountingSystemHib.getById(accountingSystem.getId());
+
         radioBtnCompany.setToggleGroup(group);
         radioBtnPrivate.setToggleGroup(group);
     }
@@ -67,7 +71,8 @@ public class SignUpWindow implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/LoginWindow.fxml"));
         Parent root = loader.load();
         LoginWindow loginWindow = loader.getController();
-        loginWindow.setAccountingSystem(accountingSystem);
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        loginWindow.setAccountingSystem(accountingSystemHib.getById(accountingSystem.getId()));
         loginWindow.setEntityManagerFactory(entityManagerFactory);
 
         Stage stage = (Stage) backBtn.getScene().getWindow();

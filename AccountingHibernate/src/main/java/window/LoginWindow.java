@@ -34,7 +34,9 @@ public class LoginWindow implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        if (accountingSystem != null)
+            accountingSystem = accountingSystemHib.getById(accountingSystem.getId());
     }
 
     public void backBtnClick(ActionEvent actionEvent) throws IOException {
@@ -47,7 +49,8 @@ public class LoginWindow implements Initializable {
         Parent root = loader.load();
         StartWindow startWindow = loader.getController();
         startWindow.setEntityManagerFactory(entityManagerFactory);
-        startWindow.setAccountingSystem(accountingSystem);
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        startWindow.setAccountingSystem(accountingSystemHib.getById(accountingSystem.getId()));
 
         Stage stage = (Stage) backBtn.getScene().getWindow();
         stage.setTitle("Accounting System");

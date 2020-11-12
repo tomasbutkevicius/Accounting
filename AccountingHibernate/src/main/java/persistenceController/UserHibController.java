@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserHibController {
@@ -122,5 +123,16 @@ public class UserHibController {
                 entityManager.close();
             }
         }
+    }
+
+    public List<User> getAllUsersInSystem(AccountingSystem accountingSystem) {
+        List<User> usersInSystem = new ArrayList<>();
+
+        for (User user : getUserList()) {
+            if (user.getAccountingSystem().getId() == accountingSystem.getId()){
+                usersInSystem.add(user);
+            }
+        }
+        return usersInSystem;
     }
 }

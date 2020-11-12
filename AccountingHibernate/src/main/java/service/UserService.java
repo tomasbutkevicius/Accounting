@@ -3,6 +3,7 @@ package service;
 import model.AccountingSystem;
 import model.User;
 import persistenceController.AccountingSystemHib;
+import persistenceController.UserHibController;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
@@ -25,5 +26,10 @@ public class UserService {
                 .filter(user -> user.getName().equals(userName) && user.getPassword().equals(password))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public static List<User> getAllUsersInSystem(EntityManagerFactory entityManagerFactory, AccountingSystem accountingSystem) {
+        UserHibController userHibController = new UserHibController(entityManagerFactory);
+        return userHibController.getAllUsersInSystem(accountingSystem);
     }
 }

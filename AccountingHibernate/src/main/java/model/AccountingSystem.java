@@ -21,7 +21,7 @@ public class AccountingSystem implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     @OrderBy("id ASC")
     private List<User> users = new ArrayList<>();
-    @OneToMany(mappedBy = "accountingSystem", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "accountingSystem", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     @OrderBy("id ASC")
     private List<Category> categories = new ArrayList<>();

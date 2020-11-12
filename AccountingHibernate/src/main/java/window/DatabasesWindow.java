@@ -29,7 +29,9 @@ public class DatabasesWindow implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        if (accountingSystem != null)
+            accountingSystem = accountingSystemHib.getById(accountingSystem.getId());
     }
 
     public AccountingSystem getAccountingSystem() {
@@ -59,8 +61,11 @@ public class DatabasesWindow implements Initializable {
         Parent root = loader.load();
         StartWindow startWindow = loader.getController();
 
-        if (accountingSystem != null)
-            startWindow.setAccountingSystem(accountingSystem);
+        if (accountingSystem != null) {
+            AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+            startWindow.setAccountingSystem(accountingSystemHib.getById(accountingSystem.getId()));
+        }
+
 
         startWindow.setEntityManagerFactory(entityManagerFactory);
 

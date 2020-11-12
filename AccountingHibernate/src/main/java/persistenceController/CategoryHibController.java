@@ -1,11 +1,14 @@
 package persistenceController;
 
+import model.AccountingSystem;
 import model.Category;
+import model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryHibController {
@@ -99,6 +102,10 @@ public class CategoryHibController {
             Category category = null;
             try{
                 category = entityManager.getReference(Category.class, id);
+                for(User user: category.getResponsibleUsers()){
+                    user.getCategories().remove(category);
+                }
+                category.getResponsibleUsers().clear();
                 category.getId();
 
             }catch(Exception e){
@@ -113,5 +120,16 @@ public class CategoryHibController {
                 entityManager.close();
             }
         }
+    }
+
+    public List<Category> getAllCategoriesInSystem(AccountingSystem accountingSystem) {
+        List<Category> categoriesInSystem = new ArrayList<>();
+
+        for (Category category : getCategoryList()) {
+            if (category.getAccountingSystem().getId() == accountingSystem.getId()){
+                categoriesInSystem.add(category);
+            }
+        }
+        return categoriesInSystem;
     }
 }

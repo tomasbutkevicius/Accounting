@@ -16,7 +16,10 @@ import model.AccountingSystem;
 import model.Category;
 import model.User;
 import model.UserType;
+import persistenceController.AccountingSystemHib;
 import persistenceController.UserHibController;
+import service.CategoryService;
+import service.UserService;
 
 import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
@@ -60,7 +63,7 @@ public class AccountingWindow implements Initializable {
     }
 
     public void setCategoryList(AccountingSystem accountingSystem) {
-        for (Category category : accountingSystem.getCategories()) {
+        for (Category category : CategoryService.getAllCategoriesInSystem(entityManagerFactory, accountingSystem)) {
             categoryList.getItems().add(category.getTitle());
         }
     }
@@ -156,23 +159,26 @@ public class AccountingWindow implements Initializable {
     }
 
     private void loadCreateCategoryWindow() throws IOException {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("CreateCategoryWindow.fxml"));
-//        Parent root = loader.load();
-//        CreateCategoryWindow createCategoryWindow = loader.getController();
-//        createCategoryWindow.setAccountingSystem(accountingSystem);
-//        createCategoryWindow.setActiveUser(activeUser);
-//
-//        Stage stage = (Stage) backBtn.getScene().getWindow();
-//        stage.setTitle("Accounting System. User " + activeUser.getName());
-//        stage.setScene(new Scene(root, 800, 600));
-//        stage.show();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/CreateCategoryWindow.fxml"));
+        Parent root = loader.load();
+        CreateCategoryWindow createCategoryWindow = loader.getController();
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        createCategoryWindow.setAccountingSystem(accountingSystemHib.getById(accountingSystem.getId()));
+        createCategoryWindow.setEntityManagerFactory(entityManagerFactory);
+        createCategoryWindow.setActiveUser(activeUser);
+
+        Stage stage = (Stage) addCatBtn.getScene().getWindow();
+        stage.setTitle("Accounting System. User " + activeUser.getName());
+        stage.setScene(new Scene(root, 800, 600));
+        stage.show();
     }
 
     private void loadLoginWindow() throws IOException, ClassNotFoundException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/LoginWindow.fxml"));
         Parent root = loader.load();
         LoginWindow loginWindow = loader.getController();
-        loginWindow.setAccountingSystem(accountingSystem);
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        loginWindow.setAccountingSystem(accountingSystemHib.getById(accountingSystem.getId()));
         loginWindow.setEntityManagerFactory(entityManagerFactory);
 
         Stage stage = (Stage) backBtn.getScene().getWindow();
@@ -309,7 +315,7 @@ public class AccountingWindow implements Initializable {
         popUpWindow.setTitle("User list");
 
         ListView users = new ListView();
-        for (User user : accountingSystem.getUsers()) {
+        for (User user : UserService.getAllUsersInSystem(entityManagerFactory, accountingSystem)) {
             users.getItems().add(user.toString());
         }
 

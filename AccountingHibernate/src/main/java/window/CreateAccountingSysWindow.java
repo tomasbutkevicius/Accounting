@@ -35,7 +35,9 @@ public class CreateAccountingSysWindow implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        if (accountingSystem != null)
+            accountingSystem = accountingSystemHib.getById(accountingSystem.getId());
     }
 
     public void backBtnClick(ActionEvent actionEvent) throws IOException {
