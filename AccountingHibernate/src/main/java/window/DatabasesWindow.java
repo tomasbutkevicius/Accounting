@@ -25,7 +25,6 @@ public class DatabasesWindow implements Initializable {
     public Label errorMessage;
     private EntityManagerFactory entityManagerFactory;
     private AccountingSystem accountingSystem;
-    private AccountingSystemHib accountingSystemHib;
 
 
     @Override
@@ -43,20 +42,12 @@ public class DatabasesWindow implements Initializable {
 
     private void setDatabaseList() {
         databaseList.getItems().clear();
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         for (AccountingSystem accountingSystem : accountingSystemHib.getAccountingSystemList()) {
             databaseList
                     .getItems()
                     .add("ID: " + accountingSystem.getId() + " Name: " + accountingSystem.getName());
         }
-    }
-
-    public AccountingSystemHib getAccountingSystemHib() {
-        return accountingSystemHib;
-    }
-
-    public void setAccountingSystemHib(AccountingSystemHib accountingSystemHib) {
-        this.accountingSystemHib = accountingSystemHib;
-        setDatabaseList();
     }
 
     public void backBtnClick(ActionEvent actionEvent) throws IOException {
@@ -71,7 +62,6 @@ public class DatabasesWindow implements Initializable {
         if (accountingSystem != null)
             startWindow.setAccountingSystem(accountingSystem);
 
-        startWindow.setAccountingSystemHib(accountingSystemHib);
         startWindow.setEntityManagerFactory(entityManagerFactory);
 
         Stage stage = (Stage) backBtn.getScene().getWindow();
@@ -82,6 +72,7 @@ public class DatabasesWindow implements Initializable {
 
     public void selectDbBtnClick(ActionEvent actionEvent) {
         try {
+            AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
             String selectedDatabase = databaseList.getSelectionModel().getSelectedItem().toString();
             String[] splitSelectedDb = selectedDatabase.split(" ");
             int id = Integer.parseInt(splitSelectedDb[1]);
@@ -100,17 +91,7 @@ public class DatabasesWindow implements Initializable {
 
     public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
+        setDatabaseList();
     }
 
-
-    //    public void manageSubCatBtnClick(ActionEvent actionEvent) throws IOException {
-//        try {
-//            Category subcategory =
-//                    CategoryController.getSubcategoryByName(
-//                            category, subCategoryList.getSelectionModel().getSelectedItem().toString());
-//            loadSubCategoryWindow(subcategory);
-//        } catch (RuntimeException e) {
-//            errorMessage.setText("Category not selected");
-//        }
-//    }
 }

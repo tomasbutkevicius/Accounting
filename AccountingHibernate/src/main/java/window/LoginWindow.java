@@ -1,6 +1,7 @@
 package window;
 
 
+import controller.UserController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,8 +12,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.AccountingSystem;
+import model.User;
 import persistenceController.AccountingSystemHib;
 import persistenceController.UserHibController;
+import service.UserService;
 
 import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
@@ -25,10 +28,9 @@ public class LoginWindow implements Initializable {
     public TextField passwordField;
     public TextField usernameField;
     public Label systemNameField;
-    private EntityManagerFactory entityManagerFactory;
+    public Button loginBtn;
     private AccountingSystem accountingSystem;
-    private AccountingSystemHib accountingSystemHib;
-    private UserHibController userHibController;
+    private EntityManagerFactory entityManagerFactory;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -44,10 +46,8 @@ public class LoginWindow implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/StartWindow.fxml"));
         Parent root = loader.load();
         StartWindow startWindow = loader.getController();
-
-        startWindow.setAccountingSystem(accountingSystem);
-        startWindow.setAccountingSystemHib(accountingSystemHib);
         startWindow.setEntityManagerFactory(entityManagerFactory);
+        startWindow.setAccountingSystem(accountingSystem);
 
         Stage stage = (Stage) backBtn.getScene().getWindow();
         stage.setTitle("Accounting System");
@@ -55,7 +55,36 @@ public class LoginWindow implements Initializable {
         stage.show();
     }
 
-    public void loginBtnClick(ActionEvent actionEvent) {
+    public void loginBtnClick(ActionEvent actionEvent) throws IOException {
+        errorMessage.setText("");
+        handleLogin();
+    }
+
+    private void handleLogin() throws IOException {
+        User user =
+                UserService.login(entityManagerFactory,
+                        accountingSystem, usernameField.getText(), passwordField.getText());
+        if (user == null) {
+            errorMessage.setText("Invalid username or password");
+        } else {
+            loadAccounting(user);
+        }
+    }
+
+
+    private void loadAccounting(User user) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/AccountingWindow.fxml"));
+        Parent root = loader.load();
+        AccountingWindow accounting = loader.getController();
+        accounting.setAccountingSystem(accountingSystem);
+        accounting.setEntityManagerFactory(entityManagerFactory);
+        accounting.setUser(user);
+        accounting.setCategoryList(accountingSystem);
+
+        Stage stage = (Stage) loginBtn.getScene().getWindow();
+        stage.setTitle("Accounting System. User " + user.getName());
+        stage.setScene(new Scene(root, 800, 600));
+        stage.show();
     }
 
     public void signBtnClick(ActionEvent actionEvent) throws IOException {
@@ -68,7 +97,6 @@ public class LoginWindow implements Initializable {
         SignUpWindow signUpWindow = loader.getController();
 
         signUpWindow.setAccountingSystem(accountingSystem);
-        signUpWindow.setAccountingSystemHib(accountingSystemHib);
         signUpWindow.setEntityManagerFactory(entityManagerFactory);
 
         Stage stage = (Stage) backBtn.getScene().getWindow();
@@ -93,21 +121,5 @@ public class LoginWindow implements Initializable {
     public void setAccountingSystem(AccountingSystem accountingSystem) {
         this.accountingSystem = accountingSystem;
         systemNameField.setText(accountingSystem.getName());
-    }
-
-    public AccountingSystemHib getAccountingSystemHib() {
-        return accountingSystemHib;
-    }
-
-    public void setAccountingSystemHib(AccountingSystemHib accountingSystemHib) {
-        this.accountingSystemHib = accountingSystemHib;
-    }
-
-    public UserHibController getUserHibController() {
-        return userHibController;
-    }
-
-    public void setUserHibController(UserHibController userHibController) {
-        this.userHibController = userHibController;
     }
 }

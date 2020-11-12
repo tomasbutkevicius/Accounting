@@ -31,13 +31,13 @@ public class CreateAccountingSysWindow implements Initializable {
     public TextField adminPasswordField;
     private EntityManagerFactory entityManagerFactory;
     private AccountingSystem accountingSystem;
-    private AccountingSystemHib accountingSystemHib;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
     }
+
     public void backBtnClick(ActionEvent actionEvent) throws IOException {
         loadStartWindow();
     }
@@ -50,7 +50,6 @@ public class CreateAccountingSysWindow implements Initializable {
         if (accountingSystem != null)
             startWindow.setAccountingSystem(accountingSystem);
 
-        startWindow.setAccountingSystemHib(accountingSystemHib);
         startWindow.setEntityManagerFactory(entityManagerFactory);
 
         Stage stage = (Stage) backBtn.getScene().getWindow();
@@ -63,8 +62,8 @@ public class CreateAccountingSysWindow implements Initializable {
         AccountingSystem accountingSystem = createAccountingSystem();
 
         if (accountingSystem != null) {
-            if(validAccountingSystem(accountingSystem))
-            {
+            if (validAccountingSystem(accountingSystem)) {
+                AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
                 User admin = new User(UserType.ADMIN, adminNameField.getText(), adminPasswordField.getText(), "First admin");
                 AccountingSystemService.create(accountingSystemHib, accountingSystem, admin);
                 this.accountingSystem = accountingSystemHib.getByName(accountingSystem.getName());
@@ -76,7 +75,8 @@ public class CreateAccountingSysWindow implements Initializable {
     }
 
     private boolean validAccountingSystem(AccountingSystem accountingSystem) {
-        if(accountingSystemHib.getByName(accountingSystem.getName()) != null) {
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        if (accountingSystemHib.getByName(accountingSystem.getName()) != null) {
             errorMessage.setText("Accounting system with this name already exists");
             return false;
         }
@@ -84,11 +84,11 @@ public class CreateAccountingSysWindow implements Initializable {
     }
 
     private AccountingSystem createAccountingSystem() {
-        if(emptyField()){
+        if (emptyField()) {
             errorMessage.setText("Required fields are empty");
             return null;
         }
-        if(hasSpaces()){
+        if (hasSpaces()) {
             errorMessage.setText("Admin information cannot have spaces");
             return null;
         }
@@ -122,13 +122,5 @@ public class CreateAccountingSysWindow implements Initializable {
 
     public void setAccountingSystem(AccountingSystem accountingSystem) {
         this.accountingSystem = accountingSystem;
-    }
-
-    public AccountingSystemHib getAccountingSystemHib() {
-        return accountingSystemHib;
-    }
-
-    public void setAccountingSystemHib(AccountingSystemHib accountingSystemHib) {
-        this.accountingSystemHib = accountingSystemHib;
     }
 }

@@ -43,7 +43,6 @@ public class StartApp extends Application {
         Parent root = loader.load();
         StartWindow startWindow = loader.getController();
         startWindow.setEntityManagerFactory(entityManagerFactory);
-        startWindow.setAccountingSystemHib(new AccountingSystemHib(entityManagerFactory));
 
         primaryStage.setTitle("Accounting System");
         primaryStage.setScene(new Scene(root, 800, 600));

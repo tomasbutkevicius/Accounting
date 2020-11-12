@@ -25,7 +25,6 @@ public class StartWindow implements Initializable {
     public Button startSysBtn;
     private AccountingSystem accountingSystem;
     private EntityManagerFactory entityManagerFactory;
-    private AccountingSystemHib accountingSystemHib;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -38,9 +37,7 @@ public class StartWindow implements Initializable {
         Parent root = loader.load();
         LoginWindow loginWindow = loader.getController();
         loginWindow.setAccountingSystem(accountingSystem);
-        loginWindow.setAccountingSystemHib(accountingSystemHib);
         loginWindow.setEntityManagerFactory(entityManagerFactory);
-        loginWindow.setUserHibController(new UserHibController(entityManagerFactory));
 
         Stage stage = (Stage) startSysBtn.getScene().getWindow();
         stage.setTitle("Accounting System");
@@ -68,7 +65,7 @@ public class StartWindow implements Initializable {
 
         if(accountingSystem != null)
             createAccountingSystem.setAccountingSystem(accountingSystem);
-        createAccountingSystem.setAccountingSystemHib(accountingSystemHib);
+        createAccountingSystem.setEntityManagerFactory(entityManagerFactory);
 
         Stage stage = (Stage) loadBtn.getScene().getWindow();
         stage.setTitle("Accounting System");
@@ -90,7 +87,7 @@ public class StartWindow implements Initializable {
         DatabasesWindow databasesWindow = loader.getController();
         if(accountingSystem != null)
             databasesWindow.setAccountingSystem(accountingSystem);
-        databasesWindow.setAccountingSystemHib(accountingSystemHib);
+        databasesWindow.setEntityManagerFactory(entityManagerFactory);
 
         Stage stage = (Stage) loadBtn.getScene().getWindow();
         stage.setTitle("Accounting System databases ");
@@ -115,13 +112,6 @@ public class StartWindow implements Initializable {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public AccountingSystemHib getAccountingSystemHib() {
-        return accountingSystemHib;
-    }
-
-    public void setAccountingSystemHib(AccountingSystemHib accountingSystemHib) {
-        this.accountingSystemHib = accountingSystemHib;
-    }
 
     private void setSystemInformation() {
         systemInformation.setText(

@@ -23,8 +23,6 @@ import java.util.ResourceBundle;
 public class SignUpWindow implements Initializable {
     private AccountingSystem accountingSystem;
     private EntityManagerFactory entityManagerFactory;
-    private UserHibController userHibController;
-    private AccountingSystemHib accountingSystemHib;
     @FXML
     public RadioButton radioBtnPrivate;
     public RadioButton radioBtnCompany;
@@ -51,7 +49,7 @@ public class SignUpWindow implements Initializable {
         if (user != null) {
             if(validUser(user)){
                 errorMessage.setText("");
-                Popup.display("User creation", UserService.create(accountingSystemHib, accountingSystem, user), "Okay");
+                Popup.display("User creation", UserService.create(entityManagerFactory, accountingSystem, user), "Okay");
             } else {
                 errorMessage.setText("User with this name already exists");
             }
@@ -70,9 +68,7 @@ public class SignUpWindow implements Initializable {
         Parent root = loader.load();
         LoginWindow loginWindow = loader.getController();
         loginWindow.setAccountingSystem(accountingSystem);
-        loginWindow.setAccountingSystemHib(accountingSystemHib);
         loginWindow.setEntityManagerFactory(entityManagerFactory);
-        loginWindow.setUserHibController(new UserHibController(entityManagerFactory));
 
         Stage stage = (Stage) backBtn.getScene().getWindow();
         stage.setTitle("Accounting System");
@@ -131,17 +127,5 @@ public class SignUpWindow implements Initializable {
 
     public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
-    }
-
-    public UserHibController getUserHibController() {
-        return userHibController;
-    }
-
-    public void setUserHibController(UserHibController userHibController) {
-        this.userHibController = userHibController;
-    }
-
-    public void setAccountingSystemHib(AccountingSystemHib accountingSystemHib) {
-        this.accountingSystemHib = accountingSystemHib;
     }
 }
