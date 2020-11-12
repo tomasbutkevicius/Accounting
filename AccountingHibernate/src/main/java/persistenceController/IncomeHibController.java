@@ -1,7 +1,6 @@
 package persistenceController;
 
-import model.User;
-import window.Popup;
+import model.Income;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -9,11 +8,11 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
-public class UserHibController {
+public class IncomeHibController {
 
     EntityManagerFactory entityManagerFactory = null;
 
-    public UserHibController(EntityManagerFactory entityManagerFactory) {
+    public IncomeHibController(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
@@ -21,16 +20,16 @@ public class UserHibController {
         return entityManagerFactory.createEntityManager();
     }
 
-    public void create(User user) {
+    public void create(Income income) {
         EntityManager entityManager = null;
 
         try {
             entityManager = getEntityManager();
             entityManager.getTransaction().begin();
-            entityManager.persist(entityManager.merge(user));
+            entityManager.persist(entityManager.merge(income));
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
-            Popup.display("error", "error", "ok");
+            exception.printStackTrace();
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -38,16 +37,17 @@ public class UserHibController {
         }
     }
 
-    public List<User> getUserList(){
-        return getUserList(true, -1, -1);
+    public List<Income> getIncomeList(){
+        return getIncomeList(true, -1, -1);
     }
 
-    public List<User> getUserList(boolean all, int maxRes, int firstRes){
+    public List<Income> getIncomeList(boolean all, int maxRes, int firstRes){
 
         EntityManager entityManager = getEntityManager();
         try{
+
             CriteriaQuery criteriaQuery = entityManager.getCriteriaBuilder().createQuery();
-            criteriaQuery.select(criteriaQuery.from(User.class));
+            criteriaQuery.select(criteriaQuery.from(Income.class));
             Query query = entityManager.createQuery(criteriaQuery);
 
             if (!all) {
@@ -66,21 +66,20 @@ public class UserHibController {
         return null;
     }
 
-    public User getById(int id) {
-        for(User user: getUserList()){
-            if(user.getId() == id) return user;
+    public Income getById(int id) {
+        for(Income income: getIncomeList()){
+            if(income.getId() == id) return income;
         }
         return null;
     }
 
-    public void update(User user){
+    public void update(Income income){
         EntityManager entityManager = null;
 
         try {
             entityManager = getEntityManager();
             entityManager.getTransaction().begin();
-            entityManager.flush();
-            user = entityManager.merge(user);
+            income = entityManager.merge(income);
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -97,15 +96,15 @@ public class UserHibController {
         try {
             entityManager = getEntityManager();
             entityManager.getTransaction().begin();
-            User user = null;
+            Income income = null;
             try{
-                user = entityManager.getReference(User.class, id);
-                System.out.println(user.getId());
+                income = entityManager.getReference(Income.class, id);
+                income.getId();
 
             }catch(Exception e){
                 e.printStackTrace();
             }
-            entityManager.remove(user);
+            entityManager.remove(income);
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
             exception.printStackTrace();

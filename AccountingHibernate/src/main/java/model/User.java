@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 public class User implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     @Enumerated(EnumType.STRING)
@@ -20,6 +20,8 @@ public class User implements Serializable {
     @ManyToMany(cascade = CascadeType.MERGE)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Category> categories;
+    @ManyToOne
+    private  AccountingSystem accountingSystem;
 
     public User(UserType type, String name, String password, String contactInformation, Category category) {
         this.type = type;
@@ -36,13 +38,14 @@ public class User implements Serializable {
         this.contactInformation = contactInformation;
     }
 
-    public User(int id, String name, UserType type, String password, String contactInformation, List<Category> categories) {
+    public User(int id, String name, UserType type, String password, String contactInformation, List<Category> categories, AccountingSystem accountingSystem) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.password = password;
         this.contactInformation = contactInformation;
         this.categories = categories;
+        this.accountingSystem = accountingSystem;
     }
 
     public User(){}
@@ -94,6 +97,14 @@ public class User implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public AccountingSystem getAccountingSystem() {
+        return accountingSystem;
+    }
+
+    public void setAccountingSystem(AccountingSystem accountingSystem) {
+        this.accountingSystem = accountingSystem;
     }
 
     @Override

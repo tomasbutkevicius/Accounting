@@ -1,7 +1,6 @@
 package persistenceController;
 
-import model.User;
-import window.Popup;
+import model.Expense;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -9,11 +8,11 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
-public class UserHibController {
+public class ExpenseHibController {
 
     EntityManagerFactory entityManagerFactory = null;
 
-    public UserHibController(EntityManagerFactory entityManagerFactory) {
+    public ExpenseHibController(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
@@ -21,66 +20,13 @@ public class UserHibController {
         return entityManagerFactory.createEntityManager();
     }
 
-    public void create(User user) {
+    public void create(Expense expense) {
         EntityManager entityManager = null;
 
         try {
             entityManager = getEntityManager();
             entityManager.getTransaction().begin();
-            entityManager.persist(entityManager.merge(user));
-            entityManager.getTransaction().commit();
-        } catch (Exception exception) {
-            Popup.display("error", "error", "ok");
-        } finally {
-            if (entityManager != null) {
-                entityManager.close();
-            }
-        }
-    }
-
-    public List<User> getUserList(){
-        return getUserList(true, -1, -1);
-    }
-
-    public List<User> getUserList(boolean all, int maxRes, int firstRes){
-
-        EntityManager entityManager = getEntityManager();
-        try{
-            CriteriaQuery criteriaQuery = entityManager.getCriteriaBuilder().createQuery();
-            criteriaQuery.select(criteriaQuery.from(User.class));
-            Query query = entityManager.createQuery(criteriaQuery);
-
-            if (!all) {
-                query.setMaxResults(maxRes);
-                query.setFirstResult(firstRes);
-            }
-            return query.getResultList();
-        } catch (Exception e){
-            e.printStackTrace();
-        } finally {
-            if (entityManager != null) {
-                entityManager.close();
-            }
-        }
-
-        return null;
-    }
-
-    public User getById(int id) {
-        for(User user: getUserList()){
-            if(user.getId() == id) return user;
-        }
-        return null;
-    }
-
-    public void update(User user){
-        EntityManager entityManager = null;
-
-        try {
-            entityManager = getEntityManager();
-            entityManager.getTransaction().begin();
-            entityManager.flush();
-            user = entityManager.merge(user);
+            entityManager.persist(entityManager.merge(expense));
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -91,21 +37,73 @@ public class UserHibController {
         }
     }
 
-    public void delete(int id){
+    public List<Expense> getExpenseList() {
+        return getExpenseList(true, -1, -1);
+    }
+
+    public List<Expense> getExpenseList(boolean all, int maxRes, int firstRes) {
+
+        EntityManager entityManager = getEntityManager();
+        try {
+
+            CriteriaQuery criteriaQuery = entityManager.getCriteriaBuilder().createQuery();
+            criteriaQuery.select(criteriaQuery.from(Expense.class));
+            Query query = entityManager.createQuery(criteriaQuery);
+
+            if (!all) {
+                query.setMaxResults(maxRes);
+                query.setFirstResult(firstRes);
+            }
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+
+        return null;
+    }
+
+    public Expense getById(int id) {
+        for (Expense expense : getExpenseList()) {
+            if (expense.getId() == id) return expense;
+        }
+        return null;
+    }
+
+    public void update(Expense expense) {
         EntityManager entityManager = null;
 
         try {
             entityManager = getEntityManager();
             entityManager.getTransaction().begin();
-            User user = null;
-            try{
-                user = entityManager.getReference(User.class, id);
-                System.out.println(user.getId());
+            expense = entityManager.merge(expense);
+            entityManager.getTransaction().commit();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+    }
 
-            }catch(Exception e){
+    public void delete(int id) {
+        EntityManager entityManager = null;
+
+        try {
+            entityManager = getEntityManager();
+            entityManager.getTransaction().begin();
+            Expense expense = null;
+            try {
+                expense = entityManager.getReference(Expense.class, id);
+                expense.getId();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            entityManager.remove(user);
+            entityManager.remove(expense);
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
             exception.printStackTrace();

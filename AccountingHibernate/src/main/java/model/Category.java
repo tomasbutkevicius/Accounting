@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 public class Category implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
     private String description;
@@ -22,6 +22,14 @@ public class Category implements Serializable {
     private Category parentCategory;
     @OneToMany(mappedBy = "parentCategory")
     private List<Category> subCategories = new ArrayList<>();
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<Income> incomes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<Expense> expenses = new ArrayList<>();
+    @ManyToOne
+    private  AccountingSystem accountingSystem;
+
 
     public Category(String title, String description) {
         this.title = title;
@@ -42,13 +50,26 @@ public class Category implements Serializable {
     }
 
 
-    public Category(int id, String title, String description, List<User> responsibleUsers, Category parentCategory, List<Category> subCategories) {
+    public Category(int id, String title, String description, List<User> responsibleUsers, Category parentCategory, List<Category> subCategories, AccountingSystem accountingSystem) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.responsibleUsers = responsibleUsers;
         this.parentCategory = parentCategory;
         this.subCategories = subCategories;
+        this.accountingSystem = accountingSystem;
+    }
+
+
+    public Category(int id, String title, String description, List<User> responsibleUsers, Category parentCategory, List<Category> subCategories, List<Income> incomes, List<Expense> expenses) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.responsibleUsers = responsibleUsers;
+        this.parentCategory = parentCategory;
+        this.subCategories = subCategories;
+        this.incomes = incomes;
+        this.expenses = expenses;
     }
 
     public Category() {
@@ -101,5 +122,37 @@ public class Category implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setResponsibleUsers(List<User> responsibleUsers) {
+        this.responsibleUsers = responsibleUsers;
+    }
+
+    public void setSubCategories(List<Category> subCategories) {
+        this.subCategories = subCategories;
+    }
+
+    public List<Income> getIncomes() {
+        return incomes;
+    }
+
+    public void setIncomes(List<Income> incomes) {
+        this.incomes = incomes;
+    }
+
+    public List<Expense> getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(List<Expense> expenses) {
+        this.expenses = expenses;
+    }
+
+    public AccountingSystem getAccountingSystem() {
+        return accountingSystem;
+    }
+
+    public void setAccountingSystem(AccountingSystem accountingSystem) {
+        this.accountingSystem = accountingSystem;
     }
 }
