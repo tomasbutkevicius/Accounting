@@ -4,7 +4,6 @@ package controller;
 import model.AccountingSystem;
 import model.Category;
 import model.User;
-import persistenceController.AccountingSystemHib;
 
 import java.util.List;
 
@@ -34,12 +33,8 @@ public class AccountingSystemController {
     }
 
     public static String addUser(AccountingSystem accountingSystem, User user) {
-        if (UserController.getUserByName(accountingSystem, user.getName()) == null) {
             accountingSystem.getUsers().add(user);
             return "User added";
-        } else {
-            return "User already exists";
-        }
     }
 
     public static List<Category> findAllParentCategories(AccountingSystem accountingSystem) {
@@ -53,6 +48,18 @@ public class AccountingSystemController {
     public static User findUserByName(AccountingSystem accountingSystem, String userName) {
         List<User> users = accountingSystem.getUsers();
         return users.stream().filter(user -> user.getName().equals(userName)).findFirst().orElse(null);
+    }
+
+    public static int userNameCount(AccountingSystem accountingSystem, String userName) {
+        List<User> users = accountingSystem.getUsers();
+        int foundUsers = 0;
+
+        for(User user: users){
+            if(user.getName().equals(userName)){
+                foundUsers++;
+            }
+        }
+        return foundUsers;
     }
 
     public static Boolean categoryExists(List<Category> categories, String categoryName) {
@@ -69,12 +76,14 @@ public class AccountingSystemController {
         return accountingSystem.getExpense();
     }
 
-    public static void removeUserForUpdate(AccountingSystem accountingSystem, User activeUser) {
-        accountingSystem.getUsers().remove(activeUser);
+    public static AccountingSystem removeUserForUpdate(AccountingSystem accountingSystem, User activeUser) {
+        AccountingSystem accountingSystemUpdated = accountingSystem;
+        accountingSystemUpdated.getUsers().remove(activeUser);
+        return accountingSystemUpdated;
     }
 
     public static void removeUser(AccountingSystem accountingSystem, User activeUser) {
-        removeUserResponsiblities(activeUser, accountingSystem.getCategories());
+        removeUserResponsibilities(activeUser, accountingSystem.getCategories());
         accountingSystem.getUsers().remove(activeUser);
     }
 
@@ -92,11 +101,11 @@ public class AccountingSystemController {
         return foundCategory;
     }
 
-    public static void removeUserResponsiblities(User activeUser, List<Category> categories) {
+    public static void removeUserResponsibilities(User activeUser, List<Category> categories) {
         if (categories != null) {
             for (Category category : categories) {
                 category.getResponsibleUsers().remove(activeUser);
-                removeUserResponsiblities(activeUser, category.getSubCategories());
+                removeUserResponsibilities(activeUser, category.getSubCategories());
             }
         }
     }

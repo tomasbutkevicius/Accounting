@@ -17,6 +17,7 @@ import model.Category;
 import model.User;
 import model.UserType;
 import persistenceController.AccountingSystemHib;
+import persistenceController.CategoryHibController;
 import persistenceController.UserHibController;
 import service.CategoryService;
 import service.UserService;
@@ -114,15 +115,19 @@ public class AccountingWindow implements Initializable {
     }
 
     private void loadManageCategoryWindow(Category category) throws IOException {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("ManageCategoryWindow.fxml"));
-//        Parent root = loader.load();
-//        ManageCategoryWindow manageCategoryWindow = loader.getController();
-//        manageCategoryWindow.setDisplayInformation(accountingSystem, category, activeUser);
-//
-//        Stage stage = (Stage) manageCatBtn.getScene().getWindow();
-//        stage.setTitle("Accounting System. User " + activeUser.getName());
-//        stage.setScene(new Scene(root, 800, 600));
-//        stage.show();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/ManageCategoryWindow.fxml"));
+        Parent root = loader.load();
+        ManageCategoryWindow manageCategoryWindow = loader.getController();
+
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+        manageCategoryWindow.setEntityManagerFactory(entityManagerFactory);
+        manageCategoryWindow.setDisplayInformation(accountingSystemHib.getById(accountingSystem.getId()), categoryHibController.getById(category.getId()), activeUser);
+
+        Stage stage = (Stage) manageCatBtn.getScene().getWindow();
+        stage.setTitle("Accounting System. User " + activeUser.getName());
+        stage.setScene(new Scene(root, 800, 600));
+        stage.show();
     }
 
     public void addCatBtnClick(ActionEvent actionEvent) throws IOException {
@@ -190,6 +195,8 @@ public class AccountingWindow implements Initializable {
     private void updateContactInformation(String contactInformation) {
         if (!emptyField(contactInformation)) {
             activeUser.setContactInformation(contactInformation);
+            UserHibController userHibController = new UserHibController(entityManagerFactory);
+            userHibController.update(activeUser);
             messageToUser.setText("User contact info updated");
         }
     }
@@ -202,13 +209,18 @@ public class AccountingWindow implements Initializable {
         messageToUser.setText("");
         User updatedUser = getUpdateUser();
         if (updatedUser != null) {
-            AccountingSystemController.removeUserForUpdate(accountingSystem, activeUser);
-            if (UserController.getUserByName(accountingSystem, updatedUser.getName()) != null) {
-                messageToUser.setText("User with this name already exists");
+            if (!updatedUser.getName().equals(activeUser.getName()) && (AccountingSystemController.userNameCount(accountingSystem, updatedUser.getName()) >= 1)) {
+                    messageToUser.setText("User with this name already exists");
+
+        } else {
+                activeUser.setName(updatedUser.getName());
+                activeUser.setPassword(updatedUser.getPassword());
+                activeUser.setContactInformation(updatedUser.getContactInformation());
+                activeUser.setType(updatedUser.getType());
+
                 AccountingSystemController.addUser(accountingSystem, activeUser);
-            } else {
-                activeUser = updatedUser;
-                AccountingSystemController.addUser(accountingSystem, activeUser);
+                UserHibController userHibController = new UserHibController(entityManagerFactory);
+                userHibController.update(activeUser);
                 messageToUser.setText("User updated");
             }
         }
@@ -267,7 +279,7 @@ public class AccountingWindow implements Initializable {
         deleteBtn.setOnAction(
                 e -> {
                     try {
-                        deleteUser(user);
+                        new UserHibController(entityManagerFactory).delete(activeUser.getId());
                         popUpWindow.close();
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -357,8 +369,6 @@ public class AccountingWindow implements Initializable {
             popUpConfirmDeleteUser(selectedUser);
     }
 
-    public void saveBtnClick(ActionEvent actionEvent) {
-    }
 
     public AccountingSystem getAccountingSystem() {
         return accountingSystem;

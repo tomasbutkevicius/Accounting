@@ -22,13 +22,16 @@ public class Category implements Serializable {
     @ManyToOne
     private Category parentCategory;
     @OneToMany(mappedBy = "parentCategory")
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OrderBy("id ASC")
     private List<Category> subCategories = new ArrayList<>();
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OrderBy("id ASC")
     private List<Income> incomes = new ArrayList<>();
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OrderBy("id ASC")
     private List<Expense> expenses = new ArrayList<>();
     @ManyToOne

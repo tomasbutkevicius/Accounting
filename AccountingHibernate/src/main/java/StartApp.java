@@ -44,8 +44,7 @@ public class StartApp extends Application {
         StartWindow startWindow = loader.getController();
         startWindow.setEntityManagerFactory(entityManagerFactory);
 
-        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
-        categoryHibController.delete(5);
+        UserHibController userHibController = new UserHibController(entityManagerFactory);
 
         primaryStage.setTitle("Accounting System");
         primaryStage.setScene(new Scene(root, 800, 600));
