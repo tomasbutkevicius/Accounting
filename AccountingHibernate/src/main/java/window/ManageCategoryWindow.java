@@ -250,11 +250,12 @@ public class ManageCategoryWindow implements Initializable {
         backBtn.setOnAction(e -> popUpWindow.close());
         deleteBtn.setOnAction(
                 e -> {
+                        new CategoryHibController(entityManagerFactory).delete(category.getId());
+                        popUpWindow.close();
                     try {
                         deleteCategory();
-                        popUpWindow.close();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
                     }
                 });
         VBox layout = new VBox(10);
