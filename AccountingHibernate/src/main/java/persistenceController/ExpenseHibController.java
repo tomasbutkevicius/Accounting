@@ -100,6 +100,7 @@ public class ExpenseHibController {
             try {
                 expense = entityManager.getReference(Expense.class, id);
                 expense.getId();
+                expense.getCategory().getExpenses().remove(expense);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -63,7 +63,8 @@ public class ManageCategoryWindow implements Initializable {
     private EntityManagerFactory entityManagerFactory;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {}
+    public void initialize(URL location, ResourceBundle resources) {
+    }
 
     public void setDisplayInformation(
             AccountingSystem accountingSystem, Category category, User activeUser) {
@@ -104,7 +105,7 @@ public class ManageCategoryWindow implements Initializable {
 
     public void setSubCategoryList(Category category) {
         subCategoryList.getItems().clear();
-        if(!category.getSubCategories().isEmpty()){
+        if (!category.getSubCategories().isEmpty()) {
             for (Category subcategory : category.getSubCategories()) {
                 subCategoryList
                         .getItems()
@@ -490,8 +491,6 @@ public class ManageCategoryWindow implements Initializable {
             if (CategoryController.responsibleUserExists(
                     category.getResponsibleUsers(), responsibleUser)) {
                 CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
-                category.getResponsibleUsers().remove(responsibleUser);
-                responsibleUser.getCategories().remove(category);
                 categoryHibController.removeUserFromCategory(category, responsibleUser);
                 messageToAddUser.setText("User removed from list");
                 setResponsibleUserList(category);
@@ -575,7 +574,7 @@ public class ManageCategoryWindow implements Initializable {
     }
 
     private void deleteIncome() {
-        if (IncomeController.removeIncome(
+        if (IncomeService.delete(entityManagerFactory,
                 accountingSystem,
                 category,
                 CategoryController.getIncomeByName(category, delIncNameField.getText()))) {
@@ -634,7 +633,7 @@ public class ManageCategoryWindow implements Initializable {
     }
 
     private void deleteExpense() {
-        if (ExpenseController.removeExpense(
+        if (ExpenseService.delete(entityManagerFactory,
                 accountingSystem,
                 category,
                 CategoryController.getExpenseByName(category, delExpNameField.getText()))) {

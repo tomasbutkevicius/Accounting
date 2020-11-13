@@ -1,5 +1,7 @@
 package service;
 
+import controller.ExpenseController;
+import controller.IncomeController;
 import model.AccountingSystem;
 import model.Category;
 import model.Expense;
@@ -18,5 +20,14 @@ public class ExpenseService {
         expenseHibController.create(expense);
         AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         accountingSystemHib.update(accountingSystem);
+    }
+
+    public static boolean delete(EntityManagerFactory entityManagerFactory, AccountingSystem accountingSystem, Category category, Expense expense) {
+        boolean successs = ExpenseController.removeExpense(accountingSystem, category, expense);
+
+        ExpenseHibController expenseHibController = new ExpenseHibController(entityManagerFactory);
+        expenseHibController.delete(expense.getId());
+
+        return successs;
     }
 }

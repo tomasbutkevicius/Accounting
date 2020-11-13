@@ -100,7 +100,7 @@ public class IncomeHibController {
             try{
                 income = entityManager.getReference(Income.class, id);
                 income.getId();
-
+                income.getCategory().getIncomes().remove(income);
             }catch(Exception e){
                 e.printStackTrace();
             }
