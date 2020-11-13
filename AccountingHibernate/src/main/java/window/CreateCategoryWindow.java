@@ -14,6 +14,7 @@ import model.AccountingSystem;
 import model.Category;
 import model.User;
 import persistenceController.AccountingSystemHib;
+import persistenceController.CategoryHibController;
 import service.CategoryService;
 
 import javax.persistence.EntityManagerFactory;
@@ -67,10 +68,12 @@ public class CreateCategoryWindow implements Initializable {
                     activeUser.getCategories().remove(category);
                     loadAccountingWindow();
                 } else {
+                    activeUser.getCategories().add(category);
                     Popup.display(
                             "Subcategory creation",
-                            CategoryService.createSubCategory(entityManagerFactory, accountingSystem, parentCategory, category, activeUser),
+                            CategoryService.createSubCategory(entityManagerFactory, accountingSystem, category),
                             "Okay");
+                    activeUser.getCategories().remove(category);
                     loadManageCategoryWindow();
                 }
             } else {
@@ -130,15 +133,19 @@ public class CreateCategoryWindow implements Initializable {
     }
 
     private void loadManageCategoryWindow() throws IOException {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("ManageCategoryWindow.fxml"));
-//        Parent root = loader.load();
-//        ManageCategoryWindow manageCategoryWindow = loader.getController();
-//        manageCategoryWindow.setDisplayInformation(accountingSystem, parentCategory, activeUser);
-//
-//        Stage stage = (Stage) backBtn.getScene().getWindow();
-//        stage.setTitle("Accounting System. User " + activeUser.getName());
-//        stage.setScene(new Scene(root, 800, 600));
-//        stage.show();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/ManageCategoryWindow.fxml"));
+        Parent root = loader.load();
+        ManageCategoryWindow manageCategoryWindow = loader.getController();
+
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+        manageCategoryWindow.setEntityManagerFactory(entityManagerFactory);
+        manageCategoryWindow.setDisplayInformation(accountingSystemHib.getById(accountingSystem.getId()), categoryHibController.getById(parentCategory.getId()), activeUser);
+
+        Stage stage = (Stage) createBtn.getScene().getWindow();
+        stage.setTitle("Accounting System. User " + activeUser.getName());
+        stage.setScene(new Scene(root, 800, 600));
+        stage.show();
     }
 
     private boolean emptyField() {

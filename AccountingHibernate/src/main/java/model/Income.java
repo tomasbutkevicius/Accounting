@@ -20,6 +20,12 @@ public class Income implements Serializable {
         this.amount = amount;
     }
 
+    public Income(String name, Integer amount, Category category) {
+        this.name = name;
+        this.amount = amount;
+        this.category = category;
+    }
+
     public Income(int id, String name, Integer amount, Category category) {
         this.id = id;
         this.name = name;

@@ -16,6 +16,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.*;
 import persistenceController.AccountingSystemHib;
+import persistenceController.CategoryHibController;
+import persistenceController.IncomeHibController;
+import persistenceController.UserHibController;
+import service.CategoryService;
+import service.ExpenseService;
+import service.IncomeService;
 
 import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
@@ -160,6 +166,8 @@ public class ManageCategoryWindow implements Initializable {
     private void updateDescriptionInformation(String text) {
         if (!emptyField(text)) {
             category.setDescription(text);
+            CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+            categoryHibController.update(category);
             messageToUser.setText("Category description updated");
         }
     }
@@ -170,7 +178,7 @@ public class ManageCategoryWindow implements Initializable {
     }
 
     private void loadParentCategoryWindow() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("ManageCategoryWindow.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/ManageCategoryWindow.fxml"));
         Parent root = loader.load();
         ManageCategoryWindow manageCategoryWindow = loader.getController();
         manageCategoryWindow.setEntityManagerFactory(entityManagerFactory);
@@ -184,10 +192,14 @@ public class ManageCategoryWindow implements Initializable {
     }
 
     private void loadSubCategoryWindow(Category subcategory) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("ManageCategoryWindow.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/ManageCategoryWindow.fxml"));
         Parent root = loader.load();
         ManageCategoryWindow manageCategoryWindow = loader.getController();
-        manageCategoryWindow.setDisplayInformation(accountingSystem, subcategory, activeUser);
+
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+        manageCategoryWindow.setEntityManagerFactory(entityManagerFactory);
+        manageCategoryWindow.setDisplayInformation(accountingSystemHib.getById(accountingSystem.getId()), categoryHibController.getById(subcategory.getId()), activeUser);
 
         Stage stage = (Stage) backBtn.getScene().getWindow();
         stage.setTitle("Accounting System. User " + activeUser.getName());
@@ -214,6 +226,8 @@ public class ManageCategoryWindow implements Initializable {
             } else {
                 category.setTitle(titleField.getText());
                 title.setText("'" + category.getTitle() + "'");
+                CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+                categoryHibController.update(category);
                 messageToUser.setText("Title updated");
             }
         } else {
@@ -304,14 +318,16 @@ public class ManageCategoryWindow implements Initializable {
     }
 
     private void loadCreateCategoryWindow() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("CreateCategoryWindow.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/CreateCategoryWindow.fxml"));
         Parent root = loader.load();
         CreateCategoryWindow createCategoryWindow = loader.getController();
-        createCategoryWindow.setAccountingSystem(accountingSystem);
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        createCategoryWindow.setAccountingSystem(accountingSystemHib.getById(accountingSystem.getId()));
+        createCategoryWindow.setEntityManagerFactory(entityManagerFactory);
         createCategoryWindow.setActiveUser(activeUser);
         createCategoryWindow.setParentCategory(category);
 
-        Stage stage = (Stage) backBtn.getScene().getWindow();
+        Stage stage = (Stage) addSubCatBtn.getScene().getWindow();
         stage.setTitle("Accounting System. User " + activeUser.getName());
         stage.setScene(new Scene(root, 800, 600));
         stage.show();
@@ -364,8 +380,9 @@ public class ManageCategoryWindow implements Initializable {
             Popup.display("Error", "Income with this name exists", "Okay");
         } else {
             try {
-                Income income = new Income(incomeNameField, Integer.parseInt(incomeAmountField));
-                IncomeController.createIncome(accountingSystem, category, income);
+                Income income = new Income(incomeNameField, Integer.parseInt(incomeAmountField), category);
+                IncomeService.create(entityManagerFactory, accountingSystem, income, category);
+
                 Popup.display("Income added", "Income added", "Okay");
                 setIncomeList(category);
             } catch (NumberFormatException e) {
@@ -422,9 +439,8 @@ public class ManageCategoryWindow implements Initializable {
         } else {
             try {
                 Integer.parseInt(expenseAmountField);
-
-                Expense expense = new Expense(expenseNameField, Integer.parseInt(expenseAmountField));
-                ExpenseController.createExpense(accountingSystem, category, expense);
+                Expense expense = new Expense(expenseNameField, Integer.parseInt(expenseAmountField), category);
+                ExpenseService.create(entityManagerFactory, accountingSystem, expense, category);
                 Popup.display("Expense added", "Expense added", "Okay");
                 setExpenseList(category);
             } catch (NumberFormatException e) {
@@ -451,13 +467,13 @@ public class ManageCategoryWindow implements Initializable {
                     category.getResponsibleUsers(), responsibleUser)) {
                 messageToAddUser.setText("User is already responsible");
             } else {
-                messageToAddUser.setText(CategoryController.addResponsibleUser(category, responsibleUser));
+                messageToAddUser.setText(CategoryController.addResponsibleUser(category, responsibleUser, entityManagerFactory));
                 setResponsibleUserList(category);
             }
         }
     }
 
-    public void removeRespBtnClick(ActionEvent actionEvent) {
+    public void removeRespBtnClick(ActionEvent actionEvent) throws Exception {
         if (emptyField(responsibleUserNameField.getText())) {
             messageToAddUser.setText("Empty field");
         } else {
@@ -465,16 +481,18 @@ public class ManageCategoryWindow implements Initializable {
         }
     }
 
-    private void removeResponsibleUser() {
-        User responsibleUser =
-                UserController.getUserByName(accountingSystem, responsibleUserNameField.getText());
+    private void removeResponsibleUser() throws Exception {
+        UserHibController userHibController = new UserHibController(entityManagerFactory);
+        User responsibleUser = userHibController.getByNameInSystem(accountingSystem, responsibleUserNameField.getText());
         if (responsibleUser == null) {
             messageToAddUser.setText("User with this name does not exist");
         } else {
             if (CategoryController.responsibleUserExists(
                     category.getResponsibleUsers(), responsibleUser)) {
-                List<User> responsibleUsers = category.getResponsibleUsers();
-                responsibleUsers.remove(responsibleUser);
+                CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+                category.getResponsibleUsers().remove(responsibleUser);
+                responsibleUser.getCategories().remove(category);
+                categoryHibController.removeUserFromCategory(category, responsibleUser);
                 messageToAddUser.setText("User removed from list");
                 setResponsibleUserList(category);
             } else {

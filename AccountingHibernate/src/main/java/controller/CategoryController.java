@@ -1,7 +1,10 @@
 package controller;
 
 import model.*;
+import persistenceController.CategoryHibController;
+import service.CategoryService;
 
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Scanner;
 
@@ -53,9 +56,9 @@ public class CategoryController {
         return AccountingSystemController.findAllParentCategories(accountingSystem);
     }
 
-    public static String addResponsibleUser(Category selectedCategory, User responsibleUser) {
+    public static String addResponsibleUser(Category selectedCategory, User responsibleUser, EntityManagerFactory entityManagerFactory) {
         if (responsibleUser.getType().equals(UserType.ADMIN)) return "Admin cannot be responsible";
-        selectedCategory.getResponsibleUsers().add(responsibleUser);
+        CategoryService.addResponsibleUser(selectedCategory, responsibleUser, entityManagerFactory);
         return "Added new responsible user";
     }
 

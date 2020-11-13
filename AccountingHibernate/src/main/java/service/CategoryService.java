@@ -23,12 +23,26 @@ public class CategoryService {
         return "action complete";
     }
 
-    public static String createSubCategory(EntityManagerFactory entityManagerFactory, AccountingSystem accountingSystem, Category parentCategory, Category category, User activeUser) {
-        return "to be released";
+    public static String createSubCategory(EntityManagerFactory entityManagerFactory, AccountingSystem accountingSystem, Category category) {
+        category.setAccountingSystem(accountingSystem);
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+
+        categoryHibController.create(category);
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        accountingSystemHib.update(accountingSystem);
+        return "action complete";
     }
 
     public static List<Category> getAllCategoriesInSystem(EntityManagerFactory entityManagerFactory, AccountingSystem accountingSystem) {
         CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
         return categoryHibController.getAllCategoriesInSystem(accountingSystem);
     }
+
+    public static void addResponsibleUser(Category selectedCategory, User responsibleUser, EntityManagerFactory entityManagerFactory) {
+        selectedCategory.getResponsibleUsers().add(responsibleUser);
+        responsibleUser.getCategories().add(selectedCategory);
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+        categoryHibController.update(selectedCategory);
+    }
+
 }

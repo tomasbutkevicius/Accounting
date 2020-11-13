@@ -20,6 +20,12 @@ public class Expense implements Serializable {
         this.amount = amount;
     }
 
+    public Expense(String name, Integer amount, Category category) {
+        this.name = name;
+        this.amount = amount;
+        this.category = category;
+    }
+
     public Expense(int id, String name, Integer amount, Category category) {
         this.id = id;
         this.name = name;

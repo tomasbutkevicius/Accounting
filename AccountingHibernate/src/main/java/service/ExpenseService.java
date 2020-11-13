@@ -1,0 +1,22 @@
+package service;
+
+import model.AccountingSystem;
+import model.Category;
+import model.Expense;
+import model.Income;
+import persistenceController.AccountingSystemHib;
+import persistenceController.ExpenseHibController;
+import persistenceController.IncomeHibController;
+
+import javax.persistence.EntityManagerFactory;
+
+public class ExpenseService {
+    public static void create(EntityManagerFactory entityManagerFactory, AccountingSystem accountingSystem, Expense expense, Category category) {
+        accountingSystem.addExpense(expense.getAmount());
+        category.getExpenses().add(expense);
+        ExpenseHibController expenseHibController = new ExpenseHibController(entityManagerFactory);
+        expenseHibController.create(expense);
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        accountingSystemHib.update(accountingSystem);
+    }
+}

@@ -6,6 +6,7 @@ import model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.ArrayList;
@@ -131,5 +132,29 @@ public class CategoryHibController {
             }
         }
         return categoriesInSystem;
+    }
+
+
+    public void removeUserFromCategory(Category category, User user) throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            try {
+                category.getResponsibleUsers().remove(user);
+                user.getCategories().remove(category);
+                em.merge(category);
+                em.merge(user);
+                em.flush();
+
+            } catch (EntityNotFoundException enfe) {
+                throw new Exception("Error when removing responsible User from category", enfe);
+            }
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 }

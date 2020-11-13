@@ -65,7 +65,9 @@ public class AccountingWindow implements Initializable {
 
     public void setCategoryList(AccountingSystem accountingSystem) {
         for (Category category : CategoryService.getAllCategoriesInSystem(entityManagerFactory, accountingSystem)) {
-            categoryList.getItems().add(category.getTitle());
+            if(category.getParentCategory() == null){
+                categoryList.getItems().add(category.getTitle());
+            }
         }
     }
 
@@ -281,6 +283,7 @@ public class AccountingWindow implements Initializable {
                     try {
                         new UserHibController(entityManagerFactory).delete(activeUser.getId());
                         popUpWindow.close();
+                        deleteUser(user);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
