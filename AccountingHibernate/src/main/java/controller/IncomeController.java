@@ -9,9 +9,8 @@ import java.util.List;
 
 public class IncomeController {
 
-    public static Boolean removeIncome(AccountingSystem accountingSystem, Category category, Income income) {
-        accountingSystem.decreaseIncome(income.getAmount());
-        return CategoryController.removeIncome(category, income);
+    public static Boolean removeIncome(AccountingSystem accountingSystem, Income income) {
+        return accountingSystem.decreaseIncome(income.getAmount());
     }
 
     public static Boolean incomeExists(List<Income> incomes, String incomeName) {

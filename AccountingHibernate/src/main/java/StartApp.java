@@ -3,12 +3,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.AccountingSystem;
-import model.Category;
-import model.User;
-import model.UserType;
+import model.*;
 import persistenceController.AccountingSystemHib;
 import persistenceController.CategoryHibController;
+import persistenceController.IncomeHibController;
 import persistenceController.UserHibController;
 import window.StartWindow;
 
@@ -43,6 +41,9 @@ public class StartApp extends Application {
         Parent root = loader.load();
         StartWindow startWindow = loader.getController();
         startWindow.setEntityManagerFactory(entityManagerFactory);
+
+        IncomeHibController incomeHibController = new IncomeHibController(entityManagerFactory);
+        incomeHibController.delete(4);
 
         primaryStage.setTitle("Accounting System");
         primaryStage.setScene(new Scene(root, 800, 600));

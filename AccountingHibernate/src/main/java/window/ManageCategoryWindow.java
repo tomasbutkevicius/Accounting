@@ -384,7 +384,10 @@ public class ManageCategoryWindow implements Initializable {
             try {
                 Income income = new Income(incomeNameField, Integer.parseInt(incomeAmountField), category);
                 IncomeService.create(entityManagerFactory, accountingSystem, income, category);
-
+                AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+                accountingSystem = accountingSystemHib.getById(accountingSystem.getId());
+                CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+                category = categoryHibController.getById(category.getId());
                 Popup.display("Income added", "Income added", "Okay");
                 setIncomeList(category);
             } catch (NumberFormatException e) {
@@ -443,6 +446,10 @@ public class ManageCategoryWindow implements Initializable {
                 Integer.parseInt(expenseAmountField);
                 Expense expense = new Expense(expenseNameField, Integer.parseInt(expenseAmountField), category);
                 ExpenseService.create(entityManagerFactory, accountingSystem, expense, category);
+                AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+                accountingSystem = accountingSystemHib.getById(accountingSystem.getId());
+                CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+                category = categoryHibController.getById(category.getId());
                 Popup.display("Expense added", "Expense added", "Okay");
                 setExpenseList(category);
             } catch (NumberFormatException e) {
@@ -492,7 +499,9 @@ public class ManageCategoryWindow implements Initializable {
             if (CategoryController.responsibleUserExists(
                     category.getResponsibleUsers(), responsibleUser)) {
                 CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
-                categoryHibController.removeUserFromCategory(category, responsibleUser);
+                category.getResponsibleUsers().remove(responsibleUser);
+                AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+                accountingSystemHib.update(accountingSystem);
                 messageToAddUser.setText("User removed from list");
                 setResponsibleUserList(category);
             } else {
@@ -574,12 +583,21 @@ public class ManageCategoryWindow implements Initializable {
         popUpWindow.showAndWait();
     }
 
-    private void deleteIncome() {
+    private void deleteIncome() throws Exception {
+        Income income = CategoryController.getIncomeByName(category, delIncNameField.getText());
         if (IncomeService.delete(entityManagerFactory,
                 accountingSystem,
                 category,
-                CategoryController.getIncomeByName(category, delIncNameField.getText()))) {
+                income)) {
             errorMessage.setText("Income deleted");
+
+            AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+            accountingSystem = accountingSystemHib.getById(accountingSystem.getId());
+            accountingSystem.decreaseIncome(income.getAmount());
+            accountingSystemHib.update(accountingSystem);
+
+            CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+            category = categoryHibController.getById(category.getId());
             setIncomeList(category);
         } else {
             errorMessage.setText("Something went wrong");
@@ -633,12 +651,22 @@ public class ManageCategoryWindow implements Initializable {
         popUpWindow.showAndWait();
     }
 
-    private void deleteExpense() {
+    private void deleteExpense() throws Exception {
+        Expense expense = CategoryController.getExpenseByName(category, delExpNameField.getText());
         if (ExpenseService.delete(entityManagerFactory,
                 accountingSystem,
                 category,
-                CategoryController.getExpenseByName(category, delExpNameField.getText()))) {
+                expense)) {
             errorMessage.setText("Expense deleted");
+
+
+            AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+            accountingSystem = accountingSystemHib.getById(accountingSystem.getId());
+            accountingSystem.decreaseExpense(expense.getAmount());
+            accountingSystemHib.update(accountingSystem);
+
+            CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+            category = categoryHibController.getById(category.getId());
             setExpenseList(category);
         } else {
             errorMessage.setText("Something went wrong");

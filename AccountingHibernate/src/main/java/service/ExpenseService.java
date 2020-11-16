@@ -7,6 +7,7 @@ import model.Category;
 import model.Expense;
 import model.Income;
 import persistenceController.AccountingSystemHib;
+import persistenceController.CategoryHibController;
 import persistenceController.ExpenseHibController;
 import persistenceController.IncomeHibController;
 
@@ -22,12 +23,12 @@ public class ExpenseService {
         accountingSystemHib.update(accountingSystem);
     }
 
-    public static boolean delete(EntityManagerFactory entityManagerFactory, AccountingSystem accountingSystem, Category category, Expense expense) {
-        boolean successs = ExpenseController.removeExpense(accountingSystem, category, expense);
-
+    public static boolean delete(EntityManagerFactory entityManagerFactory, AccountingSystem accountingSystem, Category category, Expense expense) throws Exception {
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+        categoryHibController.removeExpenseFromCategory(category, expense);
         ExpenseHibController expenseHibController = new ExpenseHibController(entityManagerFactory);
         expenseHibController.delete(expense.getId());
 
-        return successs;
+        return true;
     }
 }

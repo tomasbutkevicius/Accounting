@@ -74,12 +74,14 @@ public class AccountingSystem implements Serializable {
         this.expense += newAmount;
     }
 
-    public void decreaseIncome(int amount) {
+    public boolean decreaseIncome(int amount) {
         this.income -= amount;
+        return true;
     }
 
-    public void decreaseExpense(int amount) {
+    public boolean decreaseExpense(int amount) {
         this.expense -= amount;
+        return true;
     }
 
     public String getName() {

@@ -1,8 +1,6 @@
 package persistenceController;
 
-import model.AccountingSystem;
-import model.Category;
-import model.User;
+import model.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -141,14 +139,63 @@ public class CategoryHibController {
             em = getEntityManager();
             em.getTransaction().begin();
             try {
-                category.getResponsibleUsers().remove(user);
                 user.getCategories().remove(category);
+                category.getResponsibleUsers().remove(user);
+
                 em.merge(category);
                 em.merge(user);
                 em.flush();
 
             } catch (EntityNotFoundException enfe) {
                 throw new Exception("Error when removing responsible User from category", enfe);
+            }
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    public void removeIncomeFromCategory(Category category, Income income) throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            try {
+                income.setCategory(null);
+                category.getIncomes().remove(income);
+
+                em.merge(category);
+                em.merge(income);
+                em.flush();
+
+            } catch (EntityNotFoundException enfe) {
+                throw new Exception("Error when removing income from category", enfe);
+            }
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    public void removeExpenseFromCategory(Category category, Expense expense) throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            try {
+                expense.setCategory(null);
+                category.getIncomes().remove(expense);
+
+                em.merge(category);
+                em.merge(expense);
+                em.flush();
+
+            } catch (EntityNotFoundException enfe) {
+                throw new Exception("Error when removing expense from category", enfe);
             }
             em.getTransaction().commit();
         } finally {

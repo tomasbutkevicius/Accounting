@@ -1,6 +1,7 @@
 package persistenceController;
 
 import model.Expense;
+import model.Income;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -91,26 +92,27 @@ public class ExpenseHibController {
     }
 
     public void delete(int id) {
-        EntityManager entityManager = null;
+        EntityManager em = null;
 
         try {
-            entityManager = getEntityManager();
-            entityManager.getTransaction().begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             Expense expense = null;
+
             try {
-                expense = entityManager.getReference(Expense.class, id);
+                expense = em.getReference(Expense.class, id);
                 expense.getId();
-                expense.getCategory().getExpenses().remove(expense);
             } catch (Exception e) {
+                //Pranesti, kad pagal Id nk nerado
                 e.printStackTrace();
             }
-            entityManager.remove(expense);
-            entityManager.getTransaction().commit();
-        } catch (Exception exception) {
-            exception.printStackTrace();
+            em.remove(expense);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
-            if (entityManager != null) {
-                entityManager.close();
+            if (em != null) {
+                em.close();
             }
         }
     }

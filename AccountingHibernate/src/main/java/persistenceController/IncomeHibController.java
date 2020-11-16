@@ -37,14 +37,14 @@ public class IncomeHibController {
         }
     }
 
-    public List<Income> getIncomeList(){
+    public List<Income> getIncomeList() {
         return getIncomeList(true, -1, -1);
     }
 
-    public List<Income> getIncomeList(boolean all, int maxRes, int firstRes){
+    public List<Income> getIncomeList(boolean all, int maxRes, int firstRes) {
 
         EntityManager entityManager = getEntityManager();
-        try{
+        try {
 
             CriteriaQuery criteriaQuery = entityManager.getCriteriaBuilder().createQuery();
             criteriaQuery.select(criteriaQuery.from(Income.class));
@@ -55,7 +55,7 @@ public class IncomeHibController {
                 query.setFirstResult(firstRes);
             }
             return query.getResultList();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (entityManager != null) {
@@ -67,13 +67,13 @@ public class IncomeHibController {
     }
 
     public Income getById(int id) {
-        for(Income income: getIncomeList()){
-            if(income.getId() == id) return income;
+        for (Income income : getIncomeList()) {
+            if (income.getId() == id) return income;
         }
         return null;
     }
 
-    public void update(Income income){
+    public void update(Income income) {
         EntityManager entityManager = null;
 
         try {
@@ -90,27 +90,28 @@ public class IncomeHibController {
         }
     }
 
-    public void delete(int id){
-        EntityManager entityManager = null;
+    public void delete(int id) {
+        EntityManager em = null;
 
         try {
-            entityManager = getEntityManager();
-            entityManager.getTransaction().begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             Income income = null;
-            try{
-                income = entityManager.getReference(Income.class, id);
+
+            try {
+                income = em.getReference(Income.class, id);
                 income.getId();
-                income.getCategory().getIncomes().remove(income);
-            }catch(Exception e){
+            } catch (Exception e) {
+                //Pranesti, kad pagal Id nk nerado
                 e.printStackTrace();
             }
-            entityManager.remove(income);
-            entityManager.getTransaction().commit();
-        } catch (Exception exception) {
-            exception.printStackTrace();
+            em.remove(income);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
-            if (entityManager != null) {
-                entityManager.close();
+            if (em != null) {
+                em.close();
             }
         }
     }

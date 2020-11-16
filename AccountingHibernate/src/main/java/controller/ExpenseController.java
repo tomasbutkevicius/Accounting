@@ -9,9 +9,8 @@ import java.util.List;
 
 public class ExpenseController {
 
-    public static Boolean removeExpense(AccountingSystem accountingSystem, Category category, Expense expense) {
-        accountingSystem.decreaseExpense(expense.getAmount());
-        return CategoryController.removeExpense(category, expense);
+    public static boolean removeExpense(AccountingSystem accountingSystem, Expense expense) {
+        return accountingSystem.decreaseExpense(expense.getAmount());
     }
 
     public static Boolean expenseExists(List<Expense> expenses, String expenseName) {
