@@ -499,9 +499,9 @@ public class ManageCategoryWindow implements Initializable {
             if (CategoryController.responsibleUserExists(
                     category.getResponsibleUsers(), responsibleUser)) {
                 CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
-                category.getResponsibleUsers().remove(responsibleUser);
-                AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
-                accountingSystemHib.update(accountingSystem);
+                categoryHibController.removeUserFromCategory(category.getId(), responsibleUser.getId());
+                category = categoryHibController.getById(category.getId());
+
                 messageToAddUser.setText("User removed from list");
                 setResponsibleUserList(category);
             } else {

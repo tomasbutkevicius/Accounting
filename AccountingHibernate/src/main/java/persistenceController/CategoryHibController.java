@@ -133,29 +133,27 @@ public class CategoryHibController {
     }
 
 
-    public void removeUserFromCategory(Category category, User user) throws Exception {
+    public void removeUserFromCategory(int categoryId, int userId) throws Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             try {
+                Category category = em.find(Category.class, categoryId);
+                User user = em.find(User.class, userId);
                 user.getCategories().remove(category);
                 category.getResponsibleUsers().remove(user);
-
-                em.merge(category);
-                em.merge(user);
-                em.flush();
-
+                em.getTransaction().commit();
             } catch (EntityNotFoundException enfe) {
                 throw new Exception("Error when removing responsible User from category", enfe);
             }
-            em.getTransaction().commit();
         } finally {
             if (em != null) {
                 em.close();
             }
         }
     }
+
 
     public void removeIncomeFromCategory(Category category, Income income) throws Exception {
         EntityManager em = null;
