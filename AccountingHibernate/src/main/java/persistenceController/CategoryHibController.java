@@ -154,6 +154,26 @@ public class CategoryHibController {
         }
     }
 
+    public void addUserToCategory(int categoryId, int userId) throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            try {
+                Category category = em.find(Category.class, categoryId);
+                User user = em.find(User.class, userId);
+                user.getCategories().add(category);
+                category.getResponsibleUsers().add(user);
+                em.getTransaction().commit();
+            } catch (EntityNotFoundException enfe) {
+                throw new Exception("Error when adding responsible User to category", enfe);
+            }
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 
     public void removeIncomeFromCategory(Category category, Income income) throws Exception {
         EntityManager em = null;

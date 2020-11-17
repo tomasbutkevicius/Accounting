@@ -38,11 +38,11 @@ public class CategoryService {
         return categoryHibController.getAllCategoriesInSystem(accountingSystem);
     }
 
-    public static void addResponsibleUser(Category selectedCategory, User responsibleUser, EntityManagerFactory entityManagerFactory) {
-        selectedCategory.getResponsibleUsers().add(responsibleUser);
-        responsibleUser.getCategories().add(selectedCategory);
+    public static void addResponsibleUser(Category selectedCategory, User responsibleUser, EntityManagerFactory entityManagerFactory) throws Exception {
+//        selectedCategory.getResponsibleUsers().add(responsibleUser);
+//        responsibleUser.getCategories().add(selectedCategory);
         CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
-        categoryHibController.update(selectedCategory);
+        categoryHibController.addUserToCategory(selectedCategory.getId(), responsibleUser.getId());
     }
 
 }

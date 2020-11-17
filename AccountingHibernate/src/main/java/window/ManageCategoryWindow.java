@@ -458,7 +458,7 @@ public class ManageCategoryWindow implements Initializable {
         }
     }
 
-    public void addResponsibleBtnClick(ActionEvent actionEvent) {
+    public void addResponsibleBtnClick(ActionEvent actionEvent) throws Exception {
         if (emptyField(responsibleUserNameField.getText())) {
             messageToAddUser.setText("Empty field");
         } else {
@@ -466,7 +466,7 @@ public class ManageCategoryWindow implements Initializable {
         }
     }
 
-    private void addResponsibleUser() {
+    private void addResponsibleUser() throws Exception {
         User responsibleUser =
                 UserController.getUserByName(accountingSystem, responsibleUserNameField.getText());
         if (responsibleUser == null) {
@@ -477,6 +477,8 @@ public class ManageCategoryWindow implements Initializable {
                 messageToAddUser.setText("User is already responsible");
             } else {
                 messageToAddUser.setText(CategoryController.addResponsibleUser(category, responsibleUser, entityManagerFactory));
+                CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+                category = categoryHibController.getById(category.getId());
                 setResponsibleUserList(category);
             }
         }

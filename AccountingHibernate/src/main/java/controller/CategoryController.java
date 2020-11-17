@@ -56,7 +56,7 @@ public class CategoryController {
         return AccountingSystemController.findAllParentCategories(accountingSystem);
     }
 
-    public static String addResponsibleUser(Category selectedCategory, User responsibleUser, EntityManagerFactory entityManagerFactory) {
+    public static String addResponsibleUser(Category selectedCategory, User responsibleUser, EntityManagerFactory entityManagerFactory) throws Exception {
         if (responsibleUser.getType().equals(UserType.ADMIN)) return "Admin cannot be responsible";
         CategoryService.addResponsibleUser(selectedCategory, responsibleUser, entityManagerFactory);
         return "Added new responsible user";
