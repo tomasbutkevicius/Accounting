@@ -241,6 +241,7 @@ public class ManageCategoryWindow implements Initializable {
         errorMessage.setText("");
         Stage popUpWindow = new Stage();
 
+
         popUpWindow.initModality(Modality.APPLICATION_MODAL);
         popUpWindow.setTitle("Delete category");
 
@@ -250,13 +251,19 @@ public class ManageCategoryWindow implements Initializable {
         backBtn.setOnAction(e -> popUpWindow.close());
         deleteBtn.setOnAction(
                 e -> {
-                        new CategoryHibController(entityManagerFactory).delete(category.getId());
-                        popUpWindow.close();
+                    try {
+                        new CategoryHibController(entityManagerFactory).delete(category.getId(), activeUser.getId());
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
                     try {
                         deleteCategory();
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
                     }
+                    popUpWindow.close();
                 });
         VBox layout = new VBox(10);
 
@@ -268,13 +275,20 @@ public class ManageCategoryWindow implements Initializable {
 
         popUpWindow.setScene(scene1);
 
-        popUpWindow.showAndWait();
+        if(!category.getSubCategories().isEmpty()){
+            errorMessage.setText("Cannot delete category with subcategories");
+            popUpWindow.close();
+        } else {
+            popUpWindow.showAndWait();
+        }
     }
 
-    private void deleteCategory() throws IOException {
+    private void deleteCategory() throws Exception {
 
         if (parentCategory == null) {
             AccountingSystemController.removeCategory(accountingSystem, category);
+            AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+            accountingSystemHib.updateExpenseIncome(accountingSystem.getId());
             loadAccountingWindow();
         } else {
             CategoryController.removeSubCategory(parentCategory, category);

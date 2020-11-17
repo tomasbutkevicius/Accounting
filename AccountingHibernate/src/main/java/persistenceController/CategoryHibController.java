@@ -1,5 +1,7 @@
 package persistenceController;
 
+import controller.AccountingSystemController;
+import controller.CategoryController;
 import model.*;
 
 import javax.persistence.EntityManager;
@@ -92,7 +94,7 @@ public class CategoryHibController {
         }
     }
 
-    public void delete(int id){
+    public void delete(int catId, int userId){
         EntityManager entityManager = null;
 
         try {
@@ -100,12 +102,20 @@ public class CategoryHibController {
             entityManager.getTransaction().begin();
             Category category = null;
             try{
-                category = entityManager.getReference(Category.class, id);
-                for(User user: category.getResponsibleUsers()){
-                    user.getCategories().remove(category);
+                CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+                for(User user: categoryHibController.getById(catId).getResponsibleUsers()) {
+                    categoryHibController.removeUserFromCategory(catId, user.getId());
                 }
-                category.getResponsibleUsers().clear();
-                category.getId();
+                category = entityManager.find(Category.class, catId);
+//                for(User user: category.getResponsibleUsers()){
+//                    user.getCategories().remove(category);
+//                }
+//
+//                category.getResponsibleUsers().clear();
+//
+//                category.getIncomes().clear();
+//                category.getExpenses().clear();
+//                category.getId();
 
             }catch(Exception e){
                 e.printStackTrace();

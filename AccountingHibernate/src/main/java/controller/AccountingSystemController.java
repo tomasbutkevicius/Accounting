@@ -1,15 +1,23 @@
 package controller;
 
 
-import model.AccountingSystem;
-import model.Category;
-import model.User;
+import model.*;
+import persistenceController.ExpenseHibController;
+import persistenceController.IncomeHibController;
 
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class AccountingSystemController {
 
     public static Boolean removeCategory(AccountingSystem accountingSystem, Category category) {
+        for(Expense expense: category.getExpenses()){
+            ExpenseController.removeExpense(accountingSystem, expense);
+        }
+        for(Income income: category.getIncomes()){
+            IncomeController.removeIncome(accountingSystem, income);
+        }
+
         List<Category> categories = accountingSystem.getCategories();
         return categories.remove(category);
     }
