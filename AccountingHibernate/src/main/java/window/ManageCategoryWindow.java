@@ -275,12 +275,12 @@ public class ManageCategoryWindow implements Initializable {
 
         popUpWindow.setScene(scene1);
 
-        if(!category.getSubCategories().isEmpty()){
-            errorMessage.setText("Cannot delete category with subcategories");
-            popUpWindow.close();
-        } else {
+//        if(!category.getSubCategories().isEmpty()){
+//            errorMessage.setText("Cannot delete category with subcategories");
+//            popUpWindow.close();
+//        } else {
             popUpWindow.showAndWait();
-        }
+//        }
     }
 
     private void deleteCategory() throws Exception {
@@ -292,6 +292,8 @@ public class ManageCategoryWindow implements Initializable {
             loadAccountingWindow();
         } else {
             CategoryController.removeSubCategory(parentCategory, category);
+            AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+            accountingSystemHib.updateExpenseIncome(accountingSystem.getId());
             loadParentCategoryWindow();
         }
     }
