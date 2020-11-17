@@ -274,7 +274,7 @@ public class ManageCategoryWindow implements Initializable {
         Scene scene1 = new Scene(layout, 500, 300);
 
         popUpWindow.setScene(scene1);
-
+//
 //        if(!category.getSubCategories().isEmpty()){
 //            errorMessage.setText("Cannot delete category with subcategories");
 //            popUpWindow.close();
