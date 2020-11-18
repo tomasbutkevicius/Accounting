@@ -12,17 +12,16 @@
             <children>
                 <Pane layoutX="3.0" layoutY="14.0" prefHeight="593.0" prefWidth="803.0">
                     <children>
-                        <Button fx:id="createSysBtn" layoutX="344.0" layoutY="331.0" mnemonicParsing="false" onAction="#createSysBtnClick" text="Create new system" />
-                        <Button fx:id="startSysBtn" layoutX="363.0" layoutY="174.0" mnemonicParsing="false" onAction="#startAccountingSystem" text="Start system" />
-                        <Label fx:id="messageToUser" layoutX="178.0" layoutY="412.0" prefHeight="124.0" prefWidth="454.0" textAlignment="CENTER" />
-                        <Button fx:id="createDemoBtn" layoutX="341.0" layoutY="387.0" mnemonicParsing="false" onAction="#createDemoBtnClick" text="Create demo system" />
+                        <Button fx:id="createSysBtn" layoutX="334.0" layoutY="470.0" mnemonicParsing="false" onAction="#createSysBtnClick" prefHeight="50.0" prefWidth="135.0" text="Create new system" />
+                        <Button fx:id="startSysBtn" layoutX="351.0" layoutY="247.0" mnemonicParsing="false" onAction="#startAccountingSystem" prefHeight="50.0" prefWidth="101.0" text="Start system" />
+                        <Label fx:id="messageToUser" layoutX="14.0" layoutY="311.0" prefHeight="226.0" prefWidth="283.0" textAlignment="CENTER" />
                         <Label layoutX="353.0" layoutY="76.0" text="Accounting">
                             <font>
                                 <Font name="Bell MT Bold" size="20.0" />
                             </font>
                         </Label>
-                        <Button fx:id="loadBtn" layoutX="339.0" layoutY="220.0" mnemonicParsing="false" onAction="#loadBtnClick" text="Load database" />
-                        <Label fx:id="systemInformation" contentDisplay="CENTER" layoutX="567.0" layoutY="208.0" prefHeight="116.0" prefWidth="206.0">
+                        <Button fx:id="loadBtn" layoutX="334.0" layoutY="342.0" mnemonicParsing="false" onAction="#loadBtnClick" prefHeight="50.0" prefWidth="135.0" text="Load database" />
+                        <Label fx:id="systemInformation" contentDisplay="CENTER" layoutX="302.0" layoutY="119.0" prefHeight="116.0" prefWidth="206.0">
                             <font>
                                 <Font name="Bell MT" size="12.0" />
                             </font>
