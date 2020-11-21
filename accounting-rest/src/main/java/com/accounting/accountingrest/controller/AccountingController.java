@@ -27,8 +27,8 @@ public class AccountingController {
     }
 
     @PostMapping
-    ResponseEntity<HttpStatus> createUser(@RequestBody AccountingSystemRequest accountingSystem){
-        accountingSystemService.createAccountingSystem(accountingSystem);
+    ResponseEntity<HttpStatus> createUser(@RequestBody AccountingSystemRequest accountingSystemRequest){
+        accountingSystemService.createAccountingSystem(accountingSystemRequest);
         return new ResponseEntity<>(HttpStatus.valueOf(204));
     }
 }
