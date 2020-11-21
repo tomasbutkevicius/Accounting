@@ -12,9 +12,7 @@ import org.springframework.stereotype.Component;
 @ComponentScan(basePackages = {"com.accounting.accountingrest.controller", "com.accounting.accountingrest.service"})
 @Component
 public class AccountingRestApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(AccountingRestApplication.class, args);
 	}
-
 }

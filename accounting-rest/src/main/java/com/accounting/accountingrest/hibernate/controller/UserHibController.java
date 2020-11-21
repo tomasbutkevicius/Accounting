@@ -3,6 +3,7 @@ package com.accounting.accountingrest.hibernate.controller;
 
 import com.accounting.accountingrest.hibernate.model.AccountingSystem;
 import com.accounting.accountingrest.hibernate.model.User;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -11,6 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class UserHibController {
 
     EntityManagerFactory entityManagerFactory = null;

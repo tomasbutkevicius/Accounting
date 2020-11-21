@@ -24,7 +24,7 @@ public class AccountingSystemHib {
         return entityManagerFactory.createEntityManager();
     }
 
-    public void create(AccountingSystem accountingSystem) {
+    public String create(AccountingSystem accountingSystem) {
         EntityManager entityManager = null;
 
         try {
@@ -32,6 +32,7 @@ public class AccountingSystemHib {
             entityManager.getTransaction().begin();
             entityManager.persist(entityManager.merge(accountingSystem));
             entityManager.getTransaction().commit();
+            return "system created";
         } catch (Exception exception) {
             exception.printStackTrace();
         } finally {
@@ -39,6 +40,7 @@ public class AccountingSystemHib {
                 entityManager.close();
             }
         }
+        return "something went wrong";
     }
 
     public List<AccountingSystem> getAccountingSystemList() {

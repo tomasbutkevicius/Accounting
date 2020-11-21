@@ -18,8 +18,6 @@ public class AccountingSystemResponse {
     private String name;
     private LocalDate systemCreationDate;
     private String systemVersion;
-    private List<User> users = new ArrayList<>();
-    private List<Category> categories = new ArrayList<>();
     private int income;
     private int expense;
 
@@ -29,8 +27,6 @@ public class AccountingSystemResponse {
         this.name = accountingSystem.getName();
         this.systemCreationDate = accountingSystem.getSystemCreationDate();
         this.systemVersion = accountingSystem.getSystemVersion();
-        this.users = accountingSystem.getUsers();
-        this.categories = accountingSystem.getCategories();
         this.income = accountingSystem.getIncome();
         this.expense = accountingSystem.getExpense();
     }
