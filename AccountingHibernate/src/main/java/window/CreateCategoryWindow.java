@@ -15,7 +15,7 @@ import model.Category;
 import model.User;
 import persistenceController.AccountingSystemHib;
 import persistenceController.CategoryHibController;
-import hibernateService.CategoryHibService;
+import service.CategoryService;
 
 import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class CreateCategoryWindow implements Initializable {
                     activeUser.getCategories().add(category);
                     Popup.display(
                             "Category creation",
-                            CategoryHibService.create(entityManagerFactory, accountingSystem, category),
+                            CategoryService.create(entityManagerFactory, accountingSystem, category),
                             "Okay");
                     activeUser.getCategories().remove(category);
                     loadAccountingWindow();
@@ -71,7 +71,7 @@ public class CreateCategoryWindow implements Initializable {
                     activeUser.getCategories().add(category);
                     Popup.display(
                             "Subcategory creation",
-                            CategoryHibService.createSubCategory(entityManagerFactory, accountingSystem, category),
+                            CategoryService.createSubCategory(entityManagerFactory, accountingSystem, category),
                             "Okay");
                     activeUser.getCategories().remove(category);
                     loadManageCategoryWindow();

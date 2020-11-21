@@ -12,7 +12,8 @@ import model.AccountingSystem;
 import model.User;
 import model.UserType;
 import persistenceController.AccountingSystemHib;
-import hibernateService.UserHibService;
+import persistenceController.UserHibController;
+import service.UserService;
 
 import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
@@ -52,7 +53,7 @@ public class SignUpWindow implements Initializable {
         if (user != null) {
             if(validUser(user)){
                 errorMessage.setText("");
-                Popup.display("User creation", UserHibService.create(entityManagerFactory, accountingSystem, user), "Okay");
+                Popup.display("User creation", UserService.create(entityManagerFactory, accountingSystem, user), "Okay");
             } else {
                 errorMessage.setText("User with this name already exists");
             }

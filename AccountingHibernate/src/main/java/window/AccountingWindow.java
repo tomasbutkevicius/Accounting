@@ -1,6 +1,7 @@
 package window;
 
 import controller.AccountingSystemController;
+import controller.UserController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,8 +19,8 @@ import model.UserType;
 import persistenceController.AccountingSystemHib;
 import persistenceController.CategoryHibController;
 import persistenceController.UserHibController;
-import hibernateService.CategoryHibService;
-import hibernateService.UserHibService;
+import service.CategoryService;
+import service.UserService;
 
 import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
@@ -63,7 +64,7 @@ public class AccountingWindow implements Initializable {
     }
 
     public void setCategoryList(AccountingSystem accountingSystem) {
-        for (Category category : CategoryHibService.getAllCategoriesInSystem(entityManagerFactory, accountingSystem)) {
+        for (Category category : CategoryService.getAllCategoriesInSystem(entityManagerFactory, accountingSystem)) {
             if(category.getParentCategory() == null){
                 categoryList.getItems().add(category.getTitle());
             }
@@ -329,7 +330,7 @@ public class AccountingWindow implements Initializable {
         popUpWindow.setTitle("User list");
 
         ListView users = new ListView();
-        for (User user : UserHibService.getAllUsersInSystem(entityManagerFactory, accountingSystem)) {
+        for (User user : UserService.getAllUsersInSystem(entityManagerFactory, accountingSystem)) {
             users.getItems().add(user.toString());
         }
 

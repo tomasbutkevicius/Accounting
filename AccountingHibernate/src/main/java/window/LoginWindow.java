@@ -1,6 +1,7 @@
 package window;
 
 
+import controller.UserController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,7 +14,8 @@ import javafx.stage.Stage;
 import model.AccountingSystem;
 import model.User;
 import persistenceController.AccountingSystemHib;
-import hibernateService.UserHibService;
+import persistenceController.UserHibController;
+import service.UserService;
 
 import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
@@ -63,7 +65,7 @@ public class LoginWindow implements Initializable {
 
     private void handleLogin() throws IOException {
         User user =
-                UserHibService.login(entityManagerFactory,
+                UserService.login(entityManagerFactory,
                         accountingSystem, usernameField.getText(), passwordField.getText());
         if (user == null) {
             errorMessage.setText("Invalid username or password");
