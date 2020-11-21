@@ -10,4 +10,5 @@
    <Button fx:id="backBtn" layoutX="172.0" layoutY="306.0" mnemonicParsing="false" onAction="#backBtnClick" text="Cancel" />
    <Button fx:id="selectDbBtn" layoutX="376.0" layoutY="306.0" mnemonicParsing="false" onAction="#selectDbBtnClick" text="Confirm selection" />
    <Label layoutX="265.0" layoutY="14.0" text="Database List" />
+   <Label fx:id="errorMessage" layoutX="213.0" layoutY="344.0" prefHeight="34.0" prefWidth="230.0" />
 </AnchorPane>

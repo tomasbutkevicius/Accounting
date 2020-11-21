@@ -1,8 +1,7 @@
 package controller;
 
 import model.*;
-import persistenceController.CategoryHibController;
-import service.CategoryService;
+import hibernateService.CategoryHibService;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
@@ -58,7 +57,7 @@ public class CategoryController {
 
     public static String addResponsibleUser(Category selectedCategory, User responsibleUser, EntityManagerFactory entityManagerFactory) throws Exception {
         if (responsibleUser.getType().equals(UserType.ADMIN)) return "Admin cannot be responsible";
-        CategoryService.addResponsibleUser(selectedCategory, responsibleUser, entityManagerFactory);
+        CategoryHibService.addResponsibleUser(selectedCategory, responsibleUser, entityManagerFactory);
         return "Added new responsible user";
     }
 

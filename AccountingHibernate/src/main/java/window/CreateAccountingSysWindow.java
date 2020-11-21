@@ -14,7 +14,7 @@ import model.AccountingSystem;
 import model.User;
 import model.UserType;
 import persistenceController.AccountingSystemHib;
-import service.AccountingSystemService;
+import hibernateService.AccountingSystemHibService;
 
 import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
@@ -67,7 +67,7 @@ public class CreateAccountingSysWindow implements Initializable {
             if (validAccountingSystem(accountingSystem)) {
                 AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
                 User admin = new User(UserType.ADMIN, adminNameField.getText(), adminPasswordField.getText(), "First admin");
-                AccountingSystemService.create(accountingSystemHib, accountingSystem, admin);
+                AccountingSystemHibService.create(accountingSystemHib, accountingSystem, admin);
                 this.accountingSystem = accountingSystemHib.getByName(accountingSystem.getName());
                 errorMessage.setText("");
                 Popup.display("Accounting system creation", "New accounting system created", "Okay");

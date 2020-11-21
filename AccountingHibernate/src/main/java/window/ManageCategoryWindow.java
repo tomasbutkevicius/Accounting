@@ -17,17 +17,13 @@ import javafx.stage.Stage;
 import model.*;
 import persistenceController.AccountingSystemHib;
 import persistenceController.CategoryHibController;
-import persistenceController.IncomeHibController;
 import persistenceController.UserHibController;
-import service.CategoryService;
-import service.ExpenseService;
-import service.IncomeService;
+import hibernateService.ExpenseHibService;
+import hibernateService.IncomeHibService;
 
 import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class ManageCategoryWindow implements Initializable {
@@ -399,7 +395,7 @@ public class ManageCategoryWindow implements Initializable {
         } else {
             try {
                 Income income = new Income(incomeNameField, Integer.parseInt(incomeAmountField), category);
-                IncomeService.create(entityManagerFactory, accountingSystem, income, category);
+                IncomeHibService.create(entityManagerFactory, accountingSystem, income, category);
                 AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
                 accountingSystem = accountingSystemHib.getById(accountingSystem.getId());
                 CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
@@ -461,7 +457,7 @@ public class ManageCategoryWindow implements Initializable {
             try {
                 Integer.parseInt(expenseAmountField);
                 Expense expense = new Expense(expenseNameField, Integer.parseInt(expenseAmountField), category);
-                ExpenseService.create(entityManagerFactory, accountingSystem, expense, category);
+                ExpenseHibService.create(entityManagerFactory, accountingSystem, expense, category);
                 AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
                 accountingSystem = accountingSystemHib.getById(accountingSystem.getId());
                 CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
@@ -603,7 +599,7 @@ public class ManageCategoryWindow implements Initializable {
 
     private void deleteIncome() throws Exception {
         Income income = CategoryController.getIncomeByName(category, delIncNameField.getText());
-        if (IncomeService.delete(entityManagerFactory,
+        if (IncomeHibService.delete(entityManagerFactory,
                 accountingSystem,
                 category,
                 income)) {
@@ -671,7 +667,7 @@ public class ManageCategoryWindow implements Initializable {
 
     private void deleteExpense() throws Exception {
         Expense expense = CategoryController.getExpenseByName(category, delExpNameField.getText());
-        if (ExpenseService.delete(entityManagerFactory,
+        if (ExpenseHibService.delete(entityManagerFactory,
                 accountingSystem,
                 category,
                 expense)) {
