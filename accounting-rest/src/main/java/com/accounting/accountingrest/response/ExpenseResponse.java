@@ -12,10 +12,12 @@ public class ExpenseResponse {
     private int id;
     private String name;
     private Integer amount;
+    private int categoryID;
 
-    ExpenseResponse(Expense expense){
+    public ExpenseResponse(Expense expense){
         this.id = expense.getId();
         this.name = expense.getName();
         this.amount = expense.getAmount();
+        this.categoryID = expense.getCategory().getId();
     }
 }

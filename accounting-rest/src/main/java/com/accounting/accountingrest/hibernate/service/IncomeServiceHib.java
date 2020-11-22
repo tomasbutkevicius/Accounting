@@ -26,7 +26,7 @@ public class IncomeServiceHib {
         categoryHibController.removeIncomeFromCategory(category, income);
         IncomeHibController incomeHibController = new IncomeHibController(entityManagerFactory);
         incomeHibController.delete(income.getId());
-        
+
         return true;
     }
 }
