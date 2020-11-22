@@ -33,4 +33,11 @@ public class IncomeController {
         incomeService.createIncome(incomeRequest);
         return new ResponseEntity<>(HttpStatus.valueOf(204));
     }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteIncome(@PathVariable String id) throws Exception {
+        int idNum = Integer.parseInt(id);
+        incomeService.deleteIncome(idNum);
+    }
+
 }

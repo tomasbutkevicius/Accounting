@@ -21,7 +21,7 @@ public class CategoryResponse {
     private int parentCategoryID;
     private List<IncomeResponse> incomes = new ArrayList<>();
     private List<ExpenseResponse> expenses = new ArrayList<>();
-    private List<CategoryResponse> subcategories = new ArrayList<>();
+    private List<SubcategoryResponse> subcategories = new ArrayList<>();
 
     public CategoryResponse(Category category) {
         this.id = category.getId();
@@ -45,7 +45,7 @@ public class CategoryResponse {
         }
         if(!category.getSubCategories().isEmpty()){
             for(Category subcategory: category.getSubCategories()){
-                subcategories.add(new CategoryResponse(subcategory));
+                subcategories.add(new SubcategoryResponse(subcategory));
             }
         }
     }

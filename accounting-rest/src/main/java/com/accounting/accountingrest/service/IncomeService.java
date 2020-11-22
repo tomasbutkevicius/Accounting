@@ -2,8 +2,11 @@ package com.accounting.accountingrest.service;
 
 import com.accounting.accountingrest.hibernate.model.Category;
 import com.accounting.accountingrest.hibernate.model.Income;
+import com.accounting.accountingrest.hibernate.model.User;
+import com.accounting.accountingrest.hibernate.repository.AccountingSystemHib;
 import com.accounting.accountingrest.hibernate.repository.CategoryHibController;
 import com.accounting.accountingrest.hibernate.repository.IncomeHibController;
+import com.accounting.accountingrest.hibernate.repository.UserHibController;
 import com.accounting.accountingrest.hibernate.service.IncomeServiceHib;
 import com.accounting.accountingrest.request.IncomeRequest;
 import com.accounting.accountingrest.response.CategoryResponse;
@@ -51,4 +54,15 @@ public class IncomeService {
 
         IncomeServiceHib.create(entityManagerFactory, category.getAccountingSystem(), income, category);
     }
+
+    public void deleteIncome(int id) throws Exception {
+        IncomeHibController incomeHibController = new IncomeHibController(entityManagerFactory);
+        Income income = incomeHibController.getById(id);
+        if(income == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Income not found");
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        IncomeServiceHib.delete(entityManagerFactory, accountingSystemHib.getById(income.getCategory().getAccountingSystem().getId()),
+                income.getCategory(), income);
+    }
+
 }
