@@ -70,6 +70,7 @@ public class LoginWindow implements Initializable {
         if (user == null) {
             errorMessage.setText("Invalid username or password");
         } else {
+            System.out.println(user);
             loadAccounting(user);
         }
     }

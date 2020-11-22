@@ -243,9 +243,13 @@ public class AccountingWindow implements Initializable {
             return null;
         }
 
-        UserType type = UserType.COMPANY;
+        UserType type;
         if (radioBtnPrivate.isSelected()) {
             type = UserType.PRIVATE;
+        } else if(radioBtnCompany.isSelected()){
+            type = UserType.COMPANY;
+        } else {
+            type = UserType.ADMIN;
         }
         User user = null;
         try {
