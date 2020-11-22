@@ -68,4 +68,44 @@ public class UserService {
 
         return UserServiceHib.create(entityManagerFactory, accountingSystem, user);
     }
+
+    public String updateUser(UserRequest userUpdated, int id) {
+        if(userUpdated.getType() == null || userUpdated.getName() == null || userUpdated.getPassword() == null || userUpdated.getContactInformation() == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accounting system not found");
+
+    UserHibController userHibController = new UserHibController(entityManagerFactory);
+    User user = userHibController.getById(id);
+    if(user == null)
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+
+    AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+
+    AccountingSystem accountingSystem = accountingSystemHib.getById(userUpdated.getAccountingSystemID());
+        if(accountingSystem == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accounting system not found");
+
+        if (!userUpdated.getName().equals(user.getName()) && (userNameCount(accountingSystem, userUpdated.getName()) >= 1)) {
+            return "User with this name already exists";
+        }
+
+        user.setAccountingSystem(accountingSystem);
+        user.setName(userUpdated.getName());
+        user.setPassword(userUpdated.getPassword());
+        user.setContactInformation(userUpdated.getContactInformation());
+        user.setType(UserType.valueOf(userUpdated.getType().toUpperCase()));
+
+        return userHibController.update(user);
+    }
+
+    public static int userNameCount(AccountingSystem accountingSystem, String userName) {
+        List<User> users = accountingSystem.getUsers();
+        int foundUsers = 0;
+
+        for(User user: users){
+            if(user.getName().equals(userName)){
+                foundUsers++;
+            }
+        }
+        return foundUsers;
+    }
 }

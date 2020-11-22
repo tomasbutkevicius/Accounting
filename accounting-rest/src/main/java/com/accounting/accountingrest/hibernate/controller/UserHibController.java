@@ -85,7 +85,7 @@ public class UserHibController {
     }
 
 
-    public void update(User user){
+    public String update(User user){
         EntityManager entityManager = null;
 
         try {
@@ -94,8 +94,10 @@ public class UserHibController {
             entityManager.flush();
             user = entityManager.merge(user);
             entityManager.getTransaction().commit();
+            return "user updated";
         } catch (Exception exception) {
             exception.printStackTrace();
+            return "update failed";
         } finally {
             if (entityManager != null) {
                 entityManager.close();

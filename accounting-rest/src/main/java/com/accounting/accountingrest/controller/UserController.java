@@ -1,5 +1,6 @@
 package com.accounting.accountingrest.controller;
 
+import com.accounting.accountingrest.hibernate.model.User;
 import com.accounting.accountingrest.request.UserRequest;
 import com.accounting.accountingrest.response.UserResponse;
 import com.accounting.accountingrest.service.UserService;
@@ -28,6 +29,13 @@ public class UserController {
     @PostMapping
     ResponseEntity<HttpStatus> createUser(@RequestBody UserRequest userRequest){
         userService.createUser(userRequest);
+        return new ResponseEntity<>(HttpStatus.valueOf(204));
+    }
+
+    @PutMapping("/{id}")
+    ResponseEntity<HttpStatus> updateUser(@RequestBody UserRequest user, @PathVariable String id){
+        int idNum = Integer.parseInt(id);
+        userService.updateUser(user, idNum);
         return new ResponseEntity<>(HttpStatus.valueOf(204));
     }
 }
