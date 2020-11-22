@@ -71,7 +71,7 @@ public class UserService {
 
     public String updateUser(UserRequest userUpdated, int id) {
         if(userUpdated.getType() == null || userUpdated.getName() == null || userUpdated.getPassword() == null || userUpdated.getContactInformation() == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accounting system not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Missing parameters");
 
     UserHibController userHibController = new UserHibController(entityManagerFactory);
     User user = userHibController.getById(id);

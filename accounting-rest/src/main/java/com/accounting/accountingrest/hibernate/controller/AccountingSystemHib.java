@@ -86,7 +86,7 @@ public class AccountingSystemHib {
         return null;
     }
 
-    public void update(AccountingSystem accountingSystem) {
+    public String update(AccountingSystem accountingSystem) {
         EntityManager entityManager = null;
 
         try {
@@ -94,8 +94,10 @@ public class AccountingSystemHib {
             entityManager.getTransaction().begin();
             accountingSystem = entityManager.merge(accountingSystem);
             entityManager.getTransaction().commit();
+            return "Accounting system updated";
         } catch (Exception exception) {
             exception.printStackTrace();
+            return "Error when updating accounting system";
         } finally {
             if (entityManager != null) {
                 entityManager.close();
