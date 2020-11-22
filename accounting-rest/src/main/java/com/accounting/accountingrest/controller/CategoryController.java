@@ -25,6 +25,11 @@ public class CategoryController {
         return categoryService.findAll();
     }
 
+    @GetMapping("/{id}")
+    public CategoryResponse getCategory(@PathVariable String id){
+        return categoryService.findCategory(Integer.parseInt(id));
+    }
+
     @PostMapping
     ResponseEntity<HttpStatus> createCategory(@RequestBody CategoryRequest categoryRequest){
         categoryService.createCategory(categoryRequest);

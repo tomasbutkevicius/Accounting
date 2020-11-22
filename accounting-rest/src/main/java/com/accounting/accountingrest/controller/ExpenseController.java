@@ -2,7 +2,6 @@ package com.accounting.accountingrest.controller;
 
 import com.accounting.accountingrest.request.ExpenseRequest;
 import com.accounting.accountingrest.response.ExpenseResponse;
-import com.accounting.accountingrest.response.IncomeResponse;
 import com.accounting.accountingrest.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +23,11 @@ public class ExpenseController {
     @GetMapping
     public List<ExpenseResponse> getAllExpenses(){
         return expenseService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public ExpenseResponse getExpense(@PathVariable String id){
+        return expenseService.findExpense(Integer.parseInt(id));
     }
 
     @PostMapping

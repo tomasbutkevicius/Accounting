@@ -1,7 +1,6 @@
 package com.accounting.accountingrest.controller;
 
 import com.accounting.accountingrest.request.AccountingSystemRequest;
-import com.accounting.accountingrest.request.UserRequest;
 import com.accounting.accountingrest.response.AccountingSystemResponse;
 import com.accounting.accountingrest.service.AccountingSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,11 @@ public class AccountingController {
     @GetMapping
     public List<AccountingSystemResponse> getAllAccountingSystems(){
         return accountingSystemService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public AccountingSystemResponse getAccountingSystem(@PathVariable String id){
+        return accountingSystemService.findAccountingSystem(Integer.parseInt(id));
     }
 
     @PostMapping

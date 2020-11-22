@@ -68,4 +68,14 @@ public class AccountingSystemService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accounting system not found");
         accountingSystemHib.delete(id);
     }
+
+    public AccountingSystemResponse findAccountingSystem(int id) {
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        AccountingSystem accountingSystem = accountingSystemHib.getById(id);
+        if(accountingSystem == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "System not found");
+        }
+
+        return new AccountingSystemResponse(accountingSystem);
+    }
 }

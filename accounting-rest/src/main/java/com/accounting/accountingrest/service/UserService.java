@@ -113,4 +113,13 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
         userHibController.delete(id);
     }
+
+    public UserResponse findUser(int id) {
+        UserHibController userHibController = new UserHibController(entityManagerFactory);
+        User user = userHibController.getById(id);
+        if(user == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
+        }
+        return new UserResponse(user);
+    }
 }

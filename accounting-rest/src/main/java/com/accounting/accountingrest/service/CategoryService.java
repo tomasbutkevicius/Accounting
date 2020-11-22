@@ -1,13 +1,10 @@
 package com.accounting.accountingrest.service;
 
-import com.accounting.accountingrest.hibernate.model.User;
 import com.accounting.accountingrest.hibernate.repository.AccountingSystemHib;
 import com.accounting.accountingrest.hibernate.repository.CategoryHibController;
 import com.accounting.accountingrest.hibernate.model.AccountingSystem;
 import com.accounting.accountingrest.hibernate.model.Category;
-import com.accounting.accountingrest.hibernate.repository.UserHibController;
 import com.accounting.accountingrest.hibernate.service.CategoryServiceHib;
-import com.accounting.accountingrest.request.AccountingSystemRequest;
 import com.accounting.accountingrest.request.CategoryRequest;
 import com.accounting.accountingrest.response.CategoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +38,12 @@ public class CategoryService {
 
     public String createCategory(final CategoryRequest categoryRequest) {
         if(categoryRequest.getTitle() == null || categoryRequest.getDescription() == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Missing parameters");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameters");
 
         AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         AccountingSystem accountingSystem = accountingSystemHib.getById(categoryRequest.getAccountingSystemID());
         if (accountingSystem == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accounting system not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Accounting system not found");
         }
 
         CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
@@ -57,7 +54,7 @@ public class CategoryService {
             System.out.println(categoryRequest.getParentCategoryID());
             Category parentCategory = categoryHibController.getById(categoryRequest.getParentCategoryID());
             if (parentCategory == null)
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found");
 
             category.setParentCategory(parentCategory);
             return CategoryServiceHib.createSubCategory(entityManagerFactory, accountingSystem, category);
@@ -68,7 +65,7 @@ public class CategoryService {
         CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
         Category category = categoryHibController.getById(id);
         if(categoryRequest.getTitle() == null || categoryRequest.getDescription() == null || category == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid parameters");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid parameters");
 
         category.setDescription(categoryRequest.getDescription());
         category.setTitle(categoryRequest.getTitle());
@@ -80,7 +77,17 @@ public class CategoryService {
         CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
         Category category = categoryHibController.getById(id);
         if(category == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found");
         categoryHibController.delete(id);
+    }
+
+    public CategoryResponse findCategory(int id) {
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+        Category category = categoryHibController.getById(id);
+        if(category == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found");
+        }
+
+        return new CategoryResponse(category);
     }
 }

@@ -2,17 +2,10 @@ package com.accounting.accountingrest.service;
 
 import com.accounting.accountingrest.hibernate.model.Category;
 import com.accounting.accountingrest.hibernate.model.Expense;
-import com.accounting.accountingrest.hibernate.model.Income;
-import com.accounting.accountingrest.hibernate.repository.AccountingSystemHib;
-import com.accounting.accountingrest.hibernate.repository.CategoryHibController;
-import com.accounting.accountingrest.hibernate.repository.ExpenseHibController;
-import com.accounting.accountingrest.hibernate.repository.IncomeHibController;
+import com.accounting.accountingrest.hibernate.repository.*;
 import com.accounting.accountingrest.hibernate.service.ExpenseServiceHib;
-import com.accounting.accountingrest.hibernate.service.IncomeServiceHib;
 import com.accounting.accountingrest.request.ExpenseRequest;
-import com.accounting.accountingrest.request.IncomeRequest;
 import com.accounting.accountingrest.response.ExpenseResponse;
-import com.accounting.accountingrest.response.IncomeResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -65,5 +58,14 @@ public class ExpenseService {
         AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         ExpenseServiceHib.delete(entityManagerFactory, accountingSystemHib.getById(expense.getCategory().getAccountingSystem().getId()),
                 expense.getCategory(), expense);
+    }
+
+    public ExpenseResponse findExpense(int id) {
+        ExpenseHibController expenseHibController = new ExpenseHibController(entityManagerFactory);
+        Expense expense = expenseHibController.getById(id);
+        if(expense == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Expense not found");
+        }
+        return new ExpenseResponse(expense);
     }
 }

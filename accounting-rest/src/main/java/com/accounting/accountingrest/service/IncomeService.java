@@ -2,14 +2,9 @@ package com.accounting.accountingrest.service;
 
 import com.accounting.accountingrest.hibernate.model.Category;
 import com.accounting.accountingrest.hibernate.model.Income;
-import com.accounting.accountingrest.hibernate.model.User;
-import com.accounting.accountingrest.hibernate.repository.AccountingSystemHib;
-import com.accounting.accountingrest.hibernate.repository.CategoryHibController;
-import com.accounting.accountingrest.hibernate.repository.IncomeHibController;
-import com.accounting.accountingrest.hibernate.repository.UserHibController;
+import com.accounting.accountingrest.hibernate.repository.*;
 import com.accounting.accountingrest.hibernate.service.IncomeServiceHib;
 import com.accounting.accountingrest.request.IncomeRequest;
-import com.accounting.accountingrest.response.CategoryResponse;
 import com.accounting.accountingrest.response.IncomeResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -65,4 +60,12 @@ public class IncomeService {
                 income.getCategory(), income);
     }
 
+    public IncomeResponse findIncome(int id) {
+        IncomeHibController incomeHibController = new IncomeHibController(entityManagerFactory);
+        Income income = incomeHibController.getById(id);
+        if(income == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Income not found");
+        }
+        return new IncomeResponse(income);
+    }
 }

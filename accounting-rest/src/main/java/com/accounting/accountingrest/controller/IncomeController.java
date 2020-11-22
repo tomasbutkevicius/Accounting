@@ -1,10 +1,6 @@
 package com.accounting.accountingrest.controller;
-
 import com.accounting.accountingrest.request.IncomeRequest;
-import com.accounting.accountingrest.request.UserRequest;
-import com.accounting.accountingrest.response.CategoryResponse;
 import com.accounting.accountingrest.response.IncomeResponse;
-import com.accounting.accountingrest.service.CategoryService;
 import com.accounting.accountingrest.service.IncomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +24,11 @@ public class IncomeController {
         return incomeService.findAll();
     }
 
+    @GetMapping("/{id}")
+    public IncomeResponse getIncome(@PathVariable String id){
+        return incomeService.findIncome(Integer.parseInt(id));
+    }
+
     @PostMapping
     ResponseEntity<HttpStatus> createIncome(@RequestBody IncomeRequest incomeRequest){
         incomeService.createIncome(incomeRequest);
@@ -39,5 +40,4 @@ public class IncomeController {
         int idNum = Integer.parseInt(id);
         incomeService.deleteIncome(idNum);
     }
-
 }

@@ -1,6 +1,5 @@
 package com.accounting.accountingrest.controller;
 
-import com.accounting.accountingrest.hibernate.model.User;
 import com.accounting.accountingrest.request.UserRequest;
 import com.accounting.accountingrest.response.UserResponse;
 import com.accounting.accountingrest.service.UserService;
@@ -21,9 +20,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping
+    @GetMapping
     public List<UserResponse> getAllUsers(){
         return userService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public UserResponse getUser(@PathVariable String id){
+        return userService.findUser(Integer.parseInt(id));
     }
 
     @PostMapping
