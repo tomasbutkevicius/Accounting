@@ -38,4 +38,10 @@ public class UserController {
         userService.updateUser(user, idNum);
         return new ResponseEntity<>(HttpStatus.valueOf(204));
     }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteStudent(@PathVariable String id){
+        int idNum = Integer.parseInt(id);
+        userService.deleteUser(idNum);
+    }
 }

@@ -108,4 +108,12 @@ public class UserService {
         }
         return foundUsers;
     }
+
+    public void deleteUser(int id) {
+        UserHibController userHibController = new UserHibController(entityManagerFactory);
+        User user = userHibController.getById(id);
+        if(user == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        userHibController.delete(id);
+    }
 }
