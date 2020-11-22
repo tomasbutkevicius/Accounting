@@ -41,7 +41,7 @@ public class UserService {
         AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         AccountingSystem accountingSystem = accountingSystemHib.getById(userRequest.getAccountingSystemID());
         if(accountingSystem == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accounting system not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Accounting system not found");
         }
 
         UserHibController userHibController = new UserHibController(entityManagerFactory);
@@ -68,18 +68,18 @@ public class UserService {
 
     public String updateUser(UserRequest userUpdated, int id) {
         if(userUpdated.getType() == null || userUpdated.getName() == null || userUpdated.getPassword() == null || userUpdated.getContactInformation() == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Missing parameters");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameters");
 
     UserHibController userHibController = new UserHibController(entityManagerFactory);
     User user = userHibController.getById(id);
     if(user == null)
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
 
     AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
 
     AccountingSystem accountingSystem = accountingSystemHib.getById(userUpdated.getAccountingSystemID());
         if(accountingSystem == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accounting system not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Accounting system not found");
 
         if (!userUpdated.getName().equals(user.getName()) && (userNameCount(accountingSystem, userUpdated.getName()) >= 1)) {
             return "User with this name already exists";
@@ -110,7 +110,7 @@ public class UserService {
         UserHibController userHibController = new UserHibController(entityManagerFactory);
         User user = userHibController.getById(id);
         if(user == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
         userHibController.delete(id);
     }
 }

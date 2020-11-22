@@ -15,7 +15,6 @@ public class IncomeServiceHib {
         accountingSystem.addIncome(income.getAmount());
         category.getIncomes().add(income);
         IncomeHibController incomeHibController = new IncomeHibController(entityManagerFactory);
-        incomeHibController.create(income);
         AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         accountingSystemHib.update(accountingSystem);
     }
