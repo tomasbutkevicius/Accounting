@@ -38,4 +38,10 @@ public class AccountingController {
         accountingSystemService.updateAccountingSystem(accountingSystemRequest, idNum);
         return new ResponseEntity<>(HttpStatus.valueOf(204));
     }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteStudent(@PathVariable String id){
+        int idNum = Integer.parseInt(id);
+        accountingSystemService.deleteAccountingSystem(idNum);
+    }
 }

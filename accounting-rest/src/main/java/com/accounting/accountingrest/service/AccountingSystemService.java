@@ -64,4 +64,12 @@ public class AccountingSystemService {
 
         return accountingSystemHib.update(accountingSystem);
     }
+
+    public void deleteAccountingSystem(int id) {
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        AccountingSystem accountingSystem = accountingSystemHib.getById(id);
+        if(accountingSystem == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accounting system not found");
+        accountingSystemHib.delete(id);
+    }
 }
