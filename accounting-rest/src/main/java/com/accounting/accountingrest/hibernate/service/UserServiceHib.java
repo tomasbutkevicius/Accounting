@@ -1,7 +1,7 @@
 package com.accounting.accountingrest.hibernate.service;
 
-import com.accounting.accountingrest.hibernate.controller.AccountingSystemHib;
-import com.accounting.accountingrest.hibernate.controller.UserHibController;
+import com.accounting.accountingrest.hibernate.repository.AccountingSystemHib;
+import com.accounting.accountingrest.hibernate.repository.UserHibController;
 import com.accounting.accountingrest.hibernate.model.AccountingSystem;
 import com.accounting.accountingrest.hibernate.model.User;
 

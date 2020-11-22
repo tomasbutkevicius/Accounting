@@ -1,4 +1,4 @@
-package com.accounting.accountingrest.hibernate.controller;
+package com.accounting.accountingrest.hibernate.repository;
 
 import com.accounting.accountingrest.hibernate.model.*;
 import org.springframework.stereotype.Repository;
@@ -77,7 +77,7 @@ public class CategoryHibController {
         return null;
     }
 
-    public void update(Category category){
+    public String update(Category category){
         EntityManager entityManager = null;
 
         try {
@@ -85,8 +85,10 @@ public class CategoryHibController {
             entityManager.getTransaction().begin();
             category = entityManager.merge(category);
             entityManager.getTransaction().commit();
+            return "Category updated";
         } catch (Exception exception) {
             exception.printStackTrace();
+            return "Category update error";
         } finally {
             if (entityManager != null) {
                 entityManager.close();

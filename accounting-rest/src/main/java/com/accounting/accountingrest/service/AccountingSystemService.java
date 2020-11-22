@@ -1,12 +1,8 @@
 package com.accounting.accountingrest.service;
 
-import com.accounting.accountingrest.hibernate.controller.AccountingSystemHib;
-import com.accounting.accountingrest.hibernate.controller.UserHibController;
+import com.accounting.accountingrest.hibernate.repository.AccountingSystemHib;
 import com.accounting.accountingrest.hibernate.model.AccountingSystem;
-import com.accounting.accountingrest.hibernate.model.User;
-import com.accounting.accountingrest.hibernate.model.UserType;
 import com.accounting.accountingrest.request.AccountingSystemRequest;
-import com.accounting.accountingrest.request.UserRequest;
 import com.accounting.accountingrest.response.AccountingSystemResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.accounting.accountingrest.hibernate.controller;
+package com.accounting.accountingrest.hibernate.repository;
 
 
 import com.accounting.accountingrest.hibernate.model.AccountingSystem;

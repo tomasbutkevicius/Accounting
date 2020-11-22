@@ -2,6 +2,7 @@ package com.accounting.accountingrest.controller;
 
 import com.accounting.accountingrest.request.AccountingSystemRequest;
 import com.accounting.accountingrest.request.CategoryRequest;
+import com.accounting.accountingrest.request.UserRequest;
 import com.accounting.accountingrest.response.AccountingSystemResponse;
 import com.accounting.accountingrest.response.CategoryResponse;
 import com.accounting.accountingrest.service.AccountingSystemService;
@@ -33,4 +34,12 @@ public class CategoryController {
         categoryService.createCategory(categoryRequest);
         return new ResponseEntity<>(HttpStatus.valueOf(204));
     }
+
+    @PutMapping("/{id}")
+    ResponseEntity<HttpStatus> updateUser(@RequestBody CategoryRequest categoryRequest, @PathVariable String id){
+        int idNum = Integer.parseInt(id);
+        categoryService.updateCategory(categoryRequest, idNum);
+        return new ResponseEntity<>(HttpStatus.valueOf(204));
+    }
+
 }

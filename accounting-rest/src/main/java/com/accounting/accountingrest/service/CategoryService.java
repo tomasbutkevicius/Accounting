@@ -1,16 +1,12 @@
 package com.accounting.accountingrest.service;
 
-import com.accounting.accountingrest.hibernate.controller.AccountingSystemHib;
-import com.accounting.accountingrest.hibernate.controller.CategoryHibController;
-import com.accounting.accountingrest.hibernate.controller.UserHibController;
+import com.accounting.accountingrest.hibernate.repository.AccountingSystemHib;
+import com.accounting.accountingrest.hibernate.repository.CategoryHibController;
 import com.accounting.accountingrest.hibernate.model.AccountingSystem;
 import com.accounting.accountingrest.hibernate.model.Category;
-import com.accounting.accountingrest.hibernate.model.User;
-import com.accounting.accountingrest.hibernate.model.UserType;
 import com.accounting.accountingrest.hibernate.service.CategoryServiceHib;
-import com.accounting.accountingrest.hibernate.service.UserServiceHib;
+import com.accounting.accountingrest.request.AccountingSystemRequest;
 import com.accounting.accountingrest.request.CategoryRequest;
-import com.accounting.accountingrest.request.UserRequest;
 import com.accounting.accountingrest.response.CategoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,9 +56,21 @@ public class CategoryService {
             Category parentCategory = categoryHibController.getById(categoryRequest.getParentCategoryID());
             if (parentCategory == null)
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
-            
+
             category.setParentCategory(parentCategory);
             return CategoryServiceHib.createSubCategory(entityManagerFactory, accountingSystem, category);
         }
+    }
+
+    public String updateCategory(CategoryRequest categoryRequest, int id) {
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+        Category category = categoryHibController.getById(id);
+        if(categoryRequest.getTitle() == null || categoryRequest.getDescription() == null || category == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid parameters");
+
+        category.setDescription(categoryRequest.getDescription());
+        category.setTitle(categoryRequest.getTitle());
+
+        return categoryHibController.update(category);
     }
 }

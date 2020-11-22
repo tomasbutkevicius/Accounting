@@ -1,9 +1,9 @@
 package com.accounting.accountingrest.hibernate.service;
 
 
-import com.accounting.accountingrest.hibernate.controller.AccountingSystemHib;
-import com.accounting.accountingrest.hibernate.controller.CategoryHibController;
-import com.accounting.accountingrest.hibernate.controller.IncomeHibController;
+import com.accounting.accountingrest.hibernate.repository.AccountingSystemHib;
+import com.accounting.accountingrest.hibernate.repository.CategoryHibController;
+import com.accounting.accountingrest.hibernate.repository.IncomeHibController;
 import com.accounting.accountingrest.hibernate.model.AccountingSystem;
 import com.accounting.accountingrest.hibernate.model.Category;
 import com.accounting.accountingrest.hibernate.model.Income;
