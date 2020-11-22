@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteStudent(@PathVariable String id){
+    public void deleteUser(@PathVariable String id){
         int idNum = Integer.parseInt(id);
         userService.deleteUser(idNum);
     }

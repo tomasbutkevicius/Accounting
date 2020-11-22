@@ -1,9 +1,11 @@
 package com.accounting.accountingrest.service;
 
+import com.accounting.accountingrest.hibernate.model.User;
 import com.accounting.accountingrest.hibernate.repository.AccountingSystemHib;
 import com.accounting.accountingrest.hibernate.repository.CategoryHibController;
 import com.accounting.accountingrest.hibernate.model.AccountingSystem;
 import com.accounting.accountingrest.hibernate.model.Category;
+import com.accounting.accountingrest.hibernate.repository.UserHibController;
 import com.accounting.accountingrest.hibernate.service.CategoryServiceHib;
 import com.accounting.accountingrest.request.AccountingSystemRequest;
 import com.accounting.accountingrest.request.CategoryRequest;
@@ -72,5 +74,13 @@ public class CategoryService {
         category.setTitle(categoryRequest.getTitle());
 
         return categoryHibController.update(category);
+    }
+
+    public void deleteCategory(int id) {
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+        Category category = categoryHibController.getById(id);
+        if(category == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        categoryHibController.delete(id);
     }
 }

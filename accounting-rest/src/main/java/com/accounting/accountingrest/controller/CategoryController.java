@@ -1,11 +1,7 @@
 package com.accounting.accountingrest.controller;
 
-import com.accounting.accountingrest.request.AccountingSystemRequest;
 import com.accounting.accountingrest.request.CategoryRequest;
-import com.accounting.accountingrest.request.UserRequest;
-import com.accounting.accountingrest.response.AccountingSystemResponse;
 import com.accounting.accountingrest.response.CategoryResponse;
-import com.accounting.accountingrest.service.AccountingSystemService;
 import com.accounting.accountingrest.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,10 +32,16 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<HttpStatus> updateUser(@RequestBody CategoryRequest categoryRequest, @PathVariable String id){
+    ResponseEntity<HttpStatus> updateCategory(@RequestBody CategoryRequest categoryRequest, @PathVariable String id){
         int idNum = Integer.parseInt(id);
         categoryService.updateCategory(categoryRequest, idNum);
         return new ResponseEntity<>(HttpStatus.valueOf(204));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteCategory(@PathVariable String id){
+        int idNum = Integer.parseInt(id);
+        categoryService.deleteCategory(idNum);
     }
 
 }

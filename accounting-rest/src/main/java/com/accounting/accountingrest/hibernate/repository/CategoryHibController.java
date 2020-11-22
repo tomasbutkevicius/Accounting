@@ -96,7 +96,7 @@ public class CategoryHibController {
         }
     }
 
-    public void delete(int catId, int userId){
+    public void delete(int catId){
         EntityManager entityManager = null;
 
         try {
@@ -109,16 +109,6 @@ public class CategoryHibController {
                     categoryHibController.removeUserFromCategory(catId, user.getId());
                 }
                 category = entityManager.find(Category.class, catId);
-//                for(User user: category.getResponsibleUsers()){
-//                    user.getCategories().remove(category);
-//                }
-//
-//                category.getResponsibleUsers().clear();
-//
-//                category.getIncomes().clear();
-//                category.getExpenses().clear();
-//                category.getId();
-
             }catch(Exception e){
                 e.printStackTrace();
             }

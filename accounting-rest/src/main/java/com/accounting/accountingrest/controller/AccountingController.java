@@ -40,7 +40,7 @@ public class AccountingController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteStudent(@PathVariable String id){
+    public void deleteAccountingSystem(@PathVariable String id){
         int idNum = Integer.parseInt(id);
         accountingSystemService.deleteAccountingSystem(idNum);
     }
