@@ -1,10 +1,21 @@
 package com.accounting.accountingrest.service;
 
+import com.accounting.accountingrest.hibernate.controller.AccountingSystemHib;
 import com.accounting.accountingrest.hibernate.controller.CategoryHibController;
+import com.accounting.accountingrest.hibernate.controller.UserHibController;
+import com.accounting.accountingrest.hibernate.model.AccountingSystem;
 import com.accounting.accountingrest.hibernate.model.Category;
+import com.accounting.accountingrest.hibernate.model.User;
+import com.accounting.accountingrest.hibernate.model.UserType;
+import com.accounting.accountingrest.hibernate.service.CategoryServiceHib;
+import com.accounting.accountingrest.hibernate.service.UserServiceHib;
+import com.accounting.accountingrest.request.CategoryRequest;
+import com.accounting.accountingrest.request.UserRequest;
 import com.accounting.accountingrest.response.CategoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -16,7 +27,7 @@ public class CategoryService {
     private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("accounting_hib");
 
     @Autowired
-    public CategoryService(){
+    public CategoryService() {
     }
 
     public List<CategoryResponse> findAll() {
@@ -30,16 +41,28 @@ public class CategoryService {
         return responseList;
     }
 
-//    public String create(final AccountingSystemRequest accountingSystemRequest) {
-//        if (accountingSystemHib.getByName(accountingSystemRequest.getName()) != null){
-//            System.out.println("Toks vardas jau yra");
-//        }
-//        AccountingSystem accountingSystem = new AccountingSystem(
-//                accountingSystemRequest.getName(),
-//                LocalDate.now(),
-//                accountingSystemRequest.getSystemVersion(),
-//                0,0);
-//
-//        return accountingSystemHib.create(accountingSystem);
-//    }
+    public String createCategory(final CategoryRequest categoryRequest) {
+        if(categoryRequest.getTitle() == null || categoryRequest.getDescription() == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Missing parameters");
+
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        AccountingSystem accountingSystem = accountingSystemHib.getById(categoryRequest.getAccountingSystemID());
+        if (accountingSystem == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accounting system not found");
+        }
+
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+        Category category = new Category(categoryRequest.getTitle(), categoryRequest.getDescription());
+        if (categoryRequest.getParentCategoryID() == 0) {
+            return CategoryServiceHib.create(entityManagerFactory, accountingSystem, category);
+        } else {
+            System.out.println(categoryRequest.getParentCategoryID());
+            Category parentCategory = categoryHibController.getById(categoryRequest.getParentCategoryID());
+            if (parentCategory == null)
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
+            
+            category.setParentCategory(parentCategory);
+            return CategoryServiceHib.createSubCategory(entityManagerFactory, accountingSystem, category);
+        }
+    }
 }

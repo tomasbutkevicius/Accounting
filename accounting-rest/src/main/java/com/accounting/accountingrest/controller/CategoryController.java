@@ -28,9 +28,9 @@ public class CategoryController {
         return categoryService.findAll();
     }
 
-//    @PostMapping
-//    ResponseEntity<HttpStatus> createCategory(@RequestBody CategoryRequest categoryRequest){
-//        categoryService.createCategory(categoryRequest);
-//        return new ResponseEntity<>(HttpStatus.valueOf(204));
-//    }
+    @PostMapping
+    ResponseEntity<HttpStatus> createCategory(@RequestBody CategoryRequest categoryRequest){
+        categoryService.createCategory(categoryRequest);
+        return new ResponseEntity<>(HttpStatus.valueOf(204));
+    }
 }

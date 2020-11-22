@@ -18,7 +18,7 @@ public class CategoryServiceHib {
         categoryHibController.create(category);
         AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         accountingSystemHib.update(accountingSystem);
-        return "action complete";
+        return "category create action complete";
     }
 
     public static String createSubCategory(EntityManagerFactory entityManagerFactory, AccountingSystem accountingSystem, Category category) {
@@ -28,7 +28,7 @@ public class CategoryServiceHib {
         categoryHibController.create(category);
         AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         accountingSystemHib.update(accountingSystem);
-        return "action complete";
+        return "subcategory create action complete";
     }
 
     public static List<Category> getAllCategoriesInSystem(EntityManagerFactory entityManagerFactory, AccountingSystem accountingSystem) {
