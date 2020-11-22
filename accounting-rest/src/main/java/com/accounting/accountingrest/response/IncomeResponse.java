@@ -12,10 +12,12 @@ public class IncomeResponse {
     private int id;
     private String name;
     private Integer amount;
+    private int categoryID;
 
-    IncomeResponse(Income income){
+    public IncomeResponse(Income income){
         this.id = income.getId();
         this.name = income.getName();
         this.amount = income.getAmount();
+        this.categoryID = income.getCategory().getId();
     }
 }
