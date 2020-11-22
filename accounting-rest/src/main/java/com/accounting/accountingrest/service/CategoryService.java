@@ -1,32 +1,26 @@
 package com.accounting.accountingrest.service;
 
-import com.accounting.accountingrest.hibernate.controller.AccountingSystemHib;
 import com.accounting.accountingrest.hibernate.controller.CategoryHibController;
-import com.accounting.accountingrest.hibernate.model.AccountingSystem;
 import com.accounting.accountingrest.hibernate.model.Category;
-import com.accounting.accountingrest.request.AccountingSystemRequest;
-import com.accounting.accountingrest.response.AccountingSystemResponse;
 import com.accounting.accountingrest.response.CategoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CategoryService {
-    private CategoryHibController categoryHibController ;
+    private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("accounting_hib");
 
     @Autowired
     public CategoryService(){
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("accounting_hib");
-        this.categoryHibController = new CategoryHibController(entityManagerFactory);
     }
 
     public List<CategoryResponse> findAll() {
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
         List<Category> categories = categoryHibController.getCategoryList();
         List<CategoryResponse> responseList = new ArrayList<>();
 

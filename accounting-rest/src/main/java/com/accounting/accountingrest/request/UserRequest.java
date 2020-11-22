@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountingSystemRequest {
+public class UserRequest {
     private String name;
-    private String systemVersion;
+    private String password;
+    private String contactInformation;
+    private String type;
+    private int accountingSystemID;
 }

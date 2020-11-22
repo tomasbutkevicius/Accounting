@@ -14,15 +14,14 @@ import java.util.List;
 
 @Service
 public class AccountingSystemService {
-    private AccountingSystemHib accountingSystemHib ;
+    private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("accounting_hib");
 
     @Autowired
     public AccountingSystemService(){
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("accounting_hib");
-        this.accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
     }
 
     public List<AccountingSystemResponse> findAll() {
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         List<AccountingSystem> accountingSystems = accountingSystemHib.getAccountingSystemList();
         List<AccountingSystemResponse> responseList = new ArrayList<>();
 
@@ -33,8 +32,9 @@ public class AccountingSystemService {
     }
 
     public String createAccountingSystem(final AccountingSystemRequest accountingSystemRequest) {
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         if (accountingSystemHib.getByName(accountingSystemRequest.getName()) != null){
-            System.out.println("Toks vardas jau yra");
+            return "Toks vardas jau yra";
         }
         AccountingSystem accountingSystem = new AccountingSystem(
                 accountingSystemRequest.getName(),
