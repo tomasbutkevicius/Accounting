@@ -147,4 +147,12 @@ public class CategoryService {
 
         CategoryServiceHib.addResponsibleUser(category, user, entityManagerFactory);
     }
+
+    public void removeUserFromCategory(int catID, int userID) throws Exception {
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+        if(categoryHibController.getById(catID) == null || new UserHibController(entityManagerFactory).getById(userID) == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User or category not found");
+        }
+        categoryHibController.removeUserFromCategory(catID, userID);
+    }
 }

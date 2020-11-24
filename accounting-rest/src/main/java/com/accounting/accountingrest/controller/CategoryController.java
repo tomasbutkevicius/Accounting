@@ -41,7 +41,7 @@ public class CategoryController {
         return new ResponseEntity<>(HttpStatus.valueOf(204));
     }
 
-    @PostMapping("/{catID}/adduser/{userID}")
+    @PostMapping("/{catID}/user/{userID}")
     ResponseEntity<HttpStatus> addResponsibleUser(@PathVariable int catID, @PathVariable int userID) throws Exception {
         categoryService.addUser(catID, userID);
         return new ResponseEntity<>(HttpStatus.valueOf(204));
@@ -52,6 +52,11 @@ public class CategoryController {
         int idNum = Integer.parseInt(id);
         categoryService.updateCategory(categoryRequest, idNum);
         return new ResponseEntity<>(HttpStatus.valueOf(204));
+    }
+
+    @DeleteMapping(value = "/{catID}/user/{userID}")
+    public void deleteUserFromCategory(@PathVariable int catID, @PathVariable int userID) throws Exception {
+        categoryService.removeUserFromCategory(catID, userID);
     }
 
     @DeleteMapping(value = "/{id}")
