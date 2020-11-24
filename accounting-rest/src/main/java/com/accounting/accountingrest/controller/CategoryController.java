@@ -30,9 +30,20 @@ public class CategoryController {
         return categoryService.findCategory(Integer.parseInt(id));
     }
 
+    @GetMapping("/parents")
+    public List<CategoryResponse> getParentCategories(){
+        return categoryService.findParentCategories();
+    }
+
     @PostMapping
     ResponseEntity<HttpStatus> createCategory(@RequestBody CategoryRequest categoryRequest){
         categoryService.createCategory(categoryRequest);
+        return new ResponseEntity<>(HttpStatus.valueOf(204));
+    }
+
+    @PostMapping("/{catID}/adduser/{userID}")
+    ResponseEntity<HttpStatus> addResponsibleUser(@PathVariable int catID, @PathVariable int userID) throws Exception {
+        categoryService.addUser(catID, userID);
         return new ResponseEntity<>(HttpStatus.valueOf(204));
     }
 

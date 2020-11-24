@@ -3,6 +3,7 @@ package com.accounting.accountingrest.response;
 import com.accounting.accountingrest.hibernate.model.Category;
 import com.accounting.accountingrest.hibernate.model.Expense;
 import com.accounting.accountingrest.hibernate.model.Income;
+import com.accounting.accountingrest.hibernate.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class CategoryResponse {
     private List<IncomeResponse> incomes = new ArrayList<>();
     private List<ExpenseResponse> expenses = new ArrayList<>();
     private List<SubcategoryResponse> subcategories = new ArrayList<>();
+    private List<UserResponse> responsibleUsers = new ArrayList<>();
 
     public CategoryResponse(Category category) {
         this.id = category.getId();
@@ -47,6 +49,11 @@ public class CategoryResponse {
             for(Category subcategory: category.getSubCategories()){
                 subcategories.add(new SubcategoryResponse(subcategory));
             }
+        }
+
+        if(!category.getResponsibleUsers().isEmpty()){
+            for(User user: category.getResponsibleUsers())
+                responsibleUsers.add(new UserResponse(user));
         }
     }
 }

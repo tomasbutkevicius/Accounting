@@ -2,7 +2,9 @@ package com.accounting.accountingrest.controller;
 
 import com.accounting.accountingrest.request.AccountingSystemRequest;
 import com.accounting.accountingrest.response.AccountingSystemResponse;
+import com.accounting.accountingrest.response.CategoryResponse;
 import com.accounting.accountingrest.service.AccountingSystemService;
+import com.accounting.accountingrest.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +16,22 @@ import java.util.List;
 @RequestMapping("/systems")
 public class AccountingController {
     private final AccountingSystemService accountingSystemService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public AccountingController(AccountingSystemService accountingSystemService){
+    public AccountingController(AccountingSystemService accountingSystemService, CategoryService categoryService){
         this.accountingSystemService = accountingSystemService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
     public List<AccountingSystemResponse> getAllAccountingSystems(){
         return accountingSystemService.findAll();
+    }
+
+    @GetMapping("/{id}/categories")
+    public List<CategoryResponse> getSystemCategories(@PathVariable String id){
+        return categoryService.getCategoriesInSystem(id);
     }
 
     @GetMapping("/{id}")
@@ -48,4 +57,5 @@ public class AccountingController {
         int idNum = Integer.parseInt(id);
         accountingSystemService.deleteAccountingSystem(idNum);
     }
+
 }

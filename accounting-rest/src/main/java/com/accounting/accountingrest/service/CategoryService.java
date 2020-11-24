@@ -1,9 +1,12 @@
 package com.accounting.accountingrest.service;
 
+import com.accounting.accountingrest.hibernate.model.User;
+import com.accounting.accountingrest.hibernate.model.UserType;
 import com.accounting.accountingrest.hibernate.repository.AccountingSystemHib;
 import com.accounting.accountingrest.hibernate.repository.CategoryHibController;
 import com.accounting.accountingrest.hibernate.model.AccountingSystem;
 import com.accounting.accountingrest.hibernate.model.Category;
+import com.accounting.accountingrest.hibernate.repository.UserHibController;
 import com.accounting.accountingrest.hibernate.service.CategoryServiceHib;
 import com.accounting.accountingrest.request.CategoryRequest;
 import com.accounting.accountingrest.response.CategoryResponse;
@@ -89,5 +92,59 @@ public class CategoryService {
         }
 
         return new CategoryResponse(category);
+    }
+
+    public List<CategoryResponse> findParentCategories() {
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+        List<Category> categories = categoryHibController.getCategoryList();
+        List<CategoryResponse> responseList = new ArrayList<>();
+
+        for (Category category : categories) {
+            if(category.getParentCategory() == null){
+                responseList.add(new CategoryResponse(category));
+            }
+        }
+        return responseList;
+    }
+
+    public List<CategoryResponse> getCategoriesInSystem(String id) {
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        AccountingSystem accountingSystem = accountingSystemHib.getById(Integer.parseInt(id));
+
+        if (accountingSystem == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Accounting system not found");
+
+        List<Category> categories = CategoryServiceHib.getAllCategoriesInSystem(entityManagerFactory, accountingSystem);
+
+        List<CategoryResponse> responseList = new ArrayList<>();
+
+        for (Category category : categories) {
+                responseList.add(new CategoryResponse(category));
+        }
+        return responseList;
+    }
+
+    public void addUser(int catID, int userID) throws Exception {
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+        Category category = categoryHibController.getById(catID);
+        if (category == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found");
+
+        for(User responsibleUser :category.getResponsibleUsers()){
+            if(responsibleUser.getId() == userID)
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User already exists");
+        }
+        UserHibController userHibController = new UserHibController(entityManagerFactory);
+        User user = userHibController.getById(userID);
+        if (user == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
+
+        if(user.getAccountingSystem().getId() != category.getAccountingSystem().getId())
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "System must be same");
+
+        if(user.getType().equals(UserType.ADMIN))
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Admin cannot be responsible");
+
+        CategoryServiceHib.addResponsibleUser(category, user, entityManagerFactory);
     }
 }
