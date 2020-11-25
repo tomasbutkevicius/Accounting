@@ -94,7 +94,7 @@ public class CategoryHibController {
         }
     }
 
-    public void delete(int catId, int userId){
+    public void delete(int catId){
         EntityManager entityManager = null;
 
         try {
@@ -102,11 +102,39 @@ public class CategoryHibController {
             entityManager.getTransaction().begin();
             Category category = null;
             try{
-                CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
-                for(User user: categoryHibController.getById(catId).getResponsibleUsers()) {
-                    categoryHibController.removeUserFromCategory(catId, user.getId());
+                category = entityManager.getReference(Category.class, catId);
+
+                for(User user: category.getResponsibleUsers()) {
+                    user.getCategories().remove(category);
+                    entityManager.merge(user);
                 }
-                category = entityManager.find(Category.class, catId);
+                category.getResponsibleUsers().clear();
+                entityManager.merge(category);
+
+                AccountingSystem accountingSystem = category.getAccountingSystem();
+                accountingSystem.getCategories().remove(category);
+                entityManager.merge(accountingSystem);
+
+                Category parentCat = category.getParentCategory();
+                if(parentCat !=null){
+                    parentCat.getSubCategories().remove(category);
+                    entityManager.merge(parentCat);
+                }
+
+                for(Category cats:category.getSubCategories()){
+                    delete(cats.getId());
+                }
+
+                category.getSubCategories().clear();
+                entityManager.merge(category);
+
+
+
+
+//                for(User user: categoryHibController.getById(catId).getResponsibleUsers()) {
+//                    categoryHibController.removeUserFromCategory(catId, user.getId());
+//                }
+//                category = entityManager.find(Category.class, catId);
 //                for(User user: category.getResponsibleUsers()){
 //                    user.getCategories().remove(category);
 //                }

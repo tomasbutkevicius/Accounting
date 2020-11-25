@@ -21,7 +21,7 @@ public class Category implements Serializable {
     private List<User> responsibleUsers = new ArrayList<>();
     @ManyToOne
     private Category parentCategory;
-    @OneToMany(mappedBy = "parentCategory")
+    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     @OrderBy("id ASC")
     private List<Category> subCategories = new ArrayList<>();

@@ -252,7 +252,7 @@ public class ManageCategoryWindow implements Initializable {
         deleteBtn.setOnAction(
                 e -> {
                     try {
-                        new CategoryHibController(entityManagerFactory).delete(category.getId(), activeUser.getId());
+                        new CategoryHibController(entityManagerFactory).delete(category.getId());
                     } catch (Exception exception) {
                         exception.printStackTrace();
                     }
