@@ -6,6 +6,7 @@ import com.accounting.accountingrest.hibernate.model.AccountingSystem;
 import com.accounting.accountingrest.hibernate.model.User;
 import com.accounting.accountingrest.hibernate.model.UserType;
 import com.accounting.accountingrest.hibernate.service.UserServiceHib;
+import com.accounting.accountingrest.request.LoginRequest;
 import com.accounting.accountingrest.request.UserRequest;
 import com.accounting.accountingrest.response.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,5 +122,26 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
         }
         return new UserResponse(user);
+    }
+
+    public UserResponse login(LoginRequest loginRequest) {
+        if(loginRequest.getName() == null || loginRequest.getPassword() == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameters");
+
+        UserHibController userHibController = new UserHibController(entityManagerFactory);
+        List<User> users = userHibController.getUserList();
+        UserResponse userResponse = null;
+
+        for(User user: users){
+            if(user.getName().equals(loginRequest.getName()) && user.getPassword().equals(loginRequest.getPassword()) ){
+                userResponse = new UserResponse(user);
+            }
+        }
+
+        if(userResponse == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+
+        return userResponse;
     }
 }

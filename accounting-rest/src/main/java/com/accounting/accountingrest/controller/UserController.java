@@ -1,5 +1,6 @@
 package com.accounting.accountingrest.controller;
 
+import com.accounting.accountingrest.request.LoginRequest;
 import com.accounting.accountingrest.request.UserRequest;
 import com.accounting.accountingrest.response.UserResponse;
 import com.accounting.accountingrest.service.UserService;
@@ -34,6 +35,11 @@ public class UserController {
     ResponseEntity<HttpStatus> createUser(@RequestBody UserRequest userRequest){
         userService.createUser(userRequest);
         return new ResponseEntity<>(HttpStatus.valueOf(204));
+    }
+
+    @PostMapping("/login")
+    UserResponse login(@RequestBody LoginRequest loginRequest){
+        return userService.login(loginRequest);
     }
 
     @PutMapping("/{id}")
