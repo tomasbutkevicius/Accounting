@@ -1,5 +1,8 @@
 package com.vgtu.accounting;
 
+import com.vgtu.accounting.service.AccountingService;
+import com.vgtu.accounting.service.UserService;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -15,7 +18,7 @@ public class ApiClient {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("http://192.168.1.202:8080")
+                .baseUrl("http://192.168.1.202:8080/")
                 .client(okHttpClient)
                 .build()
                 ;
@@ -23,9 +26,15 @@ public class ApiClient {
         return retrofit;
     }
 
-    public static UserService getService(){
+    public static UserService getUserService(){
         UserService userService = getRetrofit().create(UserService.class);
 
         return userService;
+    }
+
+    public static AccountingService getAccountingService(){
+        AccountingService accountingService = getRetrofit().create(AccountingService.class);
+
+        return accountingService;
     }
 }

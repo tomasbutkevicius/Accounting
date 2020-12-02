@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.vgtu.accounting.request.LoginRequest;
+import com.vgtu.accounting.response.LoginResponse;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,14 +42,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(LoginRequest loginRequest) {
-        Call<LoginResponse> loginResponseCall = ApiClient.getService().loginUser(loginRequest);
+        Call<LoginResponse> loginResponseCall = ApiClient.getUserService().loginUser(loginRequest);
         loginResponseCall.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if(response.isSuccessful()){
                     LoginResponse loginResponse = response.body();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra("data", loginResponse));
-                    finish();
                 } else {
                     String message = "Error occurred";
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();

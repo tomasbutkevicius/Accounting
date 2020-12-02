@@ -1,4 +1,4 @@
-package com.vgtu.accounting;
+package com.vgtu.accounting.request;
 
 public class LoginRequest {
     String name;

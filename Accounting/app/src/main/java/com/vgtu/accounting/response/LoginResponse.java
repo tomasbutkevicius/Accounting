@@ -1,4 +1,6 @@
-package com.vgtu.accounting;
+package com.vgtu.accounting.response;
+
+import com.vgtu.accounting.UserType;
 
 import java.io.Serializable;
 
