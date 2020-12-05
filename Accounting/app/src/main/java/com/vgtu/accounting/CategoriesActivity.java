@@ -3,10 +3,12 @@ package com.vgtu.accounting;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.vgtu.accounting.response.CategoryResponse;
 import com.vgtu.accounting.response.UserResponse;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +78,12 @@ public class CategoriesActivity extends AppCompatActivity {
                     MyAdapter adapter = new MyAdapter(getApplicationContext(), titles, descriptions, isParent);
 
                     listView.setAdapter(adapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            startActivity(new Intent(CategoriesActivity.this, CategoryPupUp.class).putExtra("data", categories.get(position)));
+                        }
+                    });
 
                 } else {
                     String message = "Error occurred";
@@ -113,12 +122,12 @@ public class CategoriesActivity extends AppCompatActivity {
             View row = layoutInflater.inflate(R.layout.category_row, parent, false);
             ImageView images = row.findViewById(R.id.image);
             TextView myTitle = row.findViewById(R.id.title);
-            TextView myDescription = row.findViewById(R.id.subtitle);
+//            TextView myDescription = row.findViewById(R.id.subtitle);
 
             if(!isParent.get(position))
                 images.setImageResource(0);
             myTitle.setText(rTitle.get(position));
-            myDescription.setText(rDescription.get(position));
+//            myDescription.setText(rDescription.get(position));
 
             return row;
         }

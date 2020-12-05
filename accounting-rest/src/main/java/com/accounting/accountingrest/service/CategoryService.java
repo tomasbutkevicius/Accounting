@@ -176,4 +176,13 @@ public class CategoryService {
         }
         categoryHibController.removeUserFromCategory(catID, userID);
     }
+
+    public String findCategoryTitle(int parseInt) {
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+        if(categoryHibController.getById(parseInt) == null){
+            return "";
+        }
+
+        return categoryHibController.getById(parseInt).getTitle();
+    }
 }

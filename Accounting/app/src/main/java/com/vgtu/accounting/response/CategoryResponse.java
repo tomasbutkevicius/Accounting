@@ -1,9 +1,10 @@
 package com.vgtu.accounting.response;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryResponse {
+public class CategoryResponse implements Serializable {
     private int id;
     private String description;
     private String title;

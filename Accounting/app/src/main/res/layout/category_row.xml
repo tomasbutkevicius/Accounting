@@ -17,25 +17,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Main title"
             android:id="@+id/title"
-            android:textColor="#FFFF"
-            android:textStyle="bold"
-            android:layout_margin="5dp"
-            android:paddingLeft="10dp"
-            android:textSize="20sp"/>
-        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:paddingLeft="10dp"
-            android:text="Sub title"
-            android:id="@+id/subtitle"
+            android:paddingTop="20dp"
+            android:text="Main title"
             android:textColor="#FFFF"
-            android:textSize="15sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
+
     </LinearLayout>
 </LinearLayout>

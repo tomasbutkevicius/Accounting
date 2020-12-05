@@ -30,6 +30,11 @@ public class CategoryController {
         return categoryService.findCategory(Integer.parseInt(id));
     }
 
+    @GetMapping("/get_name/{id}")
+    public String getCategoryTitle(@PathVariable String id){
+        return categoryService.findCategoryTitle(Integer.parseInt(id));
+    }
+
     @GetMapping("/parents")
     public List<CategoryResponse> getParentCategories(){
         return categoryService.findParentCategories();

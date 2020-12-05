@@ -13,4 +13,7 @@ public interface CategoryService {
     @GET("categories/user/{id}")
     Call<List<CategoryResponse>> getCategories(@Path("id") String id);
 
+    @GET("categories/{id}")
+    Call<CategoryResponse> getCategory(@Path("id") String id);
+
 }

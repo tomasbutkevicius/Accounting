@@ -1,6 +1,8 @@
 package com.vgtu.accounting.response;
 
-public class IncomeResponse {
+import java.io.Serializable;
+
+public class IncomeResponse implements Serializable {
     private int id;
     private String name;
     private Integer amount;
