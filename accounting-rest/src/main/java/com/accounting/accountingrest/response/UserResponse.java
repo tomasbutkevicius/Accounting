@@ -1,13 +1,11 @@
 package com.accounting.accountingrest.response;
 
-import com.accounting.accountingrest.hibernate.model.AccountingSystem;
-import com.accounting.accountingrest.hibernate.model.Category;
+
 import com.accounting.accountingrest.hibernate.model.User;
 import com.accounting.accountingrest.hibernate.model.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

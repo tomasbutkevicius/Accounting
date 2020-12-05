@@ -33,7 +33,7 @@ public class CategoriesActivity extends AppCompatActivity {
     ListView listView;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.categories_activity);
         getSupportActionBar().setDisplayShowCustomEnabled(true);

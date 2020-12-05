@@ -35,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, CategoriesActivity.class).putExtra("data", userResponse));
     }
 
+    public void systemInformationBtnClick(View view){
+        startActivity(new Intent(MainActivity.this, AccountingPopUp.class).putExtra("data", accountingSystemResponse));
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         finish();
@@ -58,12 +62,6 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<AccountingSystemResponse> call, Response<AccountingSystemResponse> response) {
                 if(response.isSuccessful()){
                     accountingSystemResponse = response.body();
-                    TextView systemNameView = findViewById(R.id.systemName);
-                    systemNameView.append(accountingSystemResponse.getName());
-                    TextView incomeText = findViewById(R.id.incomeText);
-                    incomeText.append(String.valueOf(accountingSystemResponse.getIncome()));
-                    TextView expenseText = findViewById(R.id.expenseText);
-                    expenseText.append(String.valueOf(accountingSystemResponse.getExpense()));
                 } else {
                     String message = "Error occurred";
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
