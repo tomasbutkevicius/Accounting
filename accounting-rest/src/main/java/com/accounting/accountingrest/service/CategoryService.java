@@ -103,26 +103,16 @@ public class CategoryService {
         }
         CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
         List<Category> allCategories = categoryHibController.getCategoryList();
-        List<Category> userCategories = new ArrayList<>();
-        getUserResponsibleCategories(allCategories, userCategories, user);
 
         List<CategoryResponse> responseList = new ArrayList<>();
-        for (Category category : userCategories) {
-            responseList.add(new CategoryResponse(category));
-        }
-        return responseList;
-    }
-
-    private void getUserResponsibleCategories(List<Category> categories, List<Category> userCategories, User user) {
-        for(Category category: categories){
+        for (Category category : allCategories) {
             if(category.getResponsibleUsers().stream()
                     .filter(respUser -> String.valueOf(respUser.getId()).equals(String.valueOf(user.getId())))
                     .findFirst()
                     .orElse(null) != null)
-                userCategories.add(category);
-            if(!category.getSubCategories().isEmpty())
-                getUserResponsibleCategories(category.getSubCategories(), userCategories, user);
+            responseList.add(new CategoryResponse(category));
         }
+        return responseList;
     }
 
     public List<CategoryResponse> findParentCategories() {
