@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
 
         EditText editTextUsername = findViewById(R.id.editName);
         EditText editTextPassowrd = findViewById(R.id.editPassword);
-        Button loginBtn = findViewById(R.id.loginBtn);
+
         if(TextUtils.isEmpty(editTextUsername.getText().toString()) || TextUtils.isEmpty(editTextPassowrd.getText().toString())){
             String message = "All inputs required";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();

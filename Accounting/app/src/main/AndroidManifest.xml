@@ -13,9 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Accounting"
         android:networkSecurityConfig="@xml/network_security_config">
-        <activity android:name=".CategoriesActivity" android:parentActivityName=".MainActivity" />
-        <activity android:name=".MainActivity" android:parentActivityName=".LoginActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".CategoriesActivity" android:parentActivityName=".MainActivity" android:label="My categories" />
+        <activity android:name=".MainActivity" android:parentActivityName=".LoginActivity"  android:label="Menu"/>
+        <activity android:name=".LoginActivity"  android:label="Accounting login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
