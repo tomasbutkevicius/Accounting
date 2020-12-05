@@ -17,6 +17,7 @@ import java.util.List;
 
 @Service
 public class AccountingSystemService {
+    //To run: XAMPP Apache, MySQL was used
     private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("accounting_hib");
 
     @Autowired

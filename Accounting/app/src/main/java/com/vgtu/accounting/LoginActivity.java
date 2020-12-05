@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.vgtu.accounting.request.LoginRequest;
-import com.vgtu.accounting.response.LoginResponse;
+import com.vgtu.accounting.response.UserResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,13 +42,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(LoginRequest loginRequest) {
-        Call<LoginResponse> loginResponseCall = ApiClient.getUserService().loginUser(loginRequest);
-        loginResponseCall.enqueue(new Callback<LoginResponse>() {
+        Call<UserResponse> loginResponseCall = ApiClient.getUserService().loginUser(loginRequest);
+        loginResponseCall.enqueue(new Callback<UserResponse>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if(response.isSuccessful()){
-                    LoginResponse loginResponse = response.body();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra("data", loginResponse));
+                    UserResponse userResponse = response.body();
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra("data", userResponse));
                 } else {
                     String message = "Error occurred";
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onFailure(Call<UserResponse> call, Throwable t) {
 
                 String message = t.getLocalizedMessage();
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();

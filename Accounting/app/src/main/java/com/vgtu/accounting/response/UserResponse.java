@@ -4,7 +4,7 @@ import com.vgtu.accounting.UserType;
 
 import java.io.Serializable;
 
-public class LoginResponse implements Serializable {
+public class UserResponse implements Serializable {
     private int id;
     private String name;
     private UserType type;

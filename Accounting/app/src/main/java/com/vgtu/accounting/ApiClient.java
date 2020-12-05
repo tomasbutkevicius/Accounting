@@ -1,6 +1,7 @@
 package com.vgtu.accounting;
 
 import com.vgtu.accounting.service.AccountingService;
+import com.vgtu.accounting.service.CategoryService;
 import com.vgtu.accounting.service.UserService;
 
 import okhttp3.OkHttpClient;
@@ -36,5 +37,11 @@ public class ApiClient {
         AccountingService accountingService = getRetrofit().create(AccountingService.class);
 
         return accountingService;
+    }
+
+    public static CategoryService getCategoryService(){
+        CategoryService categoryService = getRetrofit().create(CategoryService.class);
+
+        return categoryService;
     }
 }

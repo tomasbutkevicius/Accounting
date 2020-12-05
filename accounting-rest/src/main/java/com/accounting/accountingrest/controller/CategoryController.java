@@ -41,6 +41,11 @@ public class CategoryController {
         return new ResponseEntity<>(HttpStatus.valueOf(204));
     }
 
+    @GetMapping("/user/{id}")
+    public List<CategoryResponse> getUserCategories(@PathVariable String id){
+        return categoryService.findUserCategories(Integer.parseInt(id));
+    }
+
     @PostMapping("/{catID}/user/{userID}")
     ResponseEntity<HttpStatus> addResponsibleUser(@PathVariable int catID, @PathVariable int userID) throws Exception {
         categoryService.addUser(catID, userID);

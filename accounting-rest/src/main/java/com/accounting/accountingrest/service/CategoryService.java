@@ -94,6 +94,37 @@ public class CategoryService {
         return new CategoryResponse(category);
     }
 
+
+    public List<CategoryResponse> findUserCategories(int id) {
+        UserHibController userHibController = new UserHibController(entityManagerFactory);
+        User user = userHibController.getById(id);
+        if(user == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
+        }
+        CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
+        List<Category> allCategories = categoryHibController.getCategoryList();
+        List<Category> userCategories = new ArrayList<>();
+        getUserResponsibleCategories(allCategories, userCategories, user);
+
+        List<CategoryResponse> responseList = new ArrayList<>();
+        for (Category category : userCategories) {
+            responseList.add(new CategoryResponse(category));
+        }
+        return responseList;
+    }
+
+    private void getUserResponsibleCategories(List<Category> categories, List<Category> userCategories, User user) {
+        for(Category category: categories){
+            if(category.getResponsibleUsers().stream()
+                    .filter(respUser -> String.valueOf(respUser.getId()).equals(String.valueOf(user.getId())))
+                    .findFirst()
+                    .orElse(null) != null)
+                userCategories.add(category);
+            if(!category.getSubCategories().isEmpty())
+                getUserResponsibleCategories(category.getSubCategories(), userCategories, user);
+        }
+    }
+
     public List<CategoryResponse> findParentCategories() {
         CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
         List<Category> categories = categoryHibController.getCategoryList();
