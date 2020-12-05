@@ -3,16 +3,15 @@ package com.vgtu.accounting;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vgtu.accounting.response.AccountingSystemResponse;
-import com.vgtu.accounting.response.CategoryResponse;
 import com.vgtu.accounting.response.UserResponse;
 
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,7 +20,6 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
     UserResponse userResponse;
     AccountingSystemResponse accountingSystemResponse;
-    List<CategoryResponse> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +27,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setLogin();
+        setUser();
         setAccountingSystem();
-        setCategoryList();
+    }
+
+    public void myCategoriesBtnClick(View view){
+        startActivity(new Intent(MainActivity.this, CategoriesActivity.class).putExtra("data", userResponse));
     }
 
     @Override
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void setLogin() {
+    private void setUser() {
         Intent intent = getIntent();
         if(intent.getExtras() != null){
             userResponse = (UserResponse) intent.getSerializableExtra("data");
@@ -71,30 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AccountingSystemResponse> call, Throwable t) {
-
-                String message = t.getLocalizedMessage();
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
-            }
-        });
-    }
-
-    private void setCategoryList(){
-        Call<List<CategoryResponse>> call = ApiClient.getCategoryService().getCategories(String.valueOf(userResponse.getId()));
-
-        call.enqueue(new Callback<List<CategoryResponse>>(){
-            @Override
-            public void onResponse(Call<List<CategoryResponse>> call, Response<List<CategoryResponse>> response) {
-                if(response.isSuccessful()){
-                    categories = response.body();
-                } else {
-                    String message = "Error occurred";
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<CategoryResponse>> call, Throwable t) {
 
                 String message = t.getLocalizedMessage();
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
