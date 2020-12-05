@@ -50,17 +50,21 @@ public class AccountingPopUp extends Activity {
     private void setAccounting() {
         Intent intent = getIntent();
         if(intent.getExtras() != null){
-            accountingSystemResponse = (AccountingSystemResponse) intent.getSerializableExtra("data");
-            TextView systemNameView = findViewById(R.id.systemName);
-            systemNameView.append(accountingSystemResponse.getName());
-            TextView incomeText = findViewById(R.id.incomeText);
-            incomeText.append(String.valueOf(accountingSystemResponse.getIncome()));
-            TextView expenseText = findViewById(R.id.expenseText);
-            expenseText.append(String.valueOf(accountingSystemResponse.getExpense()));
-            TextView version = findViewById(R.id.systemVersion);
-            version.append(String.valueOf(accountingSystemResponse.getSystemVersion()));
-            TextView date = findViewById(R.id.creationDate);
-            date.append(String.valueOf(accountingSystemResponse.getSystemCreationDate()));
+            setTextFields(intent);
         }
+    }
+
+    private void setTextFields(Intent intent) {
+        accountingSystemResponse = (AccountingSystemResponse) intent.getSerializableExtra("data");
+        TextView systemNameView = findViewById(R.id.systemName);
+        systemNameView.append(accountingSystemResponse.getName());
+        TextView incomeText = findViewById(R.id.incomeText);
+        incomeText.append(String.valueOf(accountingSystemResponse.getIncome()));
+        TextView expenseText = findViewById(R.id.expenseText);
+        expenseText.append(String.valueOf(accountingSystemResponse.getExpense()));
+        TextView version = findViewById(R.id.systemVersion);
+        version.append(String.valueOf(accountingSystemResponse.getSystemVersion()));
+        TextView date = findViewById(R.id.creationDate);
+        date.append(String.valueOf(accountingSystemResponse.getSystemCreationDate()));
     }
 }

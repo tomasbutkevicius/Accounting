@@ -220,7 +220,6 @@ public class AccountingWindow implements Initializable {
                 activeUser.setContactInformation(updatedUser.getContactInformation());
                 activeUser.setType(updatedUser.getType());
 
-                AccountingSystemController.addUser(accountingSystem, activeUser);
                 UserHibController userHibController = new UserHibController(entityManagerFactory);
                 userHibController.update(activeUser);
                 messageToUser.setText("User updated");
