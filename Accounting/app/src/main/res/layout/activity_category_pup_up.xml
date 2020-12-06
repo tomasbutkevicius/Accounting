@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pop_bg"
+    android:background="@color/teal_700"
     tools:context=".CategoryPupUp">
 
     <ListView
@@ -13,4 +13,5 @@
         tools:layout_editor_absoluteX="102dp"
         tools:layout_editor_absoluteY="240dp"
         android:id="@+id/listview"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
