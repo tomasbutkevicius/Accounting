@@ -37,9 +37,9 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.valueOf(204));
     }
 
-    @PostMapping("/login")
-    UserResponse login(@RequestBody LoginRequest loginRequest){
-        return userService.login(loginRequest);
+    @PostMapping("/login/{id}")
+    UserResponse login(@RequestBody LoginRequest loginRequest, @PathVariable String id){
+        return userService.login(loginRequest, Integer.parseInt(id));
     }
 
     @PutMapping("/{id}")

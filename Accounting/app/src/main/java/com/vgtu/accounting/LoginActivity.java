@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.vgtu.accounting.api.ApiClient;
 import com.vgtu.accounting.request.LoginRequest;
+import com.vgtu.accounting.response.AccountingSystemResponse;
 import com.vgtu.accounting.response.UserResponse;
 
 import retrofit2.Call;
@@ -18,11 +20,23 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
+    AccountingSystemResponse accountingSystemResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setAccountingSystem();
+    }
+
+    private void setAccountingSystem() {
+        Intent intent = getIntent();
+        if(intent.getExtras() != null){
+            accountingSystemResponse = (AccountingSystemResponse) intent.getSerializableExtra("data");
+
+            Log.e("TAG", "===>>>" + accountingSystemResponse.getName());
+        }
     }
 
     public void onBtnClick(View view){
@@ -42,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(LoginRequest loginRequest) {
-        Call<UserResponse> loginResponseCall = ApiClient.getUserService().loginUser(loginRequest);
+        Call<UserResponse> loginResponseCall = ApiClient.getUserService().loginUser(loginRequest, String.valueOf(accountingSystemResponse.getId()));
         loginResponseCall.enqueue(new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
@@ -64,4 +78,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
 }

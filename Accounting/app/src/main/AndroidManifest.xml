@@ -13,7 +13,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Accounting">
-        <activity android:name=".popup.CategoryPupUp" android:theme="@style/Theme.AppCompat.NoActionBar.Popup"></activity>
+        <activity
+            android:name=".ChooseSystemActivity"
+            android:label="Systems"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".popup.CategoryPupUp"
+            android:theme="@style/Theme.AppCompat.NoActionBar.Popup" />
         <activity
             android:name=".popup.AccountingPopUp"
             android:theme="@style/Theme.AppCompat.NoActionBar.Popup" />
@@ -27,12 +39,8 @@
             android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".LoginActivity"
-            android:label="Accounting login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="Accounting login"
+            android:parentActivityName=".ChooseSystemActivity">
         </activity>
     </application>
 

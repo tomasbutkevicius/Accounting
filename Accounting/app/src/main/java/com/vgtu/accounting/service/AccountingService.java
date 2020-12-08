@@ -15,6 +15,9 @@ public interface AccountingService {
     @GET("systems/{id}")
     Call<AccountingSystemResponse> getSystem(@Path("id") String id);
 
+    @GET("systems")
+    Call<List<AccountingSystemResponse>> getSystems();
+
     @GET("systems/{id}/categories")
     Call<List<CategoryResponse>> getSystemCategories(@Path("id") String id);
 

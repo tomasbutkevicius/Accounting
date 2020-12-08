@@ -133,12 +133,19 @@ public class UserService {
         return new UserResponse(user);
     }
 
-    public UserResponse login(LoginRequest loginRequest) {
+    public UserResponse login(LoginRequest loginRequest, int systemID) {
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        AccountingSystem accountingSystem = accountingSystemHib.getById(systemID);
+        System.out.println("SYSTEM FOUNDDD");
+
+        if(accountingSystem == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "System not found");
+
         if(loginRequest.getName() == null || loginRequest.getPassword() == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameters");
 
         UserHibController userHibController = new UserHibController(entityManagerFactory);
-        List<User> users = userHibController.getUserList();
+        List<User> users = userHibController.getAllUsersInSystem(accountingSystem);
         UserResponse userResponse = null;
 
         for(User user: users){
