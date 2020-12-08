@@ -11,7 +11,10 @@ import retrofit2.http.Path;
 public interface CategoryService {
 
     @GET("categories/user/{id}")
-    Call<List<CategoryResponse>> getCategories(@Path("id") String id);
+    Call<List<CategoryResponse>> getUserCategories(@Path("id") String id);
+
+    @GET("categories")
+    Call<List<CategoryResponse>> getCategories();
 
     @GET("categories/{id}")
     Call<CategoryResponse> getCategory(@Path("id") String id);

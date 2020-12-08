@@ -19,7 +19,7 @@
             android:theme="@style/Theme.AppCompat.NoActionBar.Popup" />
         <activity
             android:name=".CategoriesActivity"
-            android:label="My categories"
+            android:label="Categories"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"

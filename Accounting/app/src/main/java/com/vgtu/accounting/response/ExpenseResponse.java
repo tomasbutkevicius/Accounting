@@ -1,11 +1,13 @@
 package com.vgtu.accounting.response;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 public class ExpenseResponse implements Serializable {
     private int id;
     private String name;
     private Integer amount;
+    private String creationDate;
     private int categoryID;
 
     public int getId() {
@@ -38,5 +40,13 @@ public class ExpenseResponse implements Serializable {
 
     public void setCategoryID(int categoryID) {
         this.categoryID = categoryID;
+    }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
     }
 }

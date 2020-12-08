@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vgtu.accounting.api.ApiClient;
+import com.vgtu.accounting.model.UserType;
 import com.vgtu.accounting.popup.AccountingPopUp;
 import com.vgtu.accounting.response.AccountingSystemResponse;
 import com.vgtu.accounting.response.UserResponse;
@@ -53,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
 
             Log.e("TAG", "===>>>" + userResponse.getName());
         }
+        Button categoriesBtn = (Button)findViewById(R.id.categoriesBtn);
+        if(userResponse.getType().equals(UserType.ADMIN))
+            categoriesBtn.setText("ALL CATEGORIES");
+
     }
 
     private void setAccountingSystem(){

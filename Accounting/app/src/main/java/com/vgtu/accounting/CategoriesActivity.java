@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vgtu.accounting.api.ApiClient;
+import com.vgtu.accounting.model.UserType;
 import com.vgtu.accounting.popup.CategoryPupUp;
 import com.vgtu.accounting.response.CategoryResponse;
 import com.vgtu.accounting.response.UserResponse;
@@ -54,7 +55,11 @@ public class CategoriesActivity extends AppCompatActivity {
     }
 
     private void setCategoryList(){
-        Call<List<CategoryResponse>> call = ApiClient.getCategoryService().getCategories(String.valueOf(userResponse.getId()));
+        Call<List<CategoryResponse>> call = null;
+        if(userResponse.getType().equals(UserType.ADMIN))
+            call = ApiClient.getCategoryService().getCategories();
+        else
+            call = ApiClient.getCategoryService().getUserCategories(String.valueOf(userResponse.getId()));
 
         call.enqueue(new Callback<List<CategoryResponse>>(){
             @Override
