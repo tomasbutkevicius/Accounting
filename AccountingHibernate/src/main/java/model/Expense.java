@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 public class Expense implements Serializable {
@@ -12,6 +13,7 @@ public class Expense implements Serializable {
     private int id;
     private String name;
     private Integer amount;
+    private LocalDate creationDate;
     @ManyToOne
     private Category category;
 
@@ -20,10 +22,11 @@ public class Expense implements Serializable {
         this.amount = amount;
     }
 
-    public Expense(String name, Integer amount, Category category) {
+    public Expense(String name, Integer amount, Category category, LocalDate creationDate) {
         this.name = name;
         this.amount = amount;
         this.category = category;
+        this.creationDate = creationDate;
     }
 
     public Expense(int id, String name, Integer amount, Category category) {
@@ -67,5 +70,13 @@ public class Expense implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
     }
 }

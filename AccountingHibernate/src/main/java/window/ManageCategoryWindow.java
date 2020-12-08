@@ -26,6 +26,7 @@ import service.IncomeService;
 import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -398,7 +399,7 @@ public class ManageCategoryWindow implements Initializable {
             Popup.display("Error", "Income with this name exists", "Okay");
         } else {
             try {
-                Income income = new Income(incomeNameField, Integer.parseInt(incomeAmountField), category);
+                Income income = new Income(incomeNameField, Integer.parseInt(incomeAmountField), category, LocalDate.now());
                 IncomeService.create(entityManagerFactory, accountingSystem, income, category);
                 AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
                 accountingSystem = accountingSystemHib.getById(accountingSystem.getId());
@@ -460,7 +461,7 @@ public class ManageCategoryWindow implements Initializable {
         } else {
             try {
                 Integer.parseInt(expenseAmountField);
-                Expense expense = new Expense(expenseNameField, Integer.parseInt(expenseAmountField), category);
+                Expense expense = new Expense(expenseNameField, Integer.parseInt(expenseAmountField), category, LocalDate.now());
                 ExpenseService.create(entityManagerFactory, accountingSystem, expense, category);
                 AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
                 accountingSystem = accountingSystemHib.getById(accountingSystem.getId());
