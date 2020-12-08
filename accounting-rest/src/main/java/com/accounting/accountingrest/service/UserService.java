@@ -48,13 +48,22 @@ public class UserService {
         UserHibController userHibController = new UserHibController(entityManagerFactory);
         for(User user: userHibController.getAllUsersInSystem(accountingSystem)){
             if(user.getName().equalsIgnoreCase(userRequest.getName())){
-                return "user with the name already exists";
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with name already exists");
+            }
+        }
+
+        if(userRequest.getType().equalsIgnoreCase("ADMIN"))
+        {
+            for(User user: userHibController.getUserList()){
+                if(user.getName().equalsIgnoreCase(userRequest.getName())){
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with name already exists");
+                }
             }
         }
 
         if(!userRequest.getType().equalsIgnoreCase("private") && !userRequest.getType().equalsIgnoreCase("company")
         && !userRequest.getType().equalsIgnoreCase("admin"))
-            return "given type does not exist";
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Given type does not exist");
 
         UserType userType = UserType.valueOf(userRequest.getType().toUpperCase());
 

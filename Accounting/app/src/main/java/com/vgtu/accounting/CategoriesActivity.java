@@ -59,7 +59,7 @@ public class CategoriesActivity extends AppCompatActivity {
     private void setCategoryList(){
         Call<List<CategoryResponse>> call = null;
         if(userResponse.getType().equals(UserType.ADMIN))
-            call = ApiClient.getCategoryService().getCategories();
+            call = ApiClient.getAccountingService().getSystemCategories(String.valueOf(userResponse.getAccountingSystemID()));
         else
             call = ApiClient.getCategoryService().getUserCategories(String.valueOf(userResponse.getId()));
 

@@ -14,6 +14,7 @@ import model.AccountingSystem;
 import model.User;
 import model.UserType;
 import persistenceController.AccountingSystemHib;
+import persistenceController.UserHibController;
 import service.AccountingSystemService;
 
 import javax.persistence.EntityManagerFactory;
@@ -94,6 +95,10 @@ public class CreateAccountingSysWindow implements Initializable {
             errorMessage.setText("Admin information cannot have spaces");
             return null;
         }
+        if (nameExists()) {
+            errorMessage.setText("Admin name already found in system");
+            return null;
+        }
         return new AccountingSystem(systemNameField.getText(), LocalDate.now(), versionField.getText(), 0, 0);
     }
 
@@ -106,6 +111,16 @@ public class CreateAccountingSysWindow implements Initializable {
 
     private boolean hasSpaces() {
         if (adminPasswordField.getText().contains(" ") || adminNameField.getText().contains(" ")) return true;
+        return false;
+    }
+
+    private boolean nameExists() {
+        UserHibController userHibController = new UserHibController(entityManagerFactory);
+        for(User user : userHibController.getUserList()){
+            if(user.getName().equals(adminNameField.getText())){
+                return true;
+            }
+        }
         return false;
     }
 
