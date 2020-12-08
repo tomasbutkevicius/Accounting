@@ -41,6 +41,8 @@ public class CategoriesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.categories_activity);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
+
+
         setUser();
         setCategoryList();
     }
@@ -66,7 +68,7 @@ public class CategoriesActivity extends AppCompatActivity {
             public void onResponse(Call<List<CategoryResponse>> call, Response<List<CategoryResponse>> response) {
                 if(response.isSuccessful()){
                     categories = response.body();
-                    listView = findViewById(R.id.listview);
+                    listView = findViewById(R.id.category);
                     ArrayList<String> titles = new ArrayList<>();
                     ArrayList<String> descriptions = new ArrayList<>();
                     ArrayList<Boolean> isParent = new ArrayList<>();

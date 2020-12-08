@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +23,12 @@ import android.widget.Toast;
 import com.vgtu.accounting.api.ApiClient;
 import com.vgtu.accounting.R;
 import com.vgtu.accounting.response.CategoryResponse;
+import com.vgtu.accounting.response.ExpenseResponse;
+import com.vgtu.accounting.response.IncomeResponse;
 
-import java.util.Collections;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +37,7 @@ import retrofit2.Response;
 public class CategoryPupUp extends Activity {
     CategoryResponse categoryResponse;
     ListView listView;
+    Button btnClose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +50,7 @@ public class CategoryPupUp extends Activity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int) (width*.9), (int)(height*.27));
+        getWindow().setLayout((int) (width), (int)(height*.89));
 
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
@@ -54,6 +61,15 @@ public class CategoryPupUp extends Activity {
         getWindow().setAttributes(params);
         setCategoryResponse();
         displayCategoryText();
+
+        btnClose = (Button) findViewById(R.id.closeBtn);
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void displayCategoryText(){
@@ -67,13 +83,22 @@ public class CategoryPupUp extends Activity {
                 if(response.isSuccessful()){
                     categoryResponse[0] = (CategoryResponse) response.body();
 
-                    listView = findViewById(R.id.listview);
-                    MyAdapter adapter = new MyAdapter(getApplicationContext(), categoryResponseSelected.getTitle(), categoryResponseSelected.getDescription(), categoryResponse[0].getTitle());
-                    listView.setAdapter(adapter);
+                    TextView title = findViewById(R.id.title);
+                    title.setText(categoryResponseSelected.getTitle());
+                    TextView description = findViewById(R.id.description);
+                    description.setText(categoryResponseSelected.getDescription());
+                    TextView parent = findViewById(R.id.parent);
+                    parent.setText("Parent category:" + categoryResponse[0].getTitle());
                 } else {
-                    listView = findViewById(R.id.listview);
-                    MyAdapter adapter = new MyAdapter(getApplicationContext(), categoryResponseSelected.getTitle(), categoryResponseSelected.getDescription(), "");
-                    listView.setAdapter(adapter);
+                    //____________
+                    //If parent category name not found then it has no parent
+                    //____________
+                    TextView title = findViewById(R.id.title);
+                    title.setText(categoryResponseSelected.getTitle());
+                    TextView description = findViewById(R.id.description);
+                    description.setText(categoryResponseSelected.getDescription());
+                    TextView parent = findViewById(R.id.parent);
+                    parent.setText("");
                 }
 
             }
@@ -84,38 +109,60 @@ public class CategoryPupUp extends Activity {
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             }
         });
+        List<String> incomeTitles = new ArrayList<>();
+        List<String> incomeAmounts = new ArrayList<>();
+        List<String> incomeDates = new ArrayList<>();
+        for(IncomeResponse income: categoryResponseSelected.getIncomes()){
+            incomeTitles.add(income.getName());
+            incomeAmounts.add(String.valueOf(income.getAmount()));
+            incomeDates.add(income.getCreationDate());
+        }
+
+        listView = findViewById(R.id.incomes);
+        IncomeExpenseListAdapter incomeAdapter = new IncomeExpenseListAdapter(getApplicationContext(), incomeTitles, incomeAmounts, incomeDates);
+        listView.setAdapter(incomeAdapter);
+
+        List<String> expenseTitles = new ArrayList<>();
+        List<String> expenseAmounts = new ArrayList<>();
+        List<String> expenseDates = new ArrayList<>();
+
+        for(ExpenseResponse expense: categoryResponseSelected.getExpenses()){
+            expenseTitles.add(expense.getName());
+            expenseAmounts.add(String.valueOf(expense.getAmount()));
+            expenseDates.add(expense.getCreationDate());
+        }
+
+        listView = findViewById(R.id.expenses);
+        IncomeExpenseListAdapter expenseAdapter = new IncomeExpenseListAdapter(getApplicationContext(), expenseTitles, expenseAmounts, expenseDates);
+        listView.setAdapter(expenseAdapter);
     }
 
-    class MyAdapter extends ArrayAdapter<String> {
+    class IncomeExpenseListAdapter extends ArrayAdapter<String>{
         Context context;
-        String rTitle;
-        String rDescription;
-        String parentName;
+        List<String> rTitle;
+        List<String> amounts;
+        List<String> creationDates;
 
-        MyAdapter(Context c, String title, String description, String parentName){
-            super( c,  R.layout.category_row,  R.id.title, Collections.singletonList(title));
+        IncomeExpenseListAdapter(Context c, List<String> titles, List<String> amounts, List<String> creationDates){
+            super( c,  R.layout.category_row,  R.id.name,  titles);
             this.context = c;
-            this.rTitle = title;
-            this.rDescription = description;
-            this.parentName = parentName;
+            this.rTitle = titles;
+            this.amounts = amounts;
+            this.creationDates = creationDates;
         }
 
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = layoutInflater.inflate(R.layout.category_view, parent, false);
-            TextView myTitle = row.findViewById(R.id.title);
-            TextView myDescription = row.findViewById(R.id.description);
-            TextView parentName = row.findViewById(R.id.parent);
-            if(!this.parentName.equals(""))
-                parentName.setText("Parent: " + this.parentName);
-            else
-                parentName.setText("Parent category");
+            View row = layoutInflater.inflate(R.layout.income_expense_view, parent, false);
 
-            myTitle.setText(rTitle);
-            myDescription.setText(rDescription);
-
+            TextView titleView = row.findViewById(R.id.name);
+            titleView.setText(rTitle.get(position));
+            TextView amountView = row.findViewById(R.id.amount);
+            amountView.setText(amounts.get(position) + " eur");
+            TextView creationDateView = row.findViewById(R.id.creationDate);
+            creationDateView.setText(creationDates.get(position));
             return row;
         }
     }

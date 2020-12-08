@@ -11,10 +11,10 @@
 
 
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="153dp"
-        android:orientation="vertical"
-        android:id="@+id/layout">
+        android:layout_height="133dp"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/name"
                 android:layout_width="379dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -35,30 +35,25 @@
 
 
         <TextView
-            android:id="@+id/description"
+            android:id="@+id/amount"
             android:layout_width="match_parent"
-            android:layout_height="59dp"
+            android:layout_height="31dp"
             android:layout_margin="5dp"
             android:paddingLeft="10dp"
-            android:text="Description"
+            android:text="amount"
             android:textColor="#FFFF"
             android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/parent"
+            android:id="@+id/creationDate"
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:layout_margin="5dp"
             android:paddingLeft="10dp"
-            android:text="parent category: "
+            android:text="creation date "
             android:textColor="#FFFF"
             android:textSize="15sp"
             android:textStyle="bold" />
-
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/category"/>
     </LinearLayout>
 </LinearLayout>
