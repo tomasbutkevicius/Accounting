@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AccountingSystemGUI.iml" filepath="$PROJECT_DIR$/AccountingSystemGUI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/AccountingSystemGUI.iml" filepath="$PROJECT_DIR$/.idea/AccountingSystemGUI.iml" />
     </modules>
   </component>
 </project>
