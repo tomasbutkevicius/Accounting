@@ -1,7 +1,10 @@
 package com.accounting.accountingrest.hibernate.model;
 
+import org.apache.tomcat.jni.Local;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 public class Expense implements Serializable {
@@ -10,26 +13,16 @@ public class Expense implements Serializable {
     private int id;
     private String name;
     private Integer amount;
+    private LocalDate creationDate;
     @ManyToOne
     private Category category;
 
-    public Expense(String name, int amount) {
+    public Expense(String name, int amount, LocalDate creationDate) {
         this.name = name;
         this.amount = amount;
+        this.creationDate = creationDate;
     }
 
-    public Expense(String name, Integer amount, Category category) {
-        this.name = name;
-        this.amount = amount;
-        this.category = category;
-    }
-
-    public Expense(int id, String name, Integer amount, Category category) {
-        this.id = id;
-        this.name = name;
-        this.amount = amount;
-        this.category = category;
-    }
 
     public Expense() {
 
@@ -65,5 +58,13 @@ public class Expense implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
     }
 }

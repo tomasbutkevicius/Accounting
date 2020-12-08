@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class ExpenseService {
         if(category == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found");
         }
-        Expense expense = new Expense(expenseRequest.getName(), expenseRequest.getAmount());
+        Expense expense = new Expense(expenseRequest.getName(), expenseRequest.getAmount(), LocalDate.now());
         expense.setCategory(category);
 
         ExpenseServiceHib.create(entityManagerFactory, category.getAccountingSystem(), expense, category);

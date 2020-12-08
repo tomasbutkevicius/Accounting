@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class IncomeService {
         if(category == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found");
         }
-        Income income = new Income(incomeRequest.getName(), incomeRequest.getAmount());
+        Income income = new Income(incomeRequest.getName(), incomeRequest.getAmount(), LocalDate.now());
         income.setCategory(category);
 
         IncomeServiceHib.create(entityManagerFactory, category.getAccountingSystem(), income, category);
