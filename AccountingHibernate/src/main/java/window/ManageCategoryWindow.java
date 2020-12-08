@@ -118,7 +118,7 @@ public class ManageCategoryWindow implements Initializable {
     public void setIncomeList(Category category) {
         incomeList.getItems().clear();
         for (Income income : category.getIncomes()) {
-            incomeList.getItems().add("'" + income.getName() + "' amount: " + income.getAmount() + "eur");
+            incomeList.getItems().add("| " + income.getName() + " |  " + income.getAmount() + "eur   " + income.getCreationDate());
         }
     }
 
@@ -127,7 +127,7 @@ public class ManageCategoryWindow implements Initializable {
         for (Expense expense : category.getExpenses()) {
             expenseList
                     .getItems()
-                    .add("'" + expense.getName() + "' amount: " + expense.getAmount() + "eur");
+                    .add("| " + expense.getName() + " |  " + expense.getAmount() + " eur   " + expense.getCreationDate());
         }
     }
 
