@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/pop_bg"
     android:theme="@style/Theme.Accounting"
-    tools:context=".AccountingPopUp">
+    tools:context=".popup.AccountingPopUp">
 
     <TextView
         android:id="@+id/systemName"

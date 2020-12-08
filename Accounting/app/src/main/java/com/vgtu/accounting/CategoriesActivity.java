@@ -3,7 +3,6 @@ package com.vgtu.accounting;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +18,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.vgtu.accounting.api.ApiClient;
+import com.vgtu.accounting.popup.CategoryPupUp;
 import com.vgtu.accounting.response.CategoryResponse;
 import com.vgtu.accounting.response.UserResponse;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

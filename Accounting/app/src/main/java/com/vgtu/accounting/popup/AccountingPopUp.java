@@ -1,4 +1,4 @@
-package com.vgtu.accounting;
+package com.vgtu.accounting.popup;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.vgtu.accounting.R;
 import com.vgtu.accounting.response.AccountingSystemResponse;
 
 public class AccountingPopUp extends Activity {
@@ -59,9 +60,9 @@ public class AccountingPopUp extends Activity {
         TextView systemNameView = findViewById(R.id.systemName);
         systemNameView.append(accountingSystemResponse.getName());
         TextView incomeText = findViewById(R.id.incomeText);
-        incomeText.append(String.valueOf(accountingSystemResponse.getIncome()));
+        incomeText.append(accountingSystemResponse.getIncome() + " eur");
         TextView expenseText = findViewById(R.id.expenseText);
-        expenseText.append(String.valueOf(accountingSystemResponse.getExpense()));
+        expenseText.append(accountingSystemResponse.getExpense() + " eur");
         TextView version = findViewById(R.id.systemVersion);
         version.append(String.valueOf(accountingSystemResponse.getSystemVersion()));
         TextView date = findViewById(R.id.creationDate);

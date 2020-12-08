@@ -1,6 +1,6 @@
 package com.vgtu.accounting.response;
 
-import com.vgtu.accounting.UserType;
+import com.vgtu.accounting.model.UserType;
 
 import java.io.Serializable;
 

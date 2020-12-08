@@ -1,4 +1,4 @@
-package com.vgtu.accounting;
+package com.vgtu.accounting.model;
 
 public enum UserType {
     PRIVATE,

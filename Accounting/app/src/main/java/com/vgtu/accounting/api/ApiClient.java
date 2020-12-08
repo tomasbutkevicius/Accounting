@@ -1,4 +1,4 @@
-package com.vgtu.accounting;
+package com.vgtu.accounting.api;
 
 import com.vgtu.accounting.service.AccountingService;
 import com.vgtu.accounting.service.CategoryService;
