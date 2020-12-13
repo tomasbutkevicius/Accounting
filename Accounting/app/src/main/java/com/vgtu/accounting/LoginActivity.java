@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                     UserResponse userResponse = response.body();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra("data", userResponse));
                 } else {
-                    String message = "Error occurred";
+                    String message = "Wrong username or password";
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 }
             }

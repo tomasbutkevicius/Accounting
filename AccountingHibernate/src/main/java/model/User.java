@@ -111,6 +111,6 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "\nUser{" + "username = '" + name + '\'' + ", user type = " + type +
-                "} \n contact information: " + contactInformation + ", password = '" + password + "'\n";
+                "} \n contact information: " + contactInformation  + "\n";
     }
 }

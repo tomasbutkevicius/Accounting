@@ -38,7 +38,7 @@ public class AccountingSystemService {
     public String createAccountingSystem(final AccountingSystemRequest accountingSystemRequest) {
         AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         if (accountingSystemHib.getByName(accountingSystemRequest.getName()) != null){
-            return "Toks vardas jau yra";
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "System name taken");
         }
         AccountingSystem accountingSystem = new AccountingSystem(
                 accountingSystemRequest.getName(),
