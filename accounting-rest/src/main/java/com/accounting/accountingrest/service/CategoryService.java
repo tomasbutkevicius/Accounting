@@ -40,7 +40,7 @@ public class CategoryService {
     }
 
     public String createCategory(final CategoryRequest categoryRequest) {
-        if(categoryRequest.getTitle() == null || categoryRequest.getDescription() == null)
+        if (!validCategoryRequest(categoryRequest))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameters");
 
         AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
@@ -64,10 +64,11 @@ public class CategoryService {
         }
     }
 
+
     public String updateCategory(CategoryRequest categoryRequest, int id) {
         CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
         Category category = categoryHibController.getById(id);
-        if(categoryRequest.getTitle() == null || categoryRequest.getDescription() == null || category == null)
+        if (validCategoryRequest(categoryRequest) || category == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid parameters");
 
         category.setDescription(categoryRequest.getDescription());
@@ -79,7 +80,7 @@ public class CategoryService {
     public void deleteCategory(int id) {
         CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
         Category category = categoryHibController.getById(id);
-        if(category == null)
+        if (category == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found");
         categoryHibController.delete(id);
     }
@@ -87,7 +88,7 @@ public class CategoryService {
     public CategoryResponse findCategory(int id) {
         CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
         Category category = categoryHibController.getById(id);
-        if(category == null){
+        if (category == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found");
         }
 
@@ -98,19 +99,24 @@ public class CategoryService {
     public List<CategoryResponse> findUserCategories(int id) {
         UserHibController userHibController = new UserHibController(entityManagerFactory);
         User user = userHibController.getById(id);
-        if(user == null){
+        if (user == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
         }
+        List<CategoryResponse> assignedCategoryList = getUserAssignedCategories(user);
+        return assignedCategoryList;
+    }
+
+    private List<CategoryResponse> getUserAssignedCategories(User user) {
         CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
         List<Category> allCategories = categoryHibController.getCategoryList();
 
         List<CategoryResponse> responseList = new ArrayList<>();
         for (Category category : allCategories) {
-            if(category.getResponsibleUsers().stream()
+            if (category.getResponsibleUsers().stream()
                     .filter(respUser -> String.valueOf(respUser.getId()).equals(String.valueOf(user.getId())))
                     .findFirst()
                     .orElse(null) != null)
-            responseList.add(new CategoryResponse(category));
+                responseList.add(new CategoryResponse(category));
         }
         return responseList;
     }
@@ -121,7 +127,7 @@ public class CategoryService {
         List<CategoryResponse> responseList = new ArrayList<>();
 
         for (Category category : categories) {
-            if(category.getParentCategory() == null){
+            if (category.getParentCategory() == null) {
                 responseList.add(new CategoryResponse(category));
             }
         }
@@ -140,7 +146,7 @@ public class CategoryService {
         List<CategoryResponse> responseList = new ArrayList<>();
 
         for (Category category : categories) {
-                responseList.add(new CategoryResponse(category));
+            responseList.add(new CategoryResponse(category));
         }
         return responseList;
     }
@@ -148,30 +154,18 @@ public class CategoryService {
     public void addUser(int catID, int userID) throws Exception {
         CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
         Category category = categoryHibController.getById(catID);
-        if (category == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found");
 
-        for(User responsibleUser :category.getResponsibleUsers()){
-            if(responsibleUser.getId() == userID)
-                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User already exists");
-        }
         UserHibController userHibController = new UserHibController(entityManagerFactory);
         User user = userHibController.getById(userID);
-        if (user == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
 
-        if(user.getAccountingSystem().getId() != category.getAccountingSystem().getId())
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "System must be same");
-
-        if(user.getType().equals(UserType.ADMIN))
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Admin cannot be responsible");
-
+        validateAddUserToCategory(category, user);
         CategoryServiceHib.addResponsibleUser(category, user, entityManagerFactory);
     }
 
+
     public void removeUserFromCategory(int catID, int userID) throws Exception {
         CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
-        if(categoryHibController.getById(catID) == null || new UserHibController(entityManagerFactory).getById(userID) == null){
+        if (categoryHibController.getById(catID) == null || new UserHibController(entityManagerFactory).getById(userID) == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User or category not found");
         }
         categoryHibController.removeUserFromCategory(catID, userID);
@@ -179,10 +173,33 @@ public class CategoryService {
 
     public String findCategoryTitle(int parseInt) {
         CategoryHibController categoryHibController = new CategoryHibController(entityManagerFactory);
-        if(categoryHibController.getById(parseInt) == null){
+        if (categoryHibController.getById(parseInt) == null) {
             return "";
         }
 
         return categoryHibController.getById(parseInt).getTitle();
+    }
+
+    private boolean validCategoryRequest(CategoryRequest categoryRequest) {
+        return (categoryRequest.getTitle() == null || categoryRequest.getDescription() == null);
+    }
+
+    private void validateAddUserToCategory(Category category, User user) {
+        if (category == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found");
+
+        if (user == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
+
+        if (user.getType().equals(UserType.ADMIN))
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Admin cannot be responsible");
+
+        for (User responsibleUser : category.getResponsibleUsers()) {
+            if (responsibleUser.getId() == user.getId())
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User already exists");
+        }
+
+        if (user.getAccountingSystem().getId() != category.getAccountingSystem().getId())
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "System must be same");
     }
 }

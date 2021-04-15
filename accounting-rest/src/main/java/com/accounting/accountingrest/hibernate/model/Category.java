@@ -108,10 +108,6 @@ public class Category implements Serializable {
         return responsibleUsers;
     }
 
-    public void setResponsibleUsers(ArrayList<User> responsibleUsers) {
-        this.responsibleUsers = responsibleUsers;
-    }
-
     public Category getParentCategory() {
         return parentCategory;
     }
@@ -122,10 +118,6 @@ public class Category implements Serializable {
 
     public List<Category> getSubCategories() {
         return subCategories;
-    }
-
-    public void setSubCategories(ArrayList<Category> subCategories) {
-        this.subCategories = subCategories;
     }
 
     public int getId() {

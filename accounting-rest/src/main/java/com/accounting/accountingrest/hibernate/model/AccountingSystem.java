@@ -112,16 +112,8 @@ public class AccountingSystem implements Serializable {
         return users;
     }
 
-    public void setUsers(ArrayList<User> users) {
-        this.users = users;
-    }
-
     public List<Category> getCategories() {
         return categories;
-    }
-
-    public void setCategories(ArrayList<Category> categories) {
-        this.categories = categories;
     }
 
     public int getIncome() {
