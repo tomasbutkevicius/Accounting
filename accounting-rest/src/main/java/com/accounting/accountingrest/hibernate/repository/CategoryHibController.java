@@ -1,7 +1,9 @@
 package com.accounting.accountingrest.hibernate.repository;
 
 import com.accounting.accountingrest.hibernate.model.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -34,6 +36,7 @@ public class CategoryHibController {
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
             exception.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server is experiencing a problem");
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -50,7 +53,7 @@ public class CategoryHibController {
         EntityManager entityManager = getEntityManager();
         try{
 
-            CriteriaQuery criteriaQuery = entityManager.getCriteriaBuilder().createQuery();
+            CriteriaQuery<Object> criteriaQuery = entityManager.getCriteriaBuilder().createQuery();
             criteriaQuery.select(criteriaQuery.from(Category.class));
             Query query = entityManager.createQuery(criteriaQuery);
 
@@ -61,13 +64,10 @@ public class CategoryHibController {
             return query.getResultList();
         } catch (Exception e){
             e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server is experiencing a problem");
         } finally {
-            if (entityManager != null) {
                 entityManager.close();
-            }
         }
-
-        return null;
     }
 
     public Category getById(int id) {
@@ -77,7 +77,7 @@ public class CategoryHibController {
         return null;
     }
 
-    public String update(Category category){
+    public void update(Category category){
         EntityManager entityManager = null;
 
         try {
@@ -85,10 +85,9 @@ public class CategoryHibController {
             entityManager.getTransaction().begin();
             category = entityManager.merge(category);
             entityManager.getTransaction().commit();
-            return "Category updated";
         } catch (Exception exception) {
             exception.printStackTrace();
-            return "Category update error";
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server is experiencing a problem");
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -111,11 +110,13 @@ public class CategoryHibController {
                 category = entityManager.find(Category.class, catId);
             }catch(Exception e){
                 e.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server encountered a problem");
             }
             entityManager.remove(category);
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
             exception.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server encountered a problem");
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -135,7 +136,7 @@ public class CategoryHibController {
     }
 
 
-    public void removeUserFromCategory(int categoryId, int userId) throws Exception {
+    public void removeUserFromCategory(int categoryId, int userId) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -147,7 +148,8 @@ public class CategoryHibController {
                 category.getResponsibleUsers().remove(user);
                 em.getTransaction().commit();
             } catch (EntityNotFoundException enfe) {
-                throw new Exception("Error when removing responsible User from category", enfe);
+                enfe.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Not found");
             }
         } finally {
             if (em != null) {
@@ -156,7 +158,7 @@ public class CategoryHibController {
         }
     }
 
-    public void addUserToCategory(int categoryId, int userId) throws Exception {
+    public void addUserToCategory(int categoryId, int userId) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -168,7 +170,8 @@ public class CategoryHibController {
                 category.getResponsibleUsers().add(user);
                 em.getTransaction().commit();
             } catch (EntityNotFoundException enfe) {
-                throw new Exception("Error when adding responsible User to category", enfe);
+                enfe.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Not found");
             }
         } finally {
             if (em != null) {
@@ -177,7 +180,7 @@ public class CategoryHibController {
         }
     }
 
-    public void removeIncomeFromCategory(Category category, Income income) throws Exception {
+    public void removeIncomeFromCategory(Category category, Income income) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -191,7 +194,8 @@ public class CategoryHibController {
                 em.flush();
 
             } catch (EntityNotFoundException enfe) {
-                throw new Exception("Error when removing income from category", enfe);
+                enfe.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Not found");
             }
             em.getTransaction().commit();
         } finally {
@@ -201,7 +205,7 @@ public class CategoryHibController {
         }
     }
 
-    public void removeExpenseFromCategory(Category category, Expense expense) throws Exception {
+    public void removeExpenseFromCategory(Category category, Expense expense){
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -214,8 +218,9 @@ public class CategoryHibController {
                 em.merge(expense);
                 em.flush();
 
-            } catch (EntityNotFoundException enfe) {
-                throw new Exception("Error when removing expense from category", enfe);
+            } catch (EntityNotFoundException entityNotFoundException) {
+                entityNotFoundException.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Not found");
             }
             em.getTransaction().commit();
         } finally {

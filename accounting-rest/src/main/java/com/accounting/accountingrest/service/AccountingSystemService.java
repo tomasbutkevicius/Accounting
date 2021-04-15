@@ -35,7 +35,7 @@ public class AccountingSystemService {
         return responseList;
     }
 
-    public String createAccountingSystem(final AccountingSystemRequest accountingSystemRequest) {
+    public HttpStatus createAccountingSystem(final AccountingSystemRequest accountingSystemRequest) {
         AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         if (accountingSystemHib.getByName(accountingSystemRequest.getName()) != null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "System name taken");
@@ -45,8 +45,8 @@ public class AccountingSystemService {
                 LocalDate.now(),
                 accountingSystemRequest.getSystemVersion(),
                 0,0);
-
-        return accountingSystemHib.create(accountingSystem);
+        accountingSystemHib.create(accountingSystem);
+        return HttpStatus.CREATED;
     }
 
 
@@ -58,8 +58,8 @@ public class AccountingSystemService {
 
         accountingSystem.setName(accountingSystemRequest.getName());
         accountingSystem.setSystemVersion(accountingSystemRequest.getSystemVersion());
-
-        return accountingSystemHib.update(accountingSystem);
+        accountingSystemHib.update(accountingSystem);
+        return "Accounting system is updated";
     }
 
     public void deleteAccountingSystem(int id) {

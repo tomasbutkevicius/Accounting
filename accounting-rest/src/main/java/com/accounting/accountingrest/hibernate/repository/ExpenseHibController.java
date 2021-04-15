@@ -2,7 +2,9 @@ package com.accounting.accountingrest.hibernate.repository;
 
 
 import com.accounting.accountingrest.hibernate.model.Expense;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -49,7 +51,7 @@ public class ExpenseHibController {
         EntityManager entityManager = getEntityManager();
         try {
 
-            CriteriaQuery criteriaQuery = entityManager.getCriteriaBuilder().createQuery();
+            CriteriaQuery<Object> criteriaQuery = entityManager.getCriteriaBuilder().createQuery();
             criteriaQuery.select(criteriaQuery.from(Expense.class));
             Query query = entityManager.createQuery(criteriaQuery);
 
@@ -60,13 +62,10 @@ public class ExpenseHibController {
             return query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server encountered a problem");
         } finally {
-            if (entityManager != null) {
                 entityManager.close();
-            }
         }
-
-        return null;
     }
 
     public Expense getById(int id) {
@@ -86,6 +85,7 @@ public class ExpenseHibController {
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
             exception.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error when updating");
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -105,8 +105,8 @@ public class ExpenseHibController {
                 expense = em.getReference(Expense.class, id);
                 expense.getId();
             } catch (Exception e) {
-                //Pranesti, kad pagal Id nk nerado
                 e.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id not found");
             }
             em.remove(expense);
             em.getTransaction().commit();

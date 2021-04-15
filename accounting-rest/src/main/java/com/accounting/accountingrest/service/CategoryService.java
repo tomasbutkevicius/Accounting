@@ -73,8 +73,9 @@ public class CategoryService {
 
         category.setDescription(categoryRequest.getDescription());
         category.setTitle(categoryRequest.getTitle());
+        categoryHibController.update(category);
 
-        return categoryHibController.update(category);
+        return "Category is updated";
     }
 
     public void deleteCategory(int id) {
@@ -181,7 +182,7 @@ public class CategoryService {
     }
 
     private boolean validCategoryRequest(CategoryRequest categoryRequest) {
-        return (categoryRequest.getTitle() == null || categoryRequest.getDescription() == null);
+        return (categoryRequest.getTitle() != null && categoryRequest.getDescription() != null);
     }
 
     private void validateAddUserToCategory(Category category, User user) {

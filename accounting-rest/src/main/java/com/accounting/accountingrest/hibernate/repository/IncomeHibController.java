@@ -2,7 +2,9 @@ package com.accounting.accountingrest.hibernate.repository;
 
 
 import com.accounting.accountingrest.hibernate.model.Income;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -33,6 +35,7 @@ public class IncomeHibController {
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
             exception.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server encountered a problem");
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -49,7 +52,7 @@ public class IncomeHibController {
         EntityManager entityManager = getEntityManager();
         try {
 
-            CriteriaQuery criteriaQuery = entityManager.getCriteriaBuilder().createQuery();
+            CriteriaQuery<Object> criteriaQuery = entityManager.getCriteriaBuilder().createQuery();
             criteriaQuery.select(criteriaQuery.from(Income.class));
             Query query = entityManager.createQuery(criteriaQuery);
 
@@ -60,13 +63,10 @@ public class IncomeHibController {
             return query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server encountered a problem");
         } finally {
-            if (entityManager != null) {
                 entityManager.close();
-            }
         }
-
-        return null;
     }
 
     public Income getById(int id) {
@@ -86,6 +86,7 @@ public class IncomeHibController {
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
             exception.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server encountered a problem");
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -105,8 +106,8 @@ public class IncomeHibController {
                 income = em.getReference(Income.class, id);
                 income.getId();
             } catch (Exception e) {
-                //Pranesti, kad pagal Id nk nerado
                 e.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server encountered a problem");
             }
             em.remove(income);
             em.getTransaction().commit();

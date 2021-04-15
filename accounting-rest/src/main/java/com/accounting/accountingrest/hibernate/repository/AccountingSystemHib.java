@@ -2,7 +2,9 @@ package com.accounting.accountingrest.hibernate.repository;
 
 
 import com.accounting.accountingrest.hibernate.model.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,7 +26,7 @@ public class AccountingSystemHib {
         return entityManagerFactory.createEntityManager();
     }
 
-    public String create(AccountingSystem accountingSystem) {
+    public void create(AccountingSystem accountingSystem) {
         EntityManager entityManager = null;
 
         try {
@@ -32,15 +34,14 @@ public class AccountingSystemHib {
             entityManager.getTransaction().begin();
             entityManager.persist(entityManager.merge(accountingSystem));
             entityManager.getTransaction().commit();
-            return "system created";
         } catch (Exception exception) {
             exception.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server is experiencing a problem");
         } finally {
             if (entityManager != null) {
                 entityManager.close();
             }
         }
-        return "something went wrong";
     }
 
     public List<AccountingSystem> getAccountingSystemList() {
@@ -52,7 +53,7 @@ public class AccountingSystemHib {
         EntityManager entityManager = getEntityManager();
         try {
 
-            CriteriaQuery criteriaQuery = entityManager.getCriteriaBuilder().createQuery();
+            CriteriaQuery<Object> criteriaQuery = entityManager.getCriteriaBuilder().createQuery();
             criteriaQuery.select(criteriaQuery.from(AccountingSystem.class));
             Query query = entityManager.createQuery(criteriaQuery);
 
@@ -63,13 +64,10 @@ public class AccountingSystemHib {
             return query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server is experiencing a problem");
         } finally {
-            if (entityManager != null) {
                 entityManager.close();
-            }
         }
-
-        return null;
     }
 
     public AccountingSystem getByName(String name) {
@@ -86,7 +84,7 @@ public class AccountingSystemHib {
         return null;
     }
 
-    public String update(AccountingSystem accountingSystem) {
+    public void update(AccountingSystem accountingSystem) {
         EntityManager entityManager = null;
 
         try {
@@ -94,10 +92,9 @@ public class AccountingSystemHib {
             entityManager.getTransaction().begin();
             accountingSystem = entityManager.merge(accountingSystem);
             entityManager.getTransaction().commit();
-            return "Accounting system updated";
         } catch (Exception exception) {
             exception.printStackTrace();
-            return "Error when updating accounting system";
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server is experiencing a problem");
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -117,11 +114,13 @@ public class AccountingSystemHib {
                 accountingSystem.getId();
             } catch (Exception e) {
                 e.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server is experiencing a problem");
             }
             entityManager.remove(accountingSystem);
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
             exception.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server is experiencing a problem");
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -129,7 +128,7 @@ public class AccountingSystemHib {
         }
     }
 
-    public void removeCategoryFromSystem(AccountingSystem accountingSystem, Category category) throws Exception {
+    public void removeCategoryFromSystem(AccountingSystem accountingSystem, Category category){
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -141,7 +140,8 @@ public class AccountingSystemHib {
                 em.remove(categoryDb);
 
             } catch (EntityNotFoundException enfe) {
-                throw new Exception("Error when removing expense from category", enfe);
+                enfe.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server is experiencing a problem");
             }
             em.getTransaction().commit();
         } finally {
@@ -151,7 +151,7 @@ public class AccountingSystemHib {
         }
     }
 
-    public void updateExpenseIncome(int id) throws Exception {
+    public void updateExpenseIncome(int id) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -161,7 +161,8 @@ public class AccountingSystemHib {
                 accountingSystem.setExpense(countExpense(accountingSystem.getCategories()));
                 accountingSystem.setIncome(countIncome(accountingSystem.getCategories()));
             } catch (EntityNotFoundException enfe) {
-                throw new Exception("Error when removing expense from category", enfe);
+                enfe.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server is experiencing a problem");
             }
             em.getTransaction().commit();
         } finally {

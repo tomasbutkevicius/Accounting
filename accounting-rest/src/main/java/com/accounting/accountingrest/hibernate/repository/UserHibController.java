@@ -3,7 +3,9 @@ package com.accounting.accountingrest.hibernate.repository;
 
 import com.accounting.accountingrest.hibernate.model.AccountingSystem;
 import com.accounting.accountingrest.hibernate.model.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -34,7 +36,8 @@ public class UserHibController {
             entityManager.persist(entityManager.merge(user));
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
-            System.out.println("smth went wrong");
+            exception.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server encountered a problem");
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -50,7 +53,7 @@ public class UserHibController {
 
         EntityManager entityManager = getEntityManager();
         try{
-            CriteriaQuery criteriaQuery = entityManager.getCriteriaBuilder().createQuery();
+            CriteriaQuery<Object> criteriaQuery = entityManager.getCriteriaBuilder().createQuery();
             criteriaQuery.select(criteriaQuery.from(User.class));
             Query query = entityManager.createQuery(criteriaQuery);
 
@@ -61,13 +64,10 @@ public class UserHibController {
             return query.getResultList();
         } catch (Exception e){
             e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server encountered a problem");
         } finally {
-            if (entityManager != null) {
                 entityManager.close();
-            }
         }
-
-        return null;
     }
 
     public User getById(int id) {
@@ -97,7 +97,7 @@ public class UserHibController {
             return "user updated";
         } catch (Exception exception) {
             exception.printStackTrace();
-            return "update failed";
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server encountered a problem");
         } finally {
             if (entityManager != null) {
                 entityManager.close();
@@ -111,17 +111,19 @@ public class UserHibController {
         try {
             entityManager = getEntityManager();
             entityManager.getTransaction().begin();
-            User user = null;
+            User user;
             try{
                 user = entityManager.getReference(User.class, id);
                 user.getCategories().clear();
             }catch(Exception e){
                 e.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server encountered a problem");
             }
             entityManager.remove(user);
             entityManager.getTransaction().commit();
         } catch (Exception exception) {
             exception.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server encountered a problem");
         } finally {
             if (entityManager != null) {
                 entityManager.close();
