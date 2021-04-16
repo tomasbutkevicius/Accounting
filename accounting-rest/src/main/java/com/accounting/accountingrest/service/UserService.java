@@ -9,6 +9,7 @@ import com.accounting.accountingrest.hibernate.service.UserServiceHib;
 import com.accounting.accountingrest.request.LoginRequest;
 import com.accounting.accountingrest.request.UserRequest;
 import com.accounting.accountingrest.response.UserResponse;
+import com.accounting.accountingrest.validator.UserServiceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,13 +23,15 @@ import java.util.List;
 @Service
 public class UserService {
     private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("accounting_hib");
+    private UserHibController userHibController = new UserHibController(entityManagerFactory);
+    private AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+    UserServiceValidator userServiceValidator = new UserServiceValidator(userHibController, accountingSystemHib);
 
     @Autowired
     public UserService(){
     }
 
     public List<UserResponse> findAll() {
-        UserHibController userHibController = new UserHibController(entityManagerFactory);
         List<User> userList = userHibController.getUserList();
         List<UserResponse> responseList = new ArrayList<>();
 
@@ -39,31 +42,7 @@ public class UserService {
     }
 
     public String createUser(final UserRequest userRequest) {
-        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
-        AccountingSystem accountingSystem = accountingSystemHib.getById(userRequest.getAccountingSystemID());
-        if(accountingSystem == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Accounting system not found");
-        }
-
-        UserHibController userHibController = new UserHibController(entityManagerFactory);
-        for(User user: userHibController.getAllUsersInSystem(accountingSystem)){
-            if(user.getName().equalsIgnoreCase(userRequest.getName())){
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with name already exists");
-            }
-        }
-
-        if(userRequest.getType().equalsIgnoreCase("ADMIN"))
-        {
-            for(User user: userHibController.getUserList()){
-                if(user.getName().equalsIgnoreCase(userRequest.getName())){
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with name already exists");
-                }
-            }
-        }
-
-        if(!userRequest.getType().equalsIgnoreCase("private") && !userRequest.getType().equalsIgnoreCase("company")
-        && !userRequest.getType().equalsIgnoreCase("admin"))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Given type does not exist");
+       userServiceValidator.validateCreate(userRequest);
 
         UserType userType = UserType.valueOf(userRequest.getType().toUpperCase());
 
@@ -73,27 +52,14 @@ public class UserService {
                 userRequest.getPassword(),
                 userRequest.getContactInformation());
 
-        return UserServiceHib.create(entityManagerFactory, accountingSystem, user);
+        return UserServiceHib.create(entityManagerFactory, accountingSystemHib.getById(userRequest.getAccountingSystemID()), user);
     }
 
     public String updateUser(UserRequest userUpdated, int id) {
-        if(userUpdated.getType() == null || userUpdated.getName() == null || userUpdated.getPassword() == null || userUpdated.getContactInformation() == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameters");
+        userServiceValidator.validateUpdate(id, userUpdated);
 
-    UserHibController userHibController = new UserHibController(entityManagerFactory);
-    User user = userHibController.getById(id);
-    if(user == null)
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
-
-    AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
-
-    AccountingSystem accountingSystem = accountingSystemHib.getById(userUpdated.getAccountingSystemID());
-        if(accountingSystem == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Accounting system not found");
-
-        if (!userUpdated.getName().equals(user.getName()) && (userNameCount(accountingSystem, userUpdated.getName()) >= 1)) {
-            return "User with this name already exists";
-        }
+        User user = userHibController.getById(id);
+        AccountingSystem accountingSystem = accountingSystemHib.getById(userUpdated.getAccountingSystemID());
 
         user.setAccountingSystem(accountingSystem);
         user.setName(userUpdated.getName());
@@ -104,50 +70,23 @@ public class UserService {
         return userHibController.update(user);
     }
 
-    public static int userNameCount(AccountingSystem accountingSystem, String userName) {
-        List<User> users = accountingSystem.getUsers();
-        int foundUsers = 0;
-
-        for(User user: users){
-            if(user.getName().equals(userName)){
-                foundUsers++;
-            }
-        }
-        return foundUsers;
-    }
-
     public void deleteUser(int id) {
-        UserHibController userHibController = new UserHibController(entityManagerFactory);
-        User user = userHibController.getById(id);
-        if(user == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
+        userServiceValidator.validateFind(id);
         userHibController.delete(id);
     }
 
     public UserResponse findUser(int id) {
-        UserHibController userHibController = new UserHibController(entityManagerFactory);
-        User user = userHibController.getById(id);
-        if(user == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
-        }
-        return new UserResponse(user);
+        userServiceValidator.validateFind(id);
+        return new UserResponse(userHibController.getById(id));
     }
 
     public UserResponse login(LoginRequest loginRequest, int systemID) {
-        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         AccountingSystem accountingSystem = accountingSystemHib.getById(systemID);
-        System.out.println("SYSTEM FOUNDDD");
 
-        if(accountingSystem == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "System not found");
+        userServiceValidator.validateLoginRequest(loginRequest, accountingSystem);
 
-        if(loginRequest.getName() == null || loginRequest.getPassword() == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing parameters");
-
-        UserHibController userHibController = new UserHibController(entityManagerFactory);
         List<User> users = userHibController.getAllUsersInSystem(accountingSystem);
         UserResponse userResponse = null;
-
         for(User user: users){
             if(user.getName().equals(loginRequest.getName()) && user.getPassword().equals(loginRequest.getPassword()) ){
                 userResponse = new UserResponse(user);
@@ -157,7 +96,6 @@ public class UserService {
         if(userResponse == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
-
         return userResponse;
     }
 }

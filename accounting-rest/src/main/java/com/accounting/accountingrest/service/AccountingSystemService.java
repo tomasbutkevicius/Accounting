@@ -4,10 +4,10 @@ import com.accounting.accountingrest.hibernate.repository.AccountingSystemHib;
 import com.accounting.accountingrest.hibernate.model.AccountingSystem;
 import com.accounting.accountingrest.request.AccountingSystemRequest;
 import com.accounting.accountingrest.response.AccountingSystemResponse;
+import com.accounting.accountingrest.validator.AccSysServiceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -17,15 +17,15 @@ import java.util.List;
 
 @Service
 public class AccountingSystemService {
-    //To run: XAMPP Apache, MySQL was used
     private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("accounting_hib");
+    private AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+    private AccSysServiceValidator accSysServiceValidator = new AccSysServiceValidator(accountingSystemHib);
 
     @Autowired
-    public AccountingSystemService(){
+    public AccountingSystemService() {
     }
 
     public List<AccountingSystemResponse> findAll() {
-        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         List<AccountingSystem> accountingSystems = accountingSystemHib.getAccountingSystemList();
         List<AccountingSystemResponse> responseList = new ArrayList<>();
 
@@ -36,25 +36,20 @@ public class AccountingSystemService {
     }
 
     public HttpStatus createAccountingSystem(final AccountingSystemRequest accountingSystemRequest) {
-        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
-        if (accountingSystemHib.getByName(accountingSystemRequest.getName()) != null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "System name taken");
-        }
+        accSysServiceValidator.validateCreate(accountingSystemRequest);
         AccountingSystem accountingSystem = new AccountingSystem(
                 accountingSystemRequest.getName(),
                 LocalDate.now(),
                 accountingSystemRequest.getSystemVersion(),
-                0,0);
+                0, 0);
         accountingSystemHib.create(accountingSystem);
         return HttpStatus.CREATED;
     }
 
 
     public String updateAccountingSystem(AccountingSystemRequest accountingSystemRequest, int id) {
-        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
         AccountingSystem accountingSystem = accountingSystemHib.getById(id);
-        if(accountingSystemRequest.getName() == null || accountingSystemRequest.getSystemVersion() == null || accountingSystem == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid parameters");
+        accSysServiceValidator.validateUpdate(accountingSystem);
 
         accountingSystem.setName(accountingSystemRequest.getName());
         accountingSystem.setSystemVersion(accountingSystemRequest.getSystemVersion());
@@ -63,20 +58,12 @@ public class AccountingSystemService {
     }
 
     public void deleteAccountingSystem(int id) {
-        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
-        AccountingSystem accountingSystem = accountingSystemHib.getById(id);
-        if(accountingSystem == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accounting system not found");
+        accSysServiceValidator.validateFind(id);
         accountingSystemHib.delete(id);
     }
 
     public AccountingSystemResponse findAccountingSystem(int id) {
-        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
-        AccountingSystem accountingSystem = accountingSystemHib.getById(id);
-        if(accountingSystem == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "System not found");
-        }
-
-        return new AccountingSystemResponse(accountingSystem);
+        accSysServiceValidator.validateFind(id);
+        return new AccountingSystemResponse(accountingSystemHib.getById(id));
     }
 }

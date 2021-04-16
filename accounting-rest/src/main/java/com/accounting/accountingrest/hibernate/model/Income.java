@@ -21,8 +21,6 @@ public class Income implements Serializable {
         this.creationDate = creationDate;
     }
 
-
-
     public Income() {
 
     }
