@@ -10,12 +10,15 @@ import javafx.scene.control.Label;
 
 import javafx.stage.Stage;
 import model.AccountingSystem;
+import model.User;
+import model.UserType;
 import persistenceController.AccountingSystemHib;
 import persistenceController.UserHibController;
 
 import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class StartWindow implements Initializable {

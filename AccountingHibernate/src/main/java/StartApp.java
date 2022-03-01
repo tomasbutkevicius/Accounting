@@ -5,38 +5,17 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.*;
 import persistenceController.AccountingSystemHib;
-import persistenceController.CategoryHibController;
-import persistenceController.IncomeHibController;
-import persistenceController.UserHibController;
+import service.AccountingSystemService;
 import window.StartWindow;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-
-//--------Create user
-//        UserHibController userHibController = new UserHibController(factory);
-//        userHibController.create(new User(UserType.ADMIN, "test", "test", "test"));
-//--------Get user
-//        List<User> responsibleUsers = new ArrayList<User>();
-//        User user = userHibController.getByName("test");
-//        responsibleUsers.add(user);
-//--------Create category with responsible user
-//        Category category = new Category("yes", "desc", responsibleUsers);
-//--------Add to user object category
-//        user.getCategories().add(category);
-//        CategoryHibController categoryHibController = new CategoryHibController(factory);
-//--------Save category to system
-//        categoryHibController.create(category);
-//
 
 public class StartApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("accounting_hib");
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("manoDuombaze");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/StartWindow.fxml"));
         Parent root = loader.load();
         StartWindow startWindow = loader.getController();
@@ -45,6 +24,18 @@ public class StartApp extends Application {
         primaryStage.setTitle("Accounting System");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
+    }
+
+    public void setUpSystem(EntityManagerFactory entityManagerFactory){
+        AccountingSystemHib accountingSystemHib = new AccountingSystemHib(entityManagerFactory);
+        AccountingSystem accountingSystem = accountingSystemHib.getByName("System");
+
+        if (accountingSystem == null) {
+            accountingSystem = new AccountingSystem("System", LocalDate.now(), "v1", 0, 0);
+            User admin = new User(UserType.ADMIN, "admin", "password", "Karaganda");
+            AccountingSystemService.create(accountingSystemHib, accountingSystem, admin);
+        }
+
     }
 
     public static void main(String[] args) {

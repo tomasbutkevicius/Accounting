@@ -132,7 +132,7 @@ public class CreateCategoryWindow implements Initializable {
         stage.show();
     }
 
-    private void loadManageCategoryWindow() throws IOException {
+    private void loadManageCategoryWindow() throws IOException  {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/ManageCategoryWindow.fxml"));
         Parent root = loader.load();
         ManageCategoryWindow manageCategoryWindow = loader.getController();
